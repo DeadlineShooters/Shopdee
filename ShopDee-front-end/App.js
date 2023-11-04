@@ -8,6 +8,8 @@ import { FontAwesome5 } from "@expo/vector-icons";
 import Home from "./src/pages/Home";
 import MyOrders from "./src/pages/MyOrders";
 import Me from "./src/pages/Me";
+import Likes from "./src/pages/Likes";
+import Notifcations from "./src/pages/Notifications";
 
 const Tab = createBottomTabNavigator();
 
@@ -45,6 +47,24 @@ function MyTabs() {
         }}
       />
       <Tab.Screen
+        name="Likes"
+        component={Likes}
+        options={{
+          tabBarIcon: ({ focused, color }) => {
+            if (focused)
+              return (
+                <Ionicons name="ios-heart-sharp" size={24} color={color} />
+              );
+            else
+              return (
+                <Ionicons name="ios-heart-outline" size={24} color={color} />
+              );
+          },
+          headerShown: false,
+        }}
+      />
+
+      <Tab.Screen
         name="Me"
         component={Me}
         options={{
@@ -54,6 +74,27 @@ function MyTabs() {
             else
               return (
                 <Ionicons name="ios-person-outline" size={24} color={color} />
+              );
+          },
+          headerShown: false,
+        }}
+      />
+      <Tab.Screen
+        name="Notifications"
+        component={Notifcations}
+        options={{
+          tabBarIcon: ({ focused, color }) => {
+            if (focused)
+              return (
+                <Ionicons name="notifications-sharp" size={24} color={color} />
+              );
+            else
+              return (
+                <Ionicons
+                  name="notifications-outline"
+                  size={24}
+                  color={color}
+                />
               );
           },
           headerShown: false,
