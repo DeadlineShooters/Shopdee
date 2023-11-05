@@ -15,6 +15,7 @@ export default function SellerBottomNavigator() {
       screenOptions={{
         tabBarActiveTintColor: "#007EA7",
         tabBarInactiveTintColor: "black",
+        tabBarLabelStyle: { fontSize: 16 },
       }}
     >
       <Tab.Screen
