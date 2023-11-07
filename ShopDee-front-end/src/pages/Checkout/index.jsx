@@ -1,26 +1,41 @@
-import { SafeAreaView, ScrollView, Text, View, Image } from "react-native";
 
-export default function productDetails() {
+import {
+    SafeAreaView,
+    ScrollView,
+    Text,
+    View,
+    Image,
+    StyleSheet,
+  } from "react-native";
+  
+  export default function App() {
     return (
-        <SafeAreaView>
-            <ScrollView>
-                <View>
-                    <Image>
-                    source={require('assets/react-native-logo.png')}
-                    </Image>
-                    <Text>Back</Text>
-                    <Text>View Cart</Text>
-                </View>
-            </ScrollView>
-        </SafeAreaView>
-    )
-}
-
-const styles = StyleSheet.create({
+      // <SafeAreaView>
+      //   <ScrollView>
+      //     <View>
+      //       <Image source={require('./assets/splash.png')}>
+      //       </Image>
+      //       <Text>Back</Text>
+      //       <Text>View Cart</Text>
+      //     </View>
+      //   </ScrollView>
+      // </SafeAreaView>
+      <SafeAreaView style={styles.container}>
+        <View>
+          <Image source={require("./assets/favicon.png")}></Image>
+          <Text>Back</Text>
+          <Text>View Cart</Text>
+        </View>
+      </SafeAreaView>
+    );
+  }
+  
+  const styles = StyleSheet.create({
     container: {
       flex: 1,
-      backgroundColor: '#fff',
-      alignItems: 'center',
-      justifyContent: 'center',
+      backgroundColor: "blue",
+      alignItems: "center",
+      justifyContent: "center",
     },
   });
+  
