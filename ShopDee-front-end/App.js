@@ -1,20 +1,33 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+// import { Text, View } from "react-native";
+import { NavigationContainer } from "@react-navigation/native";
+// import { Dimensions } from "react-native";
+
+import SignIn from "./src/pages/SignIn";
+import BuyerBottomNavigator from "./src/components/BuyerBottomNavigator";
+import SellerBottomNavigator from "./src/components/SellerBottomNavigator";
 
 export default function App() {
-  return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
-  );
-}
+  let loggedIn = true;
+  let buyer = false;
+  let seller = true;
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+  // var { height, width } = Dimensions.get("window");
+  // console.log("Width is: " + width);
+  // console.log("Height is: " + height);
+
+  if (!loggedIn) return <SignIn />;
+  else if (buyer)
+    return (
+      <NavigationContainer>
+        <BuyerBottomNavigator />
+      </NavigationContainer>
+    );
+  else if (seller) {
+    // seller
+    return (
+      <NavigationContainer>
+        <SellerBottomNavigator />
+      </NavigationContainer>
+    );
+  }
+}
