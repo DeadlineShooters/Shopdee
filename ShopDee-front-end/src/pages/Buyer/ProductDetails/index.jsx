@@ -1,9 +1,11 @@
-import { View, Text, TouchableOpacity, Image, StyleSheet } from "react-native";
+import { View, Text, TouchableOpacity, Image, StyleSheet, ScrollView } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useState } from "react";
 import { SIZES, COLORS, FONTS } from "./theme";
 import { MaterialIcons, Ionicons, Feather } from "@expo/vector-icons";
 import img from "./shoe.png";
+// import shopProfilePicture from './adaptive-icon.png'
+import shopProfilePicture from './favicon.png'
 
 export default function Home() {
     const [isFavorite, setIsFavorite] = useState(false);
@@ -14,8 +16,8 @@ export default function Home() {
         setSelectedSize(size);
     };
     return (
-        <SafeAreaView style={{ flex: 1, backgroundColor: "#fff" }}>
-            <View style={{ flex: 1, backgroundColor: COLORS.gray }}>
+        <SafeAreaView style={{ flex: 1, backgroundColor: "#fff",overflow: "scroll" }}>
+            <ScrollView style={{ flex: 1, backgroundColor: COLORS.gray, }}>
                 <View
                     style={{
                         marginHorizontal: 22,
@@ -64,16 +66,40 @@ export default function Home() {
                 <View
                     style={{
                         backgroundColor: COLORS.white,
-                        borderRadius: 36,
-                        paddingHorizontal: 22,
-                        paddingVertical: 22,
-                        position: "absolute",
+                        paddingHorizontal: 15,
+                        paddingVertical: 15,
                         width: "100%",
-                        bottom: 0,
+                        borderBottomWidth: 1,
+                        borderBottomColor: COLORS.gray,
                     }}
                 >
                     <Text style={{ ...FONTS.h3 }}>Nike air water</Text>
-                    <Text style={{ ...FONTS.body3 }}>Men's shoes ayoooo</Text>
+                    <Text style={{ ...FONTS.h1 }}>500,000đ</Text>
+                    <Text>4.5 *</Text>
+                </View>
+                    
+                <View style={{flexDirection: "row", height: 100, padding: 15, alignItems: 'center'}}>
+                    <Image source={shopProfilePicture}
+                        style={{height: "75%", width: undefined, aspectRatio: 1, marginRight: 15}}
+                    />
+                    <View>
+                        <Text style={{...FONTS.h4}}>Golden Papaya</Text>
+                        <Text style={{color: 'gray'}}>Active 28 minutes ago</Text>
+                        <Text style={{color: 'gray'}}>Hồ Chí Minh</Text>
+                    </View>
+                </View>
+
+                <View
+                    style={{
+                        backgroundColor: COLORS.white,
+                        // borderRadius: 36,
+                        padding: 15,
+                        // position: "absolute",
+                        width: "100%",
+                        // bottom: 0,
+                    }}
+                >
+                    
 
                     <View style={{ marginVertical: 22 }}>
                         <Text style={{ ...FONTS.h4 }}>Select Size</Text>
@@ -226,7 +252,7 @@ export default function Home() {
                         </Text>
                     </TouchableOpacity>
                 </View>
-            </View>
+            </ScrollView>
         </SafeAreaView>
     );
 }
