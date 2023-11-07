@@ -2,7 +2,8 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { FontAwesome5 } from "@expo/vector-icons";
 
-import Home from "../../pages/Buyer/Home";
+// import Home from "../../pages/Buyer/Home";
+import Home from "../../pages/Buyer/ProductDetails";
 import MyOrders from "../../pages/Buyer/MyOrders";
 import Me from "../../pages/Buyer/Me";
 import Likes from "../../pages/Buyer/Likes";
