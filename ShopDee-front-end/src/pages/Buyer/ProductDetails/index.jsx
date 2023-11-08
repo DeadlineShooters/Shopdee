@@ -51,6 +51,10 @@ export default function Home() {
                             color={COLORS.black}
                         />
                     </TouchableOpacity>
+                    
+                    <TouchableOpacity style={{backgroundColor: COLORS.white, padding: 5, borderRadius: 50}}>
+                        <AntDesign name="shoppingcart" size={24} color="black" />
+                    </TouchableOpacity>
                 </View>
                 <Image
                     source={img}
@@ -63,7 +67,10 @@ export default function Home() {
                     }}
                 />
 
-                <View style={{flexDirection:'row', justifyContent: "space-between",}}>
+                <View style={[{
+                    flexDirection: 'row-reverse', justifyContent: "space-between",
+
+                }, styles.contentBox]}>
                     <TouchableOpacity
                         onPress={() => setIsFavorite(!isFavorite)}
                     >
@@ -79,12 +86,7 @@ export default function Home() {
                     </TouchableOpacity>
                     <View
                         style={{
-                            backgroundColor: COLORS.white,
-                            paddingHorizontal: 15,
-                            paddingVertical: 15,
-                            width: "100%",
-                            borderBottomWidth: 1,
-                            borderBottomColor: COLORS.gray,
+                            flex: 1,
                         }}
                     >
                         <Text style={{ ...FONTS.h3 }}>Nike air water</Text>
@@ -94,12 +96,11 @@ export default function Home() {
                 </View>
 
                 <View
-                    style={{
+                    style={[{
                         flexDirection: "row",
                         height: 100,
-                        padding: 15,
                         alignItems: "center",
-                    }}
+                    }, styles.contentBox]}
                 >
                     <Image
                         source={shopProfilePicture}
@@ -118,6 +119,12 @@ export default function Home() {
                         <Text style={{ color: "gray" }}>Hồ Chí Minh</Text>
                     </View>
                 </View>
+
+                <View style={[styles.contentBox]}>
+                    <Text style={{ ...FONTS.h4 }}>Product description</Text>
+                    <Text>Lorem ipsum dolor sit amet consectetur adipisicing elit. Architecto commodi nulla dolor hic maxime sit! Impedit iusto eos cumque culpa assumenda voluptatibus animi asperiores error neque facilis voluptatum, similique earum.</Text>
+                </View>
+                
 
                 <View
                     style={{
@@ -280,7 +287,22 @@ export default function Home() {
                         </Text>
                     </TouchableOpacity>
                 </View>
+                
             </ScrollView>
+            
+            <View style={{
+                    position: 'absolute',
+                    bottom: 0,
+                    zIndex: 999,
+                    flexDirection: 'row',
+                }}>
+                    <TouchableOpacity>
+                        <AntDesign name="shoppingcart" size={24} color="black" />
+                    </TouchableOpacity>
+                    <TouchableOpacity>
+                        <Text>Buy now</Text>
+                    </TouchableOpacity>
+                </View>
         </SafeAreaView>
     );
 }
@@ -314,4 +336,10 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         backgroundColor: COLORS.black,
     },
+    contentBox: {
+        padding: 15,
+        backgroundColor: COLORS.white,
+        borderBottomWidth: 1,
+        borderBottomColor: COLORS.gray,
+    }
 });
