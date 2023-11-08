@@ -7,7 +7,7 @@ import BuyerBottomNavigator from "./src/components/BuyerBottomNavigator";
 import SellerBottomNavigator from "./src/components/SellerBottomNavigator";
 
 export default function App() {
-  let loggedIn = true;
+  let loggedIn = false;
   let buyer = false;
   let seller = true;
 
