@@ -2,8 +2,7 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { FontAwesome5 } from "@expo/vector-icons";
 
-// import Home from "../../pages/Buyer/Home";
-import Home from "../../pages/Buyer/ProductDetails";
+import Home from "../../pages/Buyer/Home";
 import MyOrders from "../../pages/Buyer/MyOrders";
 import Me from "../../pages/Buyer/Me";
 import Likes from "../../pages/Buyer/Likes";
@@ -17,7 +16,7 @@ export default function BuyerBottomNavigator() {
       screenOptions={{
         tabBarActiveTintColor: "#007EA7",
         tabBarInactiveTintColor: "black",
-        tabBarLabelStyle: { fontSize: 16 },
+        tabBarLabelStyle: { fontSize: 13 },
       }}
     >
       <Tab.Screen

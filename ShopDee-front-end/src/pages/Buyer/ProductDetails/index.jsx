@@ -5,6 +5,8 @@ import {
     Image,
     StyleSheet,
     ScrollView,
+    Modal,
+    Pressable,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useState } from "react";
@@ -14,24 +16,140 @@ import {
     Ionicons,
     Feather,
     AntDesign,
+    MaterialCommunityIcons,
 } from "@expo/vector-icons";
 import img from "./shoe.png";
-// import shopProfilePicture from './adaptive-icon.png'
 import shopProfilePicture from "./favicon.png";
+import { useNavigation } from "@react-navigation/native";
 
 export default function Home() {
     const [isFavorite, setIsFavorite] = useState(false);
     const [selectedSize, setSelectedSize] = useState(null);
     const [quantity, setQuantity] = useState(1);
+    const [openModal, setOpenModel] = useState(false);
+
+    const navigation = useNavigation();
 
     const handelSizeSelection = (size) => {
         setSelectedSize(size);
     };
+
+    function renderModal() {
+        return (
+            <Modal visible={openModal} animationType="slide" transparent={true}>
+                <Pressable
+                    // onPress={setOpenModel(false)}
+                    style={{
+                        backgroundColor: "#00000050",
+                        height: SIZES.height,
+                        width: "100%",
+                        position: "absolute",
+                    }}
+                >
+                    {/* <View
+                        style={{
+                            position: "absolute",
+                            bottom: 0,
+                            width: "100%",
+                        }}
+                    >
+                        <View
+                            style={{
+                                zIndex: 999,
+                                flexDirection: "row",
+                                backgroundColor: "white",
+                                justifyContent: "space-between",
+                                alignItems: "center",
+                                padding: 20,
+                                borderTopLeftRadius: 10,
+                                borderTopRightRadius: 10,
+                            }}
+                        >
+                            <Text style={{ fontSize: 20 }}>Quanity</Text>
+                            <View
+                                style={{
+                                    backgroundColor: COLORS.gray,
+                                    width: 120,
+                                    flexDirection: "row",
+                                    alignItems: "center",
+                                    borderWidth: 1,
+                                    borderColor: COLORS.gray,
+                                }}
+                            >
+                                <TouchableOpacity
+                                    onPress={() => {
+                                        if (quantity > 1) {
+                                            setQuantity(quantity - 1);
+                                        }
+                                    }}
+                                    style={{
+                                        backgroundColor: COLORS.white,
+                                        alignItems: "center",
+                                        justifyContent: "center",
+                                        flex: 1,
+                                    }}
+                                >
+                                    <Feather
+                                        name="minus"
+                                        size={20}
+                                        color={COLORS.black}
+                                    />
+                                </TouchableOpacity>
+                                <Text
+                                    style={{
+                                        ...FONTS.body3,
+                                        flex: 1,
+                                        textAlign: "center",
+                                    }}
+                                >
+                                    {quantity}
+                                </Text>
+
+                                <TouchableOpacity
+                                    onPress={() => {
+                                        setQuantity(quantity + 1);
+                                    }}
+                                    style={{
+                                        backgroundColor: COLORS.white,
+                                        alignItems: "center",
+                                        justifyContent: "center",
+                                        flex: 1,
+                                    }}
+                                >
+                                    <Feather
+                                        name="plus"
+                                        size={20}
+                                        color={COLORS.black}
+                                    />
+                                </TouchableOpacity>
+                            </View>
+                        </View>
+                        <TouchableOpacity
+                            style={{
+                                justifyContent: "center",
+                                alignItems: "center",
+                                padding: 10,
+                                backgroundColor: COLORS.blue,
+                            }}
+                        >
+                            <Text style={{ fontSize: 23, color: "white" }}>
+                                Buy Now
+                            </Text>
+                        </TouchableOpacity>
+                    </View> */}
+                </Pressable>
+            </Modal>
+        );
+    }
     return (
-        <SafeAreaView
-            style={{ flex: 1, backgroundColor: "#fff", overflow: "scroll" }}
-        >
-            <ScrollView style={{ flex: 1, backgroundColor: COLORS.gray }}>
+        <SafeAreaView style={{ flex: 1, backgroundColor: "#fff" }}>
+            <ScrollView
+                style={{
+                    flex: 1,
+                    backgroundColor: COLORS.gray,
+                    paddingBottom: 50,
+                }}
+            >
                 <View
                     style={{
                         marginHorizontal: 22,
@@ -51,9 +169,19 @@ export default function Home() {
                             color={COLORS.black}
                         />
                     </TouchableOpacity>
-                    
-                    <TouchableOpacity style={{backgroundColor: COLORS.white, padding: 5, borderRadius: 50}}>
-                        <AntDesign name="shoppingcart" size={24} color="black" />
+
+                    <TouchableOpacity
+                        style={{
+                            backgroundColor: COLORS.white,
+                            padding: 5,
+                            borderRadius: 50,
+                        }}
+                    >
+                        <MaterialCommunityIcons
+                            name="cart-outline"
+                            size={24}
+                            color="black"
+                        />
                     </TouchableOpacity>
                 </View>
                 <Image
@@ -67,10 +195,15 @@ export default function Home() {
                     }}
                 />
 
-                <View style={[{
-                    flexDirection: 'row-reverse', justifyContent: "space-between",
-
-                }, styles.contentBox]}>
+                <View
+                    style={[
+                        {
+                            flexDirection: "row-reverse",
+                            justifyContent: "space-between",
+                        },
+                        styles.contentBox,
+                    ]}
+                >
                     <TouchableOpacity
                         onPress={() => setIsFavorite(!isFavorite)}
                     >
@@ -96,11 +229,15 @@ export default function Home() {
                 </View>
 
                 <View
-                    style={[{
-                        flexDirection: "row",
-                        height: 100,
-                        alignItems: "center",
-                    }, styles.contentBox]}
+                    style={[
+                        {
+                            flexDirection: "row",
+                            height: 100,
+                            alignItems: "center",
+                            marginTop: 10,
+                        },
+                        styles.contentBox,
+                    ]}
                 >
                     <Image
                         source={shopProfilePicture}
@@ -122,9 +259,16 @@ export default function Home() {
 
                 <View style={[styles.contentBox]}>
                     <Text style={{ ...FONTS.h4 }}>Product description</Text>
-                    <Text>Lorem ipsum dolor sit amet consectetur adipisicing elit. Architecto commodi nulla dolor hic maxime sit! Impedit iusto eos cumque culpa assumenda voluptatibus animi asperiores error neque facilis voluptatum, similique earum.</Text>
+                    <Text>
+                        Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                        Architecto commodi nulla dolor hic maxime sit! Impedit
+                        iusto eos cumque culpa assumenda voluptatibus animi
+                        asperiores error neque facilis voluptatum, similique
+                        earum.
+                    </Text>
                 </View>
-                
+
+                <View></View>
 
                 <View
                     style={{
@@ -136,68 +280,6 @@ export default function Home() {
                         // bottom: 0,
                     }}
                 >
-                    <View style={{ marginVertical: 22 }}>
-                        <Text style={{ ...FONTS.h4 }}>Select Size</Text>
-
-                        <View
-                            style={{ flexDirection: "row", marginVertical: 18 }}
-                        >
-                            <TouchableOpacity
-                                style={[
-                                    styles.checkboxContainer,
-                                    selectedSize === "S" &&
-                                        styles.selectedCheckbox,
-                                ]}
-                                onPress={() => handelSizeSelection("S")}
-                            >
-                                <Text
-                                    style={[
-                                        selectedSize === "S" &&
-                                            styles.checkboxText,
-                                    ]}
-                                >
-                                    S
-                                </Text>
-                            </TouchableOpacity>
-
-                            <TouchableOpacity
-                                style={[
-                                    styles.checkboxContainer,
-                                    selectedSize === "M" &&
-                                        styles.selectedCheckbox,
-                                ]}
-                                onPress={() => handelSizeSelection("M")}
-                            >
-                                <Text
-                                    style={[
-                                        selectedSize === "M" &&
-                                            styles.checkboxText,
-                                    ]}
-                                >
-                                    M
-                                </Text>
-                            </TouchableOpacity>
-
-                            <TouchableOpacity
-                                style={[
-                                    styles.checkboxContainer,
-                                    selectedSize === "L" &&
-                                        styles.selectedCheckbox,
-                                ]}
-                                onPress={() => handelSizeSelection("L")}
-                            >
-                                <Text
-                                    style={[
-                                        selectedSize === "L" &&
-                                            styles.checkboxText,
-                                    ]}
-                                >
-                                    L
-                                </Text>
-                            </TouchableOpacity>
-                        </View>
-                    </View>
-
                     <Text style={{ ...FONTS.h4 }}>Qty</Text>
                     <View
                         style={{
@@ -207,62 +289,6 @@ export default function Home() {
                             marginVertical: 6,
                         }}
                     >
-                        <View
-                            style={{
-                                backgroundColor: COLORS.gray,
-                                height: 48,
-                                width: 134,
-                                flexDirection: "row",
-                                justifyContent: "space-between",
-                                alignItems: "center",
-                                paddingHorizontal: 12,
-                                borderRadius: 24,
-                            }}
-                        >
-                            <TouchableOpacity
-                                onPress={() => {
-                                    if (quantity > 1) {
-                                        setQuantity(quantity - 1);
-                                    }
-                                }}
-                                style={{
-                                    height: 32,
-                                    width: 32,
-                                    borderRadius: 16,
-                                    backgroundColor: COLORS.white,
-                                    alignItems: "center",
-                                    justifyContent: "center",
-                                }}
-                            >
-                                <Feather
-                                    name="minus"
-                                    size={24}
-                                    color={COLORS.black}
-                                />
-                            </TouchableOpacity>
-                            <Text style={{ ...FONTS.body3 }}>{quantity}</Text>
-
-                            <TouchableOpacity
-                                onPress={() => {
-                                    setQuantity(quantity + 1);
-                                }}
-                                style={{
-                                    height: 32,
-                                    width: 32,
-                                    borderRadius: 16,
-                                    backgroundColor: COLORS.white,
-                                    alignItems: "center",
-                                    justifyContent: "center",
-                                }}
-                            >
-                                <Feather
-                                    name="plus"
-                                    size={24}
-                                    color={COLORS.black}
-                                />
-                            </TouchableOpacity>
-                        </View>
-
                         <View style={{ flexDirection: "column" }}>
                             <Text style={{ ...FONTS.body4 }}>Total Price</Text>
                             <Text style={{ ...FONTS.h3 }}>$18.00</Text>
@@ -287,22 +313,142 @@ export default function Home() {
                         </Text>
                     </TouchableOpacity>
                 </View>
-                
             </ScrollView>
-            
-            <View style={{
-                    position: 'absolute',
+
+            <View
+                style={{
+                    position: "absolute",
                     bottom: 0,
                     zIndex: 999,
-                    flexDirection: 'row',
-                }}>
-                    <TouchableOpacity>
-                        <AntDesign name="shoppingcart" size={24} color="black" />
-                    </TouchableOpacity>
-                    <TouchableOpacity>
-                        <Text>Buy now</Text>
+                    flexDirection: "row",
+                    backgroundColor: COLORS.red,
+                    width: "100%",
+                }}
+            >
+                <TouchableOpacity
+                    style={{
+                        backgroundColor: COLORS.gray,
+                        flex: 0.3,
+                        alignItems: "center",
+                        justifyContent: "center",
+                    }}
+                >
+                    <MaterialCommunityIcons
+                        name="cart-plus"
+                        size={34}
+                        color="black"
+                    />
+                </TouchableOpacity>
+                <TouchableOpacity
+                    style={{
+                        backgroundColor: COLORS.blue,
+                        flex: 0.7,
+                        padding: 15,
+                        alignItems: "center",
+                    }}
+                    onPress={() => {
+                        setOpenModel(true);
+                    }}
+                >
+                    <Text style={{ fontSize: 20, color: "white" }}>
+                        Buy now
+                    </Text>
+                </TouchableOpacity>
+            </View>
+
+            {renderModal()}
+            {/* <View
+                style={{
+                    backgroundColor: '#00000050' ,
+                    height: SIZES.height,
+                    width: '100%',
+                    position: 'absolute',
+                }}
+            >
+                <View style={{position: 'absolute', bottom: 0, width: '100%'}}>
+                    <View
+                        style={{
+                            zIndex: 999,
+                            flexDirection: "row",
+                            backgroundColor: "white",
+                            justifyContent: "space-between",
+                            alignItems: "center",
+                            padding: 20,
+                            borderTopLeftRadius: 10,
+                            borderTopRightRadius: 10,
+                        }}
+                    >
+                        <Text style={{ fontSize: 20 }}>Quanity</Text>
+                        <View
+                            style={{
+                                backgroundColor: COLORS.gray,
+                                width: 120,
+                                flexDirection: "row",
+                                alignItems: "center",
+                                borderWidth: 1,
+                                borderColor: COLORS.gray,
+                            }}
+                        >
+                            <TouchableOpacity
+                                onPress={() => {
+                                    if (quantity > 1) {
+                                        setQuantity(quantity - 1);
+                                    }
+                                }}
+                                style={{
+                                    backgroundColor: COLORS.white,
+                                    alignItems: "center",
+                                    justifyContent: "center",
+                                    flex: 1,
+                                }}
+                            >
+                                <Feather
+                                    name="minus"
+                                    size={20}
+                                    color={COLORS.black}
+                                />
+                            </TouchableOpacity>
+                            <Text
+                                style={{
+                                    ...FONTS.body3,
+                                    flex: 1,
+                                    textAlign: "center",
+                                }}
+                            >
+                                {quantity}
+                            </Text>
+
+                            <TouchableOpacity
+                                onPress={() => {
+                                    setQuantity(quantity + 1);
+                                }}
+                                style={{
+                                    backgroundColor: COLORS.white,
+                                    alignItems: "center",
+                                    justifyContent: "center",
+                                    flex: 1,
+                                }}
+                            >
+                                <Feather
+                                    name="plus"
+                                    size={20}
+                                    color={COLORS.black}
+                                />
+                            </TouchableOpacity>
+                        </View>
+                    </View>
+                    <TouchableOpacity
+                        style={{
+                            justifyContent: "center",
+                            alignItems: "center",
+                            padding: 10,
+                            backgroundColor: COLORS.blue,
+                        }}
+                    >
+                        <Text style={{ fontSize: 23, color: 'white' }}>Buy Now</Text>
                     </TouchableOpacity>
                 </View>
+            </View> */}
         </SafeAreaView>
     );
 }
@@ -341,5 +487,5 @@ const styles = StyleSheet.create({
         backgroundColor: COLORS.white,
         borderBottomWidth: 1,
         borderBottomColor: COLORS.gray,
-    }
+    },
 });
