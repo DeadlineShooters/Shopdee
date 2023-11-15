@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, ToastAndroid, Image, TextInput, SafeAreaView } from "react-native";
+import * as ImagePicker from 'expo-image-picker';
 import Ionic from 'react-native-vector-icons/Ionicons';
 export default function Me() {
     const [shopName, setShopName] = useState('');
@@ -21,6 +22,17 @@ export default function Me() {
             setBio(text);
         }
     };
+    const handleImageSelection = async () => {
+        let result = await ImagePicker.launchImageLibraryAsync({
+          mediaTypes: ImagePicker.MediaTypeOptions.All,
+          allowsEditing: true,
+          aspect: [4, 4],
+          quality: 1,
+        })
+        if (!result.canceled) {
+          setSelectedImage(result.assets[0].url);
+        }
+      }
     return (
         <SafeAreaView
             style={{
@@ -49,17 +61,22 @@ export default function Me() {
                     <Ionic name="checkmark" style={{ fontSize: 35, color: '#3493D9' }} />
                 </TouchableOpacity>
             </View>
-            <View style={{ padding: 20, alignItems: 'center', backgroundColor: 'white' }}>
-                <Image
-                    source={require('./avatar.jpg')}
-                    style={{ width: 80, height: 80, borderRadius: 100 }} />
-                <Text
-                    style={{
-                        color: '#3493D9',
-                    }}>
-                    Change profile photo
-                </Text>
+            <View style={{ padding: 20, alignItems: 'center', backgroundColor: '#00a7e1' }}>
+          <Image
+            source={require('./avatar.jpg')}
+            style={{ width: 80, height: 80, borderRadius: 100 }} 
+           />
+            <View>
+            <TouchableOpacity onPress={handleImageSelection}>
+              <Text
+                style={{
+                  color: 'white',
+                }}>
+                Change profile photo
+              </Text>
+              </TouchableOpacity>
             </View>
+      </View>
             <View style={{
                 backgroundColor: 'white',
                 flexDirection: 'row',

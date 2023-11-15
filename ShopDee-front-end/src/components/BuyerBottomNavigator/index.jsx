@@ -7,6 +7,8 @@ import MyOrders from "../../pages/Buyer/MyOrders";
 import Me from "../../pages/Buyer/Me";
 import Likes from "../../pages/Buyer/Likes";
 import Notifcations from "../../pages/Buyer/Notifications";
+import CreateShop from "../../pages/Buyer/CreateShop";
+
 
 const Tab = createBottomTabNavigator();
 
@@ -85,7 +87,7 @@ export default function BuyerBottomNavigator() {
       />
       <Tab.Screen
         name="Me"
-        component={Me}
+        component={CreateShop}
         options={{
           tabBarIcon: ({ focused, color }) => {
             if (focused)

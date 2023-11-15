@@ -8,6 +8,7 @@ import SignIn from "./src/pages/SignIn";
 import BuyerBottomNavigator from "./src/components/BuyerBottomNavigator";
 import SellerBottomNavigator from "./src/components/SellerBottomNavigator";
 import ProductDetails from "./src/pages/Buyer/ProductDetails";
+import Me from "./src/pages/Seller/EditProfile";
 
 const Stack = createNativeStackNavigator();
 
@@ -37,6 +38,11 @@ export default function App() {
             component={ProductDetails}
             options={{ headerShown: false }}
           />
+          <Stack.Screen
+          name="EditShopProfile"
+          component={Me}
+          options={{ headerShown: false }}
+        />
         </Stack.Navigator>
       </NavigationContainer>
     );
