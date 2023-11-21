@@ -2,6 +2,8 @@
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+
 // import { Dimensions } from "react-native";
 
 import SignIn from "./src/pages/SignIn";
@@ -15,6 +17,8 @@ const Stack = createNativeStackNavigator();
 
 export default function App() {
   let loggedIn = true;
+  let buyer = true;
+  let seller = false;
   let buyer = true;
   let seller = false;
 
@@ -61,6 +65,15 @@ export default function App() {
     // seller
     return (
       <NavigationContainer>
+        <Stack.Navigator>
+          <Stack.Screen
+            name="SellerBottomNav"
+            component={SellerBottomNavigator}
+            options={{
+              headerShown: false,
+            }}
+          />
+        </Stack.Navigator>
         <Stack.Navigator>
           <Stack.Screen
             name="SellerBottomNav"
