@@ -1,4 +1,5 @@
-import { View, Text, SafeAreaView, TouchableOpacity, ScrollView, Image} from "react-native";
+import { View, Text, SafeAreaView, TouchableOpacity, ScrollView, Image, Modal, Alert} from "react-native";
+import { useState } from "react";
 import React from "react";
 import { COLORS } from "../../../../assets/Themes";
 import {MaterialIcons, AntDesign} from '@expo/vector-icons';
@@ -7,14 +8,14 @@ const Me = ({navigation}) => {
     const navigateToEditProfile = () => {
         navigation.navigate("EditProfile");
     }
-    const navigateToSecurity = () => {
+    const navigateToShopOwner = () => {
         console.log("Security function");
     }
-    const navigateToPrivacy = () => {
-        console.log("Privacy function");
+    const navigateToSettings = () => {
+        navigation.navigate("Settings");
     }
-    const navigateToNofitications = () => {
-        console.log("Notifications function");
+    const navigateToSetAddress = () => {
+        navigation.navigate("SetAddress");
     }
     const navigateToSubcription = () => {
         console.log("Subcription function");
@@ -25,14 +26,11 @@ const Me = ({navigation}) => {
     const navigateToTermsAndPolicies = () => {
         console.log("Terms and Policies function");
     }
-    const logout = () => {
-        console.log("logout function");
-    }
     const accountItems = [
         { icon: "person", text: "Edit Profile", color: "#2b5087", action: navigateToEditProfile},
-        { icon: "add-business", text: "For Shop Owner", color: "#1DA664", action: navigateToSecurity},
-        { icon: "settings", text: "Settings", color: "#D7882B", action: navigateToNofitications},
-        { icon: "map", text: "Address", color: "#1ab780", action: navigateToPrivacy}
+        { icon: "add-business", text: "For Shop Owner", color: "#1DA664", action: navigateToShopOwner},
+        { icon: "settings", text: "Settings", color: "#D7882B", action: navigateToSettings},
+        { icon: "map", text: "Address", color: "#1ab780", action: navigateToSetAddress}
     ];
     const supportItems = [
         {icon:"text-snippet", text:"User Privacy", color: "#4F12B3", action: navigateToSubcription},
@@ -61,40 +59,52 @@ const Me = ({navigation}) => {
             </View>
         </TouchableOpacity>
     )
+    const handleOnPressLogout = () => {
+        Alert.alert('Confirm message', 'Do you really want to log out?', [
+            {
+                text: 'Cancel', 
+                onPress: () => console.log('Cancel request'),
+            },
+            {
+                text: 'Ok',
+                onPress: () => console.log('Exit the program')
+            }
+        ]);
+    }
     return (
         <SafeAreaView style={{
             flex: 1,
             backgroundColor: COLORS.gray,
         }}>
             <View>
-                    <View style={{
-                        backgroundColor: COLORS.lightBlue,
-                        alignItems: "center",
-                        height: 150,
-                        display: 'flex',
-                        flexDirection: 'row'
-                    }}>
-                        <Image
-                        source = {require('../../../../assets/avatar.jpg')}
-                        style ={{
-                            height: 100,
-                            width: 100,
-                            borderRadius: 85,
-                            borderWidth: 2,
-                            borderColor: COLORS.primary,
-                            alignSelf: 'flex-start',
-                            marginLeft: 16,
-                            marginTop: 32,
-                        }}
-                        />
-                        <Text style={{
-                            fontSize: 22,
-                            fontWeight: 800,
-                            marginVertical: 10,
-                            color: COLORS.white,
-                            marginLeft: 10,
-                        }}>Golden Papaya</Text>
-                    </View>
+                <View style={{
+                    backgroundColor: COLORS.lightBlue,
+                    alignItems: "center",
+                    height: 150,
+                    display: 'flex',
+                    flexDirection: 'row'
+                }}>
+                    <Image
+                    source = {require('../../../../assets/avatar.jpg')}
+                    style ={{
+                        height: 100,
+                        width: 100,
+                        borderRadius: 85,
+                        borderWidth: 2,
+                        borderColor: COLORS.primary,
+                        alignSelf: 'flex-start',
+                        marginLeft: 16,
+                        marginTop: 32,
+                    }}
+                    />
+                    <Text style={{
+                        fontSize: 22,
+                        fontWeight: 800,
+                        marginVertical: 10,
+                        color: COLORS.white,
+                        marginLeft: 10,
+                    }}>Golden Papaya</Text>
+                </View>
             </View>
             <View style={{marginHorizontal: 12}}>
                 {/*setting */}
@@ -141,12 +151,12 @@ const Me = ({navigation}) => {
                         <Text style={{fontSize:12, color: COLORS.black}}>Version 1.0</Text>
                         <Text style={{fontSize:12, color: COLORS.black}}>@ ShopDee 2023</Text>
                     </View>
-                    <TouchableOpacity onPress={logout}>
-                        <View style={{marginBottom: 12}}>
+                    <TouchableOpacity onPress={handleOnPressLogout}>
+                        <View style={{marginBottom: 20}}>
                             <View style={{
-                                borderRadius: 12,
-                                backgroundColor: COLORS.blue,
-                                alignItems: "center",
+                                    borderRadius: 12,
+                                    backgroundColor: COLORS.blue,
+                                    alignItems: "center",
                             }}>                        
                             <Text style={{fontSize:16, fontWeight:600, marginVertical: 10, color: COLORS.white}}>Logout</Text>
                             </View>

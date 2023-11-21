@@ -9,5 +9,5 @@ export const COLORS = {
     gray: 'rgba(36, 39, 96, 0.05)',
     secondaryGray: 'rgba(84, 76, 76, 0.14)',
     blue: '#007EA7',
-    lightBlue: '#00a7e1',
+    lightBlue: '#469AB6',
 }
