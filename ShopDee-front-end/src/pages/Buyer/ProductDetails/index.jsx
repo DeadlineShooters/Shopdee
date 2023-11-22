@@ -36,17 +36,18 @@ export default function Home() {
 
     function renderModal() {
         return (
-            <Modal visible={openModal} animationType="slide" transparent={true}>
+            <Modal visible={openModal} animationType="none" transparent={true}>
                 <Pressable
-                    // onPress={setOpenModel(false)}
+                    style={{ flex: 1, backgroundColor: "rgba(0,0,0,0.6)" }}
+                    onPress={() => setOpenModel(false)}
+                ></Pressable>
+                <View
                     style={{
                         backgroundColor: "#00000050",
-                        height: SIZES.height,
                         width: "100%",
-                        position: "absolute",
                     }}
                 >
-                    {/* <View
+                    <View
                         style={{
                             position: "absolute",
                             bottom: 0,
@@ -124,7 +125,7 @@ export default function Home() {
                                 </TouchableOpacity>
                             </View>
                         </View>
-                        <TouchableOpacity
+                        <Pressable
                             style={{
                                 justifyContent: "center",
                                 alignItems: "center",
@@ -135,9 +136,9 @@ export default function Home() {
                             <Text style={{ fontSize: 23, color: "white" }}>
                                 Buy Now
                             </Text>
-                        </TouchableOpacity>
-                    </View> */}
-                </Pressable>
+                        </Pressable>
+                    </View>
+                </View>
             </Modal>
         );
     }
@@ -145,9 +146,10 @@ export default function Home() {
         <SafeAreaView style={{ flex: 1, backgroundColor: "#fff" }}>
             <ScrollView
                 style={{
-                    flex: 1,
+                    // flex: 1,
                     backgroundColor: COLORS.gray,
-                    paddingBottom: 50,
+                    // paddingBottom: 100,
+                    marginBottom: 56
                 }}
             >
                 <View
@@ -270,49 +272,6 @@ export default function Home() {
 
                 <View></View>
 
-                <View
-                    style={{
-                        backgroundColor: COLORS.white,
-                        // borderRadius: 36,
-                        padding: 15,
-                        // position: "absolute",
-                        width: "100%",
-                        // bottom: 0,
-                    }}
-                >
-                    <Text style={{ ...FONTS.h4 }}>Qty</Text>
-                    <View
-                        style={{
-                            flexDirection: "row",
-                            justifyContent: "space-between",
-                            alignItems: "center",
-                            marginVertical: 6,
-                        }}
-                    >
-                        <View style={{ flexDirection: "column" }}>
-                            <Text style={{ ...FONTS.body4 }}>Total Price</Text>
-                            <Text style={{ ...FONTS.h3 }}>$18.00</Text>
-                        </View>
-                    </View>
-
-                    <TouchableOpacity style={styles.button}>
-                        <Feather
-                            name="shopping-bag"
-                            size={24}
-                            color={COLORS.white}
-                        />
-
-                        <Text
-                            style={{
-                                ...FONTS.h3,
-                                color: COLORS.white,
-                                marginLeft: 12,
-                            }}
-                        >
-                            Add to Bag
-                        </Text>
-                    </TouchableOpacity>
-                </View>
             </ScrollView>
 
             <View
@@ -335,9 +294,12 @@ export default function Home() {
                 >
                     <MaterialCommunityIcons
                         name="cart-plus"
-                        size={34}
+                        size={30}
                         color="black"
                     />
+                    <Text>
+                        Add to Cart
+                    </Text>
                 </TouchableOpacity>
                 <TouchableOpacity
                     style={{
@@ -357,98 +319,6 @@ export default function Home() {
             </View>
 
             {renderModal()}
-            {/* <View
-                style={{
-                    backgroundColor: '#00000050' ,
-                    height: SIZES.height,
-                    width: '100%',
-                    position: 'absolute',
-                }}
-            >
-                <View style={{position: 'absolute', bottom: 0, width: '100%'}}>
-                    <View
-                        style={{
-                            zIndex: 999,
-                            flexDirection: "row",
-                            backgroundColor: "white",
-                            justifyContent: "space-between",
-                            alignItems: "center",
-                            padding: 20,
-                            borderTopLeftRadius: 10,
-                            borderTopRightRadius: 10,
-                        }}
-                    >
-                        <Text style={{ fontSize: 20 }}>Quanity</Text>
-                        <View
-                            style={{
-                                backgroundColor: COLORS.gray,
-                                width: 120,
-                                flexDirection: "row",
-                                alignItems: "center",
-                                borderWidth: 1,
-                                borderColor: COLORS.gray,
-                            }}
-                        >
-                            <TouchableOpacity
-                                onPress={() => {
-                                    if (quantity > 1) {
-                                        setQuantity(quantity - 1);
-                                    }
-                                }}
-                                style={{
-                                    backgroundColor: COLORS.white,
-                                    alignItems: "center",
-                                    justifyContent: "center",
-                                    flex: 1,
-                                }}
-                            >
-                                <Feather
-                                    name="minus"
-                                    size={20}
-                                    color={COLORS.black}
-                                />
-                            </TouchableOpacity>
-                            <Text
-                                style={{
-                                    ...FONTS.body3,
-                                    flex: 1,
-                                    textAlign: "center",
-                                }}
-                            >
-                                {quantity}
-                            </Text>
-
-                            <TouchableOpacity
-                                onPress={() => {
-                                    setQuantity(quantity + 1);
-                                }}
-                                style={{
-                                    backgroundColor: COLORS.white,
-                                    alignItems: "center",
-                                    justifyContent: "center",
-                                    flex: 1,
-                                }}
-                            >
-                                <Feather
-                                    name="plus"
-                                    size={20}
-                                    color={COLORS.black}
-                                />
-                            </TouchableOpacity>
-                        </View>
-                    </View>
-                    <TouchableOpacity
-                        style={{
-                            justifyContent: "center",
-                            alignItems: "center",
-                            padding: 10,
-                            backgroundColor: COLORS.blue,
-                        }}
-                    >
-                        <Text style={{ fontSize: 23, color: 'white' }}>Buy Now</Text>
-                    </TouchableOpacity>
-                </View>
-            </View> */}
         </SafeAreaView>
     );
 }
