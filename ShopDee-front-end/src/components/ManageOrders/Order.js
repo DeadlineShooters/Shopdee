@@ -6,7 +6,7 @@ export default function Order({ buyer, buttonVisible, buttonText, itemList, tota
   const navigation = useNavigation();
 
   function confirmOrder() {
-    navigation.navigate("Completed");
+    navigation.navigate("To Deliver");
     // update database
   }
   return (
