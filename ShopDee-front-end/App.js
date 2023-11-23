@@ -1,4 +1,5 @@
-// import { Text, View } from "react-native";
+import { StatusBar } from "react-native";
+import { SafeAreaProvider } from "react-native-safe-area-context";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
@@ -20,40 +21,43 @@ export default function App() {
   // console.log("Width is: " + width);
   // console.log("Height is: " + height);
 
-  if (!loggedIn) return <SignIn />;
-  else if (buyer)
+  if (!loggedIn)
     return (
-      <NavigationContainer>
-        <Stack.Navigator>
-          <Stack.Screen
-            name="BuyerBottomNav"
-            component={BuyerBottomNavigator}
-            options={{
-              headerShown: false,
-            }}
-          />
-          <Stack.Screen
-            name="Product Details"
-            component={ProductDetails}
-            options={{ headerShown: false }}
-          />
-        </Stack.Navigator>
-      </NavigationContainer>
+      <>
+        <StatusBar />
+        <SignIn />
+      </>
     );
-  else if (seller) {
-    // seller
-    return (
-      <NavigationContainer>
-        <Stack.Navigator>
-          <Stack.Screen
-            name="SellerBottomNav"
-            component={SellerBottomNavigator}
-            options={{
-              headerShown: false,
-            }}
-          />
-        </Stack.Navigator>
-      </NavigationContainer>
-    );
-  }
+  return (
+    <>
+      <StatusBar />
+      <SafeAreaProvider>
+        <NavigationContainer>
+          <Stack.Navigator>
+            {buyer && (
+              <>
+                <Stack.Screen
+                  name="BuyerBottomNav"
+                  component={BuyerBottomNavigator}
+                  options={{
+                    headerShown: false,
+                  }}
+                />
+                <Stack.Screen name="Product Details" component={ProductDetails} options={{ headerShown: false }} />
+              </>
+            )}
+            {seller && (
+              <Stack.Screen
+                name="SellerBottomNav"
+                component={SellerBottomNavigator}
+                options={{
+                  headerShown: false,
+                }}
+              />
+            )}
+          </Stack.Navigator>
+        </NavigationContainer>
+      </SafeAreaProvider>
+    </>
+  );
 }
