@@ -17,14 +17,14 @@ const Me = ({navigation}) => {
     const navigateToSetAddress = () => {
         navigation.navigate("SetAddress");
     }
-    const navigateToSubcription = () => {
-        console.log("Subcription function");
+    const navigateToTermsAndPolicies = () => {
+        navigation.navigate("UserPrivacy");
+    }
+    const navigateToAboutShopDee = () => {
+        navigation.navigate("AboutShopDee");
     }
     const navigateToSupport = () => {
-        console.log("Support function");
-    }
-    const navigateToTermsAndPolicies = () => {
-        console.log("Terms and Policies function");
+        navigation.navigate("HelpSupport");
     }
     const accountItems = [
         { icon: "person", text: "Edit Profile", color: "#2b5087", action: navigateToEditProfile},
@@ -33,9 +33,9 @@ const Me = ({navigation}) => {
         { icon: "map", text: "Address", color: "#1ab780", action: navigateToSetAddress}
     ];
     const supportItems = [
-        {icon:"text-snippet", text:"User Privacy", color: "#4F12B3", action: navigateToSubcription},
+        {icon:"text-snippet", text:"User Privacy", color: "#4F12B3", action: navigateToTermsAndPolicies},
         {icon:"help-outline", text:"Help & Support", color: "#a4055b",action: navigateToSupport},
-        {icon:"info-outline", text:"About ShopDee", color: "#fc3a3a",action: navigateToTermsAndPolicies},
+        {icon:"info-outline", text:"About ShopDee", color: "#fc3a3a",action: navigateToAboutShopDee},
     ];
     const renderSettingsItems = ({icon, text, color, action}) => (
         <TouchableOpacity
@@ -141,7 +141,7 @@ const Me = ({navigation}) => {
                 </View>
                 {/*Logout button */}
                 <View style={{
-                    marginTop: 120
+                    marginTop: 100
                 }}>
                     <View style={{
                             alignItems: "center",

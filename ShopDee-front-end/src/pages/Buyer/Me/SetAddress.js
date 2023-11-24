@@ -32,20 +32,23 @@ const SetAddress = ({ navigation }) => {
         marginVertical: 36,
         flexDirection: "row",
         justifyContent: "center",
+        alignItems: "center"
       }}>
 
         <TouchableOpacity
           onPress={() => navigation.goBack()}
           style={{
             position: "absolute",
-            left: 0,
+            left: -10,
+            flexDirection: "row",
+            alignItems: "center"
           }}>
-
           <MaterialIcons
             name="keyboard-arrow-left"
             size={24}
-            color={COLORS.black}
+            color={COLORS.lightBlue}
           />
+          <Text style={{ color: COLORS.lightBlue }}>Profile</Text>
         </TouchableOpacity>
         <Text style={{ fontSize: 20, fontWeight: 600 }}>Delivery Address</Text>
       </View>
@@ -124,7 +127,7 @@ const SetAddress = ({ navigation }) => {
                 value={address}
                 onChangeText={value => SetAddress(value)}
                 editable={true}
-                selection={{start:0}}
+                selection={{ start: 0 }}
               />
             </View>
           </View>

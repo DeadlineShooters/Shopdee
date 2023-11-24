@@ -166,20 +166,24 @@ const EditProfile = ({navigation}) => {
                 marginVertical: 36,
                 flexDirection: "row",
                 justifyContent: "center",
+                alignItems: "center"
             }}>
 
                 <TouchableOpacity
                     onPress={()=> navigation.goBack()}
                     style={{
                         position: "absolute",
-                        left: 0,
+                        left: -10,
+                        flexDirection: "row",
+                        alignItems: "center"
                     }}>
 
                     <MaterialIcons
                         name="keyboard-arrow-left"
                         size={24}
-                        color={COLORS.black}
+                        color={COLORS.lightBlue}
                     />
+                    <Text style={{color: COLORS.lightBlue}}>Profile</Text>
                 </TouchableOpacity>
                 <Text style={{ fontSize: 20, fontWeight: 600 }}>User information</Text>
             </View>

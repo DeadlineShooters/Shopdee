@@ -1,11 +1,6 @@
 // import { Text, View } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
-
-// import { Dimensions } from "react-native";
-
 import SignIn from "./src/pages/SignIn";
 import BuyerBottomNavigator from "./src/components/BuyerBottomNavigator";
 import SellerBottomNavigator from "./src/components/SellerBottomNavigator";
@@ -13,12 +8,13 @@ import ProductDetails from "./src/pages/Buyer/ProductDetails";
 import EditProfile from "./src/pages/Buyer/Me/EditProfile.js";
 import Settings from "./src/pages/Buyer/Me/Settings.js";
 import SetAddress from "./src/pages/Buyer/Me/SetAddress.js";
+import UserPrivacy from "./src/pages/Buyer/Me/UserPrivacy.js";
+import AboutShopDee from "./src/pages/Buyer/Me/About.js";
+import HelpSupport from "./src/pages/Buyer/Me/Support";
 const Stack = createNativeStackNavigator();
 
 export default function App() {
   let loggedIn = true;
-  let buyer = true;
-  let seller = false;
   let buyer = true;
   let seller = false;
 
@@ -56,6 +52,21 @@ export default function App() {
           <Stack.Screen 
             name="SetAddress"
             component={SetAddress}
+            options={{headerShown: false}}
+          />
+          <Stack.Screen 
+            name="UserPrivacy"
+            component={UserPrivacy}
+            options={{headerShown: false}}
+          />
+          <Stack.Screen 
+            name="AboutShopDee"
+            component={AboutShopDee}
+            options={{headerShown: false}}
+          />
+          <Stack.Screen 
+            name="HelpSupport"
+            component={HelpSupport}
             options={{headerShown: false}}
           />
         </Stack.Navigator>
