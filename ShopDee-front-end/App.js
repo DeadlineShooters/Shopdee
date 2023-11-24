@@ -41,59 +41,50 @@ export default function App() {
                 <Stack.Screen
                   name="BuyerBottomNav"
                   component={BuyerBottomNavigator}
-                  options={{
-                    headerShown: false,
-                  }}
+                  options={{headerShown: false,}}
                 />
-                <Stack.Screen name="Product Details" component={ProductDetails} options={{ headerShown: false }} />
-          <Stack.Screen 
-            name="EditProfile"
-            component={EditProfile}
-            options={{headerShown: false}}
-          />
-          <Stack.Screen 
-            name="Settings"
-            component={Settings}
-            options={{headerShown: false}}
-          />
-          <Stack.Screen 
-            name="SetAddress"
-            component={SetAddress}
-            options={{headerShown: false}}
-          />
-          <Stack.Screen 
-            name="UserPrivacy"
-            component={UserPrivacy}
-            options={{headerShown: false}}
-          />
-          <Stack.Screen 
-            name="AboutShopDee"
-            component={AboutShopDee}
-            options={{headerShown: false}}
-          />
-          <Stack.Screen 
-            name="HelpSupport"
-            component={HelpSupport}
-            options={{headerShown: false}}
-          />
+                <Stack.Screen 
+                  name="Product Details" 
+                  component={ProductDetails} 
+                  options={{ headerShown: false }} 
+                />
+                <Stack.Screen 
+                  name="EditProfile"
+                  component={EditProfile}
+                  options={{headerShown: false}}
+                />
+                <Stack.Screen 
+                  name="Settings"
+                  component={Settings}
+                  options={{headerShown: false}}
+                />
+                <Stack.Screen 
+                  name="SetAddress"
+                  component={SetAddress}
+                  options={{headerShown: false}}
+                />
+                <Stack.Screen 
+                  name="UserPrivacy"
+                  component={UserPrivacy}
+                  options={{headerShown: false}}
+                />
+                <Stack.Screen 
+                  name="AboutShopDee"
+                  component={AboutShopDee}
+                  options={{headerShown: false}}
+                />
+                <Stack.Screen 
+                  name="HelpSupport"
+                  component={HelpSupport}
+                  options={{headerShown: false}}
+                />
               </>
             )}
-              <Stack.Navigator>
-          <Stack.Screen
-            name="SellerBottomNav"
-            component={SellerBottomNavigator}
-            options={{
-              headerShown: false,
-            }}
-          />
-        </Stack.Navigator>
-      {seller && (
-              <Stack.Screen
-                name="SellerBottomNav"
-                component={SellerBottomNavigator}
-                options={{
-                  headerShown: false,
-                }}
+            {seller && (
+                <Stack.Screen
+                  name="SellerBottomNav"
+                  component={SellerBottomNavigator}
+                  options={{headerShown: false}}
               />
             )}
           </Stack.Navigator>
