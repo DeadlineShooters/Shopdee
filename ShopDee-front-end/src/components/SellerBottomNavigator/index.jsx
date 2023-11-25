@@ -4,8 +4,8 @@ import { FontAwesome5 } from "@expo/vector-icons";
 import { Feather } from "@expo/vector-icons";
 
 import MyProduct from "../../pages/Seller/MyProduct";
-import ManageOrders from "../../pages/Seller/ManageOrders";
 import EditProfile from "../../pages/Seller/EditProfile";
+import SellerMyOrderTopTabs from "../SellerMyOrderTopTabs";
 
 const Tab = createBottomTabNavigator();
 
@@ -30,7 +30,7 @@ export default function SellerBottomNavigator() {
       />
       <Tab.Screen
         name="Orders"
-        component={ManageOrders}
+        component={SellerMyOrderTopTabs}
         options={{
           tabBarIcon: ({ focused, color }) => {
             return <FontAwesome5 name="list-alt" size={24} color={color} />;
