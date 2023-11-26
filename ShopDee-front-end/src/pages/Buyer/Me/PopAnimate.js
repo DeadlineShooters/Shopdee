@@ -14,8 +14,6 @@ const PopAnimate = (props) => {
     const failHeader = "Failed!";
     const failMessage = "You pressed the fail button";
 
-    
-
     return (
         <View>
             <Animated.View

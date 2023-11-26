@@ -20,7 +20,7 @@ const EditProfile = ({navigation}) => {
     //Pop in animation
     const windowHeight = Dimensions.get("window").height;
     const [status, setStatus] = useState(null);
-    const popAnim = useRef(new Animated.Value(windowHeight)).current;
+    const popAnim = useRef(new Animated.Value(windowHeight *-1)).current;
 
     const successColor = "#6dcf81";
     const successHeader = "Success!";
@@ -31,7 +31,7 @@ const EditProfile = ({navigation}) => {
 
     const popIn = () => {
         Animated.timing(popAnim, {
-            toValue: windowHeight * -0.8,
+            toValue: windowHeight * -0.82*0.95,
             duration: 300,
             useNativeDriver: true,
         }).start(popOut());
@@ -291,6 +291,7 @@ const EditProfile = ({navigation}) => {
                                 value={phone}
                                 onChangeText={value => setPhone(value)}
                                 editable={true}
+                                keyboardType='number-pad'
                             />
                         </View>
                     </View>

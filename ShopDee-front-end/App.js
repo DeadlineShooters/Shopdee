@@ -12,6 +12,7 @@ import SetAddress from "./src/pages/Buyer/Me/SetAddress.js";
 import UserPrivacy from "./src/pages/Buyer/Me/UserPrivacy.js";
 import AboutShopDee from "./src/pages/Buyer/Me/About.js";
 import HelpSupport from "./src/pages/Buyer/Me/Support";
+import ChangePassword from "./src/pages/Buyer/Me/ChangePassword";
 const Stack = createNativeStackNavigator();
 
 export default function App() {
@@ -56,6 +57,11 @@ export default function App() {
                 <Stack.Screen 
                   name="Settings"
                   component={Settings}
+                  options={{headerShown: false}}
+                />
+                <Stack.Screen 
+                  name="ChangePassword"
+                  component={ChangePassword}
                   options={{headerShown: false}}
                 />
                 <Stack.Screen 

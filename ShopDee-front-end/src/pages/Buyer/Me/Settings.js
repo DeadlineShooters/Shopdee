@@ -5,7 +5,7 @@ import {MaterialIcons, AntDesign} from '@expo/vector-icons';
 
 const Settings = ({navigation}) => {
     const navigateToChangePassword = () => {
-        console.log('change password')
+        navigation.navigate("ChangePassword");
     }
     return (
         <SafeAreaView style={{
