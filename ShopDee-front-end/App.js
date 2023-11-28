@@ -16,7 +16,7 @@ import ChangePassword from "./src/pages/Buyer/Me/ChangePassword";
 const Stack = createNativeStackNavigator();
 
 export default function App() {
-  let loggedIn = true;
+  let loggedIn = false;
   let buyer = false;
   let seller = true;
 
