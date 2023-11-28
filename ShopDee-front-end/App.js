@@ -10,12 +10,20 @@ import BuyerBottomNavigator from "./src/components/BuyerBottomNavigator";
 import SellerBottomNavigator from "./src/components/SellerBottomNavigator";
 import ProductDetails from "./src/pages/Buyer/ProductDetails";
 
+import EditProfile from "./src/pages/Buyer/Me/EditProfile.js";
+import Settings from "./src/pages/Buyer/Me/Settings.js";
+import SetAddress from "./src/pages/Buyer/Me/SetAddress.js";
+import UserPrivacy from "./src/pages/Buyer/Me/UserPrivacy.js";
+import AboutShopDee from "./src/pages/Buyer/Me/About.js";
+import HelpSupport from "./src/pages/Buyer/Me/Support";
+import ChangePassword from "./src/pages/Buyer/Me/ChangePassword";
+
 const Stack = createNativeStackNavigator();
 
 export default function App() {
-  let loggedIn = false;
-  let buyer = false;
-  let seller = true;
+  let loggedIn = true;
+  let buyer = true;
+  let seller = false;
 
   // var { height, width } = Dimensions.get("window");
   // console.log("Width is: " + width);
@@ -42,6 +50,41 @@ export default function App() {
                   options={{
                     headerShown: false,
                   }}
+                />
+                <Stack.Screen 
+                  name="EditProfile"
+                  component={EditProfile}
+                  options={{headerShown: false}}
+                />
+                <Stack.Screen 
+                  name="Settings"
+                  component={Settings}
+                  options={{headerShown: false}}
+                />
+                <Stack.Screen 
+                  name="ChangePassword"
+                  component={ChangePassword}
+                  options={{headerShown: false}}
+                />
+                <Stack.Screen 
+                  name="SetAddress"
+                  component={SetAddress}
+                  options={{headerShown: false}}
+                />
+                <Stack.Screen 
+                  name="UserPrivacy"
+                  component={UserPrivacy}
+                  options={{headerShown: false}}
+                />
+                <Stack.Screen 
+                  name="AboutShopDee"
+                  component={AboutShopDee}
+                  options={{headerShown: false}}
+                />
+                <Stack.Screen 
+                  name="HelpSupport"
+                  component={HelpSupport}
+                  options={{headerShown: false}}
                 />
                 <Stack.Screen
                   name="Product Details"
