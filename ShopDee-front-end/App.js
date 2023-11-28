@@ -13,9 +13,9 @@ import ProductDetails from "./src/pages/Buyer/ProductDetails";
 const Stack = createNativeStackNavigator();
 
 export default function App() {
-  let loggedIn = true;
-  let buyer = true;
-  let seller = false;
+  let loggedIn = false;
+  let buyer = false;
+  let seller = true;
 
   // var { height, width } = Dimensions.get("window");
   // console.log("Width is: " + width);
