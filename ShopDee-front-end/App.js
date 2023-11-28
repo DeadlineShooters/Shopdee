@@ -9,13 +9,14 @@ import SignIn from "./src/pages/SignIn";
 import BuyerBottomNavigator from "./src/components/BuyerBottomNavigator";
 import SellerBottomNavigator from "./src/components/SellerBottomNavigator";
 import ProductDetails from "./src/pages/Buyer/ProductDetails";
+import Checkout from './src/pages/Buyer/Checkout';
 
 const Stack = createNativeStackNavigator();
 
 export default function App() {
   let loggedIn = true;
-  let buyer = false;
-  let seller = true;
+  let buyer = true;
+  let seller = false;
 
   // var { height, width } = Dimensions.get("window");
   // console.log("Width is: " + width);
@@ -46,6 +47,11 @@ export default function App() {
                 <Stack.Screen
                   name="Product Details"
                   component={ProductDetails}
+                  options={{ headerShown: false }}
+                />
+                <Stack.Screen
+                  name="Checkout"
+                  component={Checkout}
                   options={{ headerShown: false }}
                 />
               </>
