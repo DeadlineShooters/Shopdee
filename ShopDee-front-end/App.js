@@ -14,8 +14,8 @@ const Stack = createNativeStackNavigator();
 
 export default function App() {
   let loggedIn = true;
-  let buyer = false;
-  let seller = true;
+  let buyer = true;
+  let seller = false;
 
   // var { height, width } = Dimensions.get("window");
   // console.log("Width is: " + width);
