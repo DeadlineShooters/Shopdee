@@ -7,6 +7,37 @@ export default function Me() {
     const [bio, setBio] = useState('');
     const [maxCharactersName] = useState(30); // Số ký tự tối đa cho phép
     const [maxCharactersBio] = useState(200);
+    const successColor = "#6dcf81";
+    const successHeader = "Success!";
+    const successMessage = "Your information was saved";
+    const failColor = "#bf6060";
+    const failHeader = "Failed!";
+    const failMessage = "Your information was still unsaved";
+    const popIn = () => {
+        Animated.timing(popAnim, {
+            toValue: windowHeight * -0.82*0.95,
+            duration: 300,
+            useNativeDriver: true,
+        }).start(popOut());
+    };
+
+    const popOut = () => {
+        setTimeout(() => {
+            Animated.timing(popAnim, {
+                toValue: windowHeight * -1,
+                duration: 300,
+                useNativeDriver: true,
+            }).start();
+        }, 2000);
+    };
+
+    const instantPopOut = () => {
+        Animated.timing(popAnim, {
+            toValue: windowHeight * -1,
+            duration: 150,
+            useNativeDriver: true,
+        }).start();
+    };
     const showToast = () => {
         ToastAndroid.show('Toast message displayed!', ToastAndroid.SHORT);
     };
