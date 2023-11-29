@@ -1,6 +1,10 @@
 import { StatusBar } from "react-native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
+import { StatusBar } from "react-native";
+import { SafeAreaProvider } from "react-native-safe-area-context";
 import { NavigationContainer } from "@react-navigation/native";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
 // import { Dimensions } from "react-native";
