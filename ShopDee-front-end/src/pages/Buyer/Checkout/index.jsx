@@ -1,5 +1,8 @@
-import { SafeAreaView, ScrollView, Text, View, TouchableOpacity } from "react-native"
-import { SIZES, COLORS, FONTS } from "../../../../constants/theme";
+import { SafeAreaView, ScrollView, Text, View, Pressable, StyleSheet, Image, TouchableOpacity } from "react-native"
+import { SIZES, COLORS, FONTS } from "../../../../assets/Themes";
+import GoBack from '../../../components/goBackPanel'
+import { useNavigation } from "@react-navigation/native";
+import React, { useState } from 'react';
 
 import {
     MaterialIcons,
@@ -7,42 +10,178 @@ import {
     Feather,
     AntDesign,
     MaterialCommunityIcons,
+    SimpleLineIcons 
 } from "@expo/vector-icons";
 
-export default function Checkout() {
+export default function Checkout({ route }) {
+    const [selectedPayment, setSelectedPayment] = useState('');
+    const navigation = useNavigation();
+    const product = route.params.product;
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: "#fff" }}>
             <ScrollView
                 style={{
-                    // flex: 1,
                     backgroundColor: COLORS.gray,
-                    // paddingBottom: 100,
-                    // marginBottom: 56
                 }}
             >
-                <View
-                    style={{
-                        marginHorizontal: 22,
-                        // flexDirection: "row",
-                        // justifyContent: "space-between",
-                        // alignItems: "center",
-                        // position: "absolute",
-                        // width: SIZES.width - 44,
-                        // top: 22,
-                        // zIndex: 999,
-                        height: 100,
-                        backgroundColor: COLORS.blue,
-                    }}
-                >
-                    <TouchableOpacity onPress={() => navigation.goBack()}>
-                        <MaterialIcons
-                            name="keyboard-arrow-left"
-                            size={24}
-                            color={COLORS.black}
-                        />
-                    </TouchableOpacity>
+                <GoBack currentTitle="Checkout" prevTitle="Details" func={() => navigation.goBack()}></GoBack>
+                <View style={styles.section}>
+                    <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                        <SimpleLineIcons name="location-pin" size={24} color={COLORS.blue} />
+                        <Text style={{marginLeft: 10}}>Delivery Address</Text>
+                    </View>
+                    <Text style={{ paddingLeft: 36 }}>Nguyễn Tuấn Kiệt | 0902800628{'\n'}27 Nguyễn Văn Cừ{'\n'}P. Bình Trị Đông, Q. Bình Tân, TPHCM</Text>
+                    <Pressable onPress={() => {}} style={{
+                            position: 'absolute', top:35, right:20,
+                        }} >
+                        <MaterialIcons name="keyboard-arrow-right" size={24}/>
+                    </Pressable>
+                </View>
+
+                <View style={styles.section}>
+                    <Text style={{marginBottom: 15}}>{ product.shop.name }</Text>
+                    <View style={{ flexDirection: "row" }}>
+                        <View style={styles.imageContainer}>
+                            <Image source={{uri: product.imgUrl}} style={styles.image}></Image>
+                        </View>
+                        <View>
+                            <Text>{product.name}</Text>
+                            <Text style={{marginTop: 10}}>{product.price} x 1</Text>
+                        </View>
+                    </View>
+                </View>
+
+                <View style={styles.section}>
+                    <View style={{flexDirection: 'row', alignItems: 'center', marginBottom: 10}}>
+                        <Ionicons name="receipt-outline" size={24} color={COLORS.blue} />
+                        <Text style={{marginLeft: 10}}>Payment Details</Text>
+                    </View>
+                    <View style={{ flexDirection: 'row', justifyContent: "space-between", marginBottom: 5}}>
+                        <Text>Merchandise Subtotal</Text>
+                        <Text>đ500,000</Text>
+                    </View>
+                    <View style={{ flexDirection: 'row', justifyContent: "space-between", marginBottom: 5}}>
+                        <Text>Delivery</Text>
+                        <Text>đ15,000</Text>
+                    </View>
+                    <View style={{
+                        flexDirection: 'row', justifyContent: "space-between", marginBottom: 5,
+                        fontSize: 20
+                    }}>
+                        <Text style={{fontSize: 18, fontWeight: 'bold'}}>Merchandise Subtotal</Text>
+                        <Text style={{fontSize: 18, color: 'red'}}>đ500,000</Text>
+                    </View>
+
+                </View>
+                <View style={styles.section}>
+                    <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                        <MaterialIcons name="payment" size={24} color={COLORS.blue} />
+                        <Text style={{marginLeft: 10}}>Payment Options</Text>
+                    </View>
+
+                    <View style={{ flexDirection: "row", marginVertical: 18 }}>
+                        <Pressable
+                            style={[
+                                styles.paymentOption,
+                                selectedPayment === "Cash" && styles.selectedPayment,
+                            ]}
+                            onPress={() => setSelectedPayment("Cash")}
+                        >
+                            <Text style={[selectedPayment === "Cash" && styles.checkboxText]}>Cash</Text>
+                        </Pressable>
+
+                        <Pressable
+                            style={[
+                                styles.paymentOption,
+                                selectedPayment === "ShopdeePay" && styles.selectedPayment,
+                            ]}
+                            onPress={() => setSelectedPayment("ShopdeePay")}
+                        >
+                            <Text style={[selectedPayment === "ShopdeePay" && styles.checkboxText]}>ShopdeePay</Text>
+                        </Pressable>
+                    </View> 
+                </View>
+
+                <View style={styles.section}>
+                    <View style={{flexDirection: 'row', alignItems: 'center', paddingRight: 1}}>
+                        <AntDesign name="profile" size={24} color={COLORS.blue} />
+                        <Text style={{marginLeft: 10}}>By clicking “Place Order”, you are agreeing to ShopDee's General Transaction Terms</Text>
+                    </View>
                 </View>
             </ScrollView>
+            
+            <View
+                style={{
+                    position: "absolute",
+                    bottom: 0,
+                    zIndex: 999,
+                    flexDirection: "row",
+                    backgroundColor: COLORS.red,
+                    width: "100%",
+                }}
+            >
+                <View style={{
+                    flex: 0.6, backgroundColor: 'white', alignItems: 'flex-end',
+                    justifyContent: 'center',
+                    // padding: 10,
+                }}>
+                    <View style={{marginRight: 10, alignItems: 'flex-end'}}>
+                        <Text>Total Payment</Text>
+                        <Text style={{ fontSize: 20, color: 'red' }}>đ515,000</Text>
+                    </View>
+                </View>
+                <TouchableOpacity
+                    style={{
+                        backgroundColor: COLORS.blue,
+                        flex: 0.4,
+                        padding: 15,
+                        alignItems: "center",
+                    }}
+                    onPress={() => {
+                        setOpenModel(true);
+                    }}
+                >
+                    <Text style={{ fontSize: 20, color: "white" }}>
+                        Buy now
+                    </Text>
+                </TouchableOpacity>
+            </View>
         </SafeAreaView>
     )
 }
+
+const styles = StyleSheet.create({
+    section: {
+        backgroundColor: COLORS.white, marginBottom: 5, padding:15
+    },
+    image: {
+        resizeMode: "contain",
+        flex: 1,
+        width: undefined,
+        height: undefined,
+      },
+      imageContainer: {
+        marginRight: 10,
+        borderWidth: 1,
+        borderColor: "#D9D9D9",
+        borderStyle: "solid",
+        width: 100,
+        height: 100,
+    },
+    paymentOption: {
+        flex: 1,
+        flexDirection: 'row',
+        borderWidth: 1,
+        borderColor: 'gray',
+        margin: 2,
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: 35,
+    },
+    selectedPayment: {
+        borderColor: COLORS.blue,
+    },
+    checkboxText: {
+        color: COLORS.blue
+    }
+});

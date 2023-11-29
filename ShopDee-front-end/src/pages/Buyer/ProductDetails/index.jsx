@@ -10,7 +10,7 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useState } from "react";
-import { SIZES, COLORS, FONTS } from "../../../../constants/theme";
+import { SIZES, COLORS, FONTS } from "../../../../assets/Themes";
 import {
     MaterialIcons,
     Ionicons,
@@ -21,6 +21,7 @@ import {
 import img from "./shoe.png";
 import shopProfilePicture from "./favicon.png";
 import { useNavigation } from "@react-navigation/native";
+import { product } from "../../../../data/product";
 
 export default function ProductDetails() {
     const [isFavorite, setIsFavorite] = useState(false);
@@ -133,7 +134,8 @@ export default function ProductDetails() {
                                 backgroundColor: COLORS.blue,
                             }}
                             onPress={() => {
-                                navigation.navigate("Checkout");
+                                navigation.navigate("Checkout", {product: product});
+                                setOpenModel(false);
                             }}
                         >
                             <Text style={{ fontSize: 23, color: "white" }}>
