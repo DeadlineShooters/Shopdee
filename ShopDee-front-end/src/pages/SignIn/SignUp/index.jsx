@@ -1,58 +1,89 @@
 import React, { useState } from 'react';
 import { View, Text, Image, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import { FontAwesome, Entypo } from '@expo/vector-icons';
 
 export default function SignUp() {
   const [email, setEmail] = useState('');
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-
+  const navigation = useNavigation();
+  const [hidePassword, setHidePassword] =useState(false);
+  const handlePassword = () => {
+    setHidePassword(!hidePassword)
+  };
   const handleSignUp = () => {
     // Xử lý logic đăng ký ở đây
   };
-
   return (
     <View style={styles.container}>
-      <TouchableOpacity style={styles.backButton} onPress={() => {}}>
+
+      <TouchableOpacity style={styles.backButton} onPress={() => navigation.navigate("SignIn")}>
         <Text style={styles.backButtonText}>←</Text>
       </TouchableOpacity>
-
-      <Image
+        <Image
         style={styles.logo}
         source={require('./shopdee_icon.png')}
       />
 
       <Text style={styles.title}>SHOPDEE</Text>
 
-      <TextInput
-        style={styles.input}
-        onChangeText={setEmail}
-        value={email}
-        placeholder="Enter Email Address"
-      />
 
-      <TextInput
-        style={styles.input}
-        onChangeText={setUsername}
-        value={username}
-        placeholder="Username"
-      />
+      <View style={{ flexDirection: "column", marginBottom: 6, alignSelf: 'center', display: 'flex', }}>
+        <View style={styles.inputContainer}>
+          <FontAwesome name="envelope" size={24} color="black" style={styles.Icon} />
+          <TextInput
+            style={styles.input}
+            onChangeText={setEmail}
+            value={email}
+            placeholder="Enter Email Address"
+          />
+        </View>
+      </View>
+      
+      <View style={{ flexDirection: "column", marginBottom: 6, alignSelf: 'center', display: 'flex', }}>
+        <View style={styles.inputContainer}>
+          <FontAwesome name="user" size={24} color="black" style={styles.Icon} />
+          <TextInput
+            style={styles.input}
+           onChangeText={setUsername}
+           value={username}
+           placeholder="Username"
+           />
+        </View>
+      </View>  
+          
+      <View style={{ flexDirection: "column", marginBottom: 6, alignSelf: 'center', display: 'flex', }}>
+        <View style={styles.inputContainer}>
+        <TouchableOpacity style={styles.Icon} onPress={handlePassword}>
+        <Entypo name= {hidePassword ? "eye" : "eye-with-line"} size={24} color="black" style={styles.Icon}/>
+      </TouchableOpacity>
+          <TextInput
+            style={styles.input}
+            onChangeText={setPassword}
+           value={password}
+            placeholder="Password"
+            secureTextEntry = {hidePassword? false : true}
+          />
+        </View>
+      </View> 
 
-      <TextInput
-        style={styles.input}
-        onChangeText={setPassword}
-        value={password}
-        placeholder="Password"
-        secureTextEntry
-      />
 
-      <TextInput
-        style={styles.input}
-        onChangeText={setConfirmPassword}
-        value={confirmPassword}
-        placeholder="Confirm Password"
-        secureTextEntry
-      />
+      <View style={{ flexDirection: "column", marginBottom: 6, alignSelf: 'center', display: 'flex', }}>
+        <View style={styles.inputContainer}>
+        <TouchableOpacity style={styles.Icon} onPress={handlePassword}>
+        <Entypo name= {hidePassword ? "eye" : "eye-with-line"} size={24} color="black" style={styles.Icon}/>
+      </TouchableOpacity>
+          <TextInput
+           style={styles.input}
+           onChangeText={setConfirmPassword}
+           value={confirmPassword}
+           placeholder="Confirm Password"
+            secureTextEntry = {hidePassword? false : true}
+         />
+        </View>
+      </View> 
 
       <TouchableOpacity style={styles.button} onPress={handleSignUp}>
         <Text style={styles.buttonText}>Register</Text>
@@ -82,7 +113,7 @@ const styles = StyleSheet.create({
     borderColor: 'transparent',
     backgroundColor: 'rgba(51, 153, 255, 0.5)',
     borderWidth: 1,
-    paddingLeft: 10,
+    paddingLeft: 50,
     marginBottom: 10,
   },
 
@@ -93,7 +124,12 @@ const styles = StyleSheet.create({
     textTransform: 'uppercase',
     fontWeight: 'bold',
   },
-  
+  Icon: {
+    position: 'absolute',
+    paddingLeft: 10,
+    zIndex: 2,
+  },
+
   button: {
     height: 50,
     width: '40%',
@@ -114,15 +150,27 @@ const styles = StyleSheet.create({
   },
   backButton: {
     position: 'absolute',
-    top: 0,
+    top: -70,
     left: 40, 
     width: 40,
     height: 40,
     justifyContent: 'center',
     alignItems: 'center',
   },
-  backButtonText: {
+
+  backButtonText: {    
     fontSize: 40,
     color: '#007bff',
+  },
+
+  inputContainer: {
+    height: 40,
+    width: '100%',
+    alignSelf: 'center',
+    borderColor: 'transparent',
+    borderWidth: 1,
+    marginBottom: 10,
+    justifyContent: "space-between",
+    flexDirection: "row",
   },
 });
