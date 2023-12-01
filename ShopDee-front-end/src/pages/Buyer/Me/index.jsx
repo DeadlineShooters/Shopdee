@@ -42,19 +42,19 @@ const Me = ({navigation}) => {
             onPress={action}
             style={{
                 flexDirection: "row",
-                alignItems: "flex-end",
                 justifyContent: "space-between",
                 paddingVertical: 8,
                 paddingLeft: 12,
                 borderWidth: 1,
                 borderColor: COLORS.gray,
+                alignItems: "center"
             }}
         >
             <View style={{flexDirection: "row"}}>
                 <MaterialIcons name={icon} size={24} color= {color} />
                 <Text style={{marginLeft: 36, fontSize: 16, fontWeight: 600}}>{text}</Text>
             </View>
-            <View>
+            <View style={{marginRight: 10}}>
                 <AntDesign name="right" size={16} color="black"/>
             </View>
         </TouchableOpacity>

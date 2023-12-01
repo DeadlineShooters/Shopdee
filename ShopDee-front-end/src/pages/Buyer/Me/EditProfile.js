@@ -8,6 +8,7 @@ import { View,
     Modal,
     StyleSheet,
     Animated,
+    Alert,
     Dimensions } from "react-native";
 import * as ImagePicker from 'expo-image-picker'
 import React, { useState, useRef } from "react";
@@ -54,12 +55,6 @@ const instantPopOut = () => {
         useNativeDriver: true,
     }).start();
 };
-//USER INFORMATION SETTING
-const [selectedImage, setSelectedImage] = useState();
-const [name, setName] = useState("Golden Papaya");
-const [mail, setMail] = useState("goldenpapaya@gmail.com");
-const [phone, setPhone] = useState("0921773092");
-const [password, setPassword] = useState("letmein");
 
 const handleImageSelection = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
@@ -72,10 +67,7 @@ const handleImageSelection = async () => {
         setSelectedImage(result.assets[0].url);
     }
 }
-const save = () => {
-    setStatus("success");
-    popIn();
-}
+
 //Gender picker modal
 const [gender, setGender] = useState("Not willing");
 const [isFocus, setIsFocus] = useState(false);
@@ -100,6 +92,50 @@ const handleChangeStartDate = (propDate) => {
 const handleOnPressStartDate = () => {
     setOpenStartDatePicker(!openStartDatePicker);
 }
+
+//USER INFORMATION SETTING
+const [selectedImage, setSelectedImage] = useState();
+const [name, setName] = useState("Golden Papaya");
+const [mail, setMail] = useState("goldenpapaya@gmail.com");
+const [phone, setPhone] = useState("0921773092");
+
+//Change information
+const [changName, setChangeName] = useState("Golden Papaya");
+const [changeMail, setChangeMail] = useState("goldenpapaya@gmail.com");
+const [changePhone, setChangePhone] = useState("0921773092");
+const [changeGender, setChangeGender] = useState("Not willing");
+const [changeStartedDate, setChangeStartedDate] = useState("2000/01/01");
+
+const handleOnPressGoBack = ({navigation}) => {
+    if (changName != name || changeMail != mail || changePhone != phone || changeGender != gender || changeStartedDate != startedDate)
+    {
+      Alert.alert('Confirm message', 'Your profile is not saved. Exit now?', [
+        {
+          text: 'Cancel',
+          onPress: () => console.log('Cancel request'),
+        },
+        {
+          text: 'Ok',
+          onPress: () => navigation.goBack(),
+        }
+      ]);
+    }
+    else {
+      navigation.goBack()
+    }
+}
+
+const save = () => {
+    setChangeName(name);
+    setChangeMail(mail);
+    setChangePhone(phone);
+    setChangeGender(gender);
+    setChangeStartedDate(startedDate);
+
+    setStatus("success");
+    popIn();
+}
+
 function renderDatePicker() {
     return (
         <Modal
@@ -168,9 +204,8 @@ return (
             justifyContent: "center",
             alignItems: "center"
         }}>
-
             <TouchableOpacity
-                onPress={()=> navigation.goBack()}
+                onPress={()=> handleOnPressGoBack({navigation})}
                 style={{
                     position: "absolute",
                     left: -10,
@@ -384,21 +419,34 @@ return (
                 </View>
             </Animated.View>
         </View>
-        <TouchableOpacity onPress={save}>
+        {changName != name || changeMail != mail || changePhone != phone || changeGender != gender || changeStartedDate != startedDate ?
+            <TouchableOpacity onPress={save}>
+                <View style={{
+                    marginBottom: 20,
+                }}>                        
+                    <View style={{
+                        borderRadius: 12,
+                            backgroundColor: COLORS.blue,
+                            alignItems: "center",
+                        }}>                        
+                        <Text style={{fontSize:16, fontWeight:600, marginVertical: 10, color: COLORS.white}}>Save</Text>
+                    </View>
+                </View>
+            </TouchableOpacity> :
             <View style={{
                 marginBottom: 20,
             }}>                        
                 <View style={{
                     borderRadius: 12,
-                        backgroundColor: COLORS.blue,
+                        backgroundColor: COLORS.secondaryGray,
                         alignItems: "center",
                     }}>                        
                     <Text style={{fontSize:16, fontWeight:600, marginVertical: 10, color: COLORS.white}}>Save</Text>
                 </View>
             </View>
-        </TouchableOpacity>
+        }
     </SafeAreaView>
-)
+    )
 }
 
 export default EditProfile;

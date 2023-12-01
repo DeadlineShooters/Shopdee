@@ -5,7 +5,6 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
 // import { Dimensions } from "react-native";
 
-import SignIn from "./src/pages/SignIn";
 import BuyerBottomNavigator from "./src/components/BuyerBottomNavigator";
 import SellerBottomNavigator from "./src/components/SellerBottomNavigator";
 import ProductDetails from "./src/pages/Buyer/ProductDetails";
@@ -17,6 +16,8 @@ import UserPrivacy from "./src/pages/Buyer/Me/UserPrivacy.js";
 import AboutShopDee from "./src/pages/Buyer/Me/About.js";
 import HelpSupport from "./src/pages/Buyer/Me/Support";
 import ChangePassword from "./src/pages/Buyer/Me/ChangePassword";
+import SignIn from "./src/pages/SignIn";
+import SignUp from "./src/pages/SignIn/SignUp/index.jsx";
 
 const Stack = createNativeStackNavigator();
 
@@ -32,8 +33,23 @@ export default function App() {
   if (!loggedIn)
     return (
       <>
-        <StatusBar />
-        <SignIn />
+      <StatusBar />
+      <SafeAreaProvider>
+        <NavigationContainer>
+          <Stack.Navigator>
+            <Stack.Screen
+                name="SignIn"
+                component={SignIn}
+                options={{ headerShown: false }}
+            />
+            <Stack.Screen
+                name="SignUp"
+                component={SignUp}
+                options={{ headerShown: false }}
+            />
+          </Stack.Navigator>
+        </NavigationContainer>
+      </SafeAreaProvider>
       </>
     );
   return (

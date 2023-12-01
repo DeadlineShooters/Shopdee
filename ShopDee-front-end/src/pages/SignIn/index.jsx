@@ -1,12 +1,14 @@
-import { View, Text, Image, TextInput, Button, StyleSheet, TouchableOpacity } from "react-native";
+import { View, Text, Image, TextInput, Button, StyleSheet, TouchableOpacity, Pressable } from "react-native";
 import { useState } from "react";
 import React from 'react';
 import { useNavigation } from '@react-navigation/native';
-import SignUp from "./SignUp";
+
 export default function SignIn() {
+  const navigation = useNavigation();
   const handleRegisterPress = () => {
-    navigation.navigate('SignUp');
+    navigation.navigate("SignUp");
   };
+
   const [email, getEmail] = useState('');
   const [password, getPassword] = useState('');
 
@@ -38,9 +40,9 @@ export default function SignIn() {
         <Text style={styles.buttonText}>Sign In</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity style={styles.registerLink} onPress={handleRegisterPress}>
+      <Pressable style={styles.registerLink} onPress={handleRegisterPress}>
         <Text>Do not have an account? <Text style={styles.register}>Register</Text></Text>
-      </TouchableOpacity>
+      </Pressable>
     </View>
   );
 }

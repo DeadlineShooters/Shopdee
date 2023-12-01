@@ -1,11 +1,14 @@
+import { useNavigation } from '@react-navigation/native';
 import React, { useState } from 'react';
 import { View, Text, Image, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
 
-export default function SignUp() {
+const SignUp = () => {
   const [email, setEmail] = useState('');
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+
+  const navigation = useNavigation();
 
   const handleSignUp = () => {
     // Xử lý logic đăng ký ở đây
@@ -13,7 +16,7 @@ export default function SignUp() {
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity style={styles.backButton} onPress={() => {}}>
+      <TouchableOpacity style={styles.backButton} onPress={() => navigation.navigate("SignIn")}>
         <Text style={styles.backButtonText}>←</Text>
       </TouchableOpacity>
 
@@ -60,6 +63,8 @@ export default function SignUp() {
     </View>
   );
 }
+
+export default SignUp;
 
 const styles = StyleSheet.create({
   container: {
