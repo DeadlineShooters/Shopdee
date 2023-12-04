@@ -3,7 +3,6 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 import { FontAwesome5 } from "@expo/vector-icons";
 
 import Home from "../../pages/Buyer/Home";
-import ManageOrders from "../../pages/Buyer/ManageOrders";
 import Me from "../../pages/Buyer/Me";
 import Likes from "../../pages/Buyer/Likes";
 import Notifcations from "../../pages/Buyer/Notifications";
