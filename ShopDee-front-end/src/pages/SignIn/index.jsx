@@ -1,21 +1,48 @@
-import { View, Text, Image, TextInput, Button, StyleSheet, TouchableOpacity } from "react-native";
-import { useState } from "react";
+import { View, Text, Image, TextInput, Button, StyleSheet, TouchableOpacity, Alert } from "react-native";
+import { useEffect, useState } from "react";
 import React from 'react';
 import { useNavigation } from "@react-navigation/native";
 import { AntDesign, Entypo, FontAwesome } from '@expo/vector-icons';
-export default function SignIn() {
+import AsyncStorage from "@react-native-async-storage/async-storage"
+import axios from "axios";
 
+export default function SignIn() {
   const [email, getEmail] = useState('');
   const [password, getPassword] = useState('');
   const navigation = useNavigation();
+  useEffect(() => {
+    const checkSigninStatus = async () => {
+      try {
+        const token = await AsyncStorage.getItem("authToken");
+        if (token) {
+          navigation.navigate('BuyerBottomNav', { screen: 'Home' });
+        }
+      } catch(err) {
+        console.log("error message", err);
+      }
+    }
+    checkSigninStatus();
+  }, []);
   const handleSignUpPress = () => {
     navigation.navigate("SignUp");
   };
   const [hidePassword, setHidePassword] =useState(false);
   const handlePassword = () => {
     setHidePassword(!hidePassword)
-  };const handleSignIn= () => {
-    
+  };
+  const handleSignIn = () => {
+    const user = {
+      email:email,
+      password:password
+    }
+    axios.post("http://10.0.2.2:3000/user/signin", user).then((res) => {
+      const token = res.data.token;
+      AsyncStorage.setItem("authToken", token);
+      navigation.navigate('BuyerBottomNav', { screen: 'Home' });
+    }).catch((error) => {
+      Alert.alert("SignIn Error", "Invalid email");
+      console.log(error);
+    })
   };
 
   return (
@@ -55,8 +82,6 @@ export default function SignIn() {
           />          
         </View>
       </View>     
-      
-
 
       <TouchableOpacity style={styles.button} onPress={handleSignIn}>
         <Text style={styles.buttonText}>Sign In</Text>
@@ -73,9 +98,9 @@ export default function SignIn() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    marginTop: 100,
-    justifyContent: 'top',
     paddingHorizontal: 10,
+    backgroundColor: "#FFFFFF",
+    justifyContent: "center"
   },
   logo: {
     width: 150,
@@ -93,6 +118,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     paddingLeft: 50,
     marginBottom: 10,
+    borderRadius: 8
   },
 
   title: {
