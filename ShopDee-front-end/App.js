@@ -13,6 +13,8 @@ import SellerBottomNavigator from "./src/components/SellerBottomNavigator";
 import ProductDetails from "./src/pages/Buyer/ProductDetails";
 import Checkout from "./src/pages/Buyer/Checkout";
 import SignUp from "./src/pages/SignIn/SignUp";
+import EditProduct from "./src/pages/Seller/EditProduct";
+import { COLORS } from "./assets/Themes";
 
 const Stack = createNativeStackNavigator();
 
@@ -90,13 +92,23 @@ export default function App() {
               </>
             )}
             {seller && (
-              <Stack.Screen
-                name="SellerBottomNav"
-                component={SellerBottomNavigator}
-                options={{
-                  headerShown: false,
-                }}
-              />
+              <>
+                <Stack.Screen
+                  name="SellerBottomNav"
+                  component={SellerBottomNavigator}
+                  options={{
+                    headerShown: false,
+                  }}
+                />
+                <Stack.Screen
+                  name="Edit product"
+                  component={EditProduct}
+                  options={{
+                    headerTitleStyle: { color: COLORS.lightBlue },
+                    headerTintColor: COLORS.lightBlue,
+                  }}
+                />
+              </>
             )}
           </Stack.Navigator>
         </NavigationContainer>
