@@ -1,9 +1,6 @@
 import { StatusBar } from "react-native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
-import { StatusBar } from "react-native";
-import { SafeAreaProvider } from "react-native-safe-area-context";
 import { NavigationContainer } from "@react-navigation/native";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
@@ -14,15 +11,15 @@ import Home from "./src/pages/Buyer/Home";
 import BuyerBottomNavigator from "./src/components/BuyerBottomNavigator";
 import SellerBottomNavigator from "./src/components/SellerBottomNavigator";
 import ProductDetails from "./src/pages/Buyer/ProductDetails";
-import Checkout from './src/pages/Buyer/Checkout';
+import Checkout from "./src/pages/Buyer/Checkout";
 import SignUp from "./src/pages/SignIn/SignUp";
 
 const Stack = createNativeStackNavigator();
 
 export default function App() {
-  let loggedIn = false;
-  let buyer = true;
-  let seller = false;
+  let loggedIn = true;
+  let buyer = false;
+  let seller = true;
 
   // var { height, width } = Dimensions.get("window");
   // console.log("Width is: " + width);
@@ -32,22 +29,22 @@ export default function App() {
     return (
       <>
         <StatusBar />
-      <SafeAreaProvider>
-        <NavigationContainer>
-          <Stack.Navigator>
-              <Stack.Screen 
-                  name="SignIn"
-                  component={SignIn}
-                  options={{headerShown: false}}
-                />
-                <Stack.Screen 
-                  name="SignUp"
-                  component={SignUp}
-                  options={{headerShown: false}}
-                />
-          </Stack.Navigator>
-        </NavigationContainer>
-      </SafeAreaProvider>
+        <SafeAreaProvider>
+          <NavigationContainer>
+            <Stack.Navigator>
+              <Stack.Screen
+                name="SignIn"
+                component={SignIn}
+                options={{ headerShown: false }}
+              />
+              <Stack.Screen
+                name="SignUp"
+                component={SignUp}
+                options={{ headerShown: false }}
+              />
+            </Stack.Navigator>
+          </NavigationContainer>
+        </SafeAreaProvider>
       </>
     );
   return (
@@ -55,7 +52,7 @@ export default function App() {
       <StatusBar />
       <SafeAreaProvider>
         <NavigationContainer>
-          <Stack.Navigator>          
+          <Stack.Navigator>
             {buyer && (
               <>
                 <Stack.Screen
@@ -75,15 +72,15 @@ export default function App() {
                   component={Checkout}
                   options={{ headerShown: false }}
                 />
-                <Stack.Screen 
+                <Stack.Screen
                   name="SignUp"
                   component={SignUp}
-                  options={{headerShown: false}}
+                  options={{ headerShown: false }}
                 />
-                <Stack.Screen 
+                <Stack.Screen
                   name="SignIn"
                   component={SignIn}
-                  options={{headerShown: false}}
+                  options={{ headerShown: false }}
                 />
               </>
             )}
