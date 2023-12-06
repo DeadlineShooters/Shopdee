@@ -1,16 +1,49 @@
-import { View, Text, Image, TextInput, Button, StyleSheet, TouchableOpacity, Pressable } from "react-native";
-import { useState } from "react";
+import { View, Text, Image, TextInput, Button, StyleSheet, TouchableOpacity, Alert } from "react-native";
+import { useEffect, useState } from "react";
 import React from 'react';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation } from "@react-navigation/native";
+import { AntDesign, Entypo, FontAwesome } from '@expo/vector-icons';
+import AsyncStorage from "@react-native-async-storage/async-storage"
+import axios from "axios";
 
 export default function SignIn() {
-  const navigation = useNavigation();
-  const handleRegisterPress = () => {
-    navigation.navigate("SignUp");
-  };
-
   const [email, getEmail] = useState('');
   const [password, getPassword] = useState('');
+  const navigation = useNavigation();
+  useEffect(() => {
+    const checkSigninStatus = async () => {
+      try {
+        const token = await AsyncStorage.getItem("authToken");
+        if (token) {
+          navigation.navigate('BuyerBottomNav', { screen: 'Home' });
+        }
+      } catch(err) {
+        console.log("error message", err);
+      }
+    }
+    checkSigninStatus();
+  }, []);
+  const handleSignUpPress = () => {
+    navigation.navigate("SignUp");
+  };
+  const [hidePassword, setHidePassword] =useState(false);
+  const handlePassword = () => {
+    setHidePassword(!hidePassword)
+  };
+  const handleSignIn = () => {
+    const user = {
+      email:email,
+      password:password
+    }
+    axios.post("http://10.0.2.2:3000/user/signin", user).then((res) => {
+      const token = res.data.token;
+      AsyncStorage.setItem("authToken", token);
+      navigation.navigate('BuyerBottomNav', { screen: 'Home' });
+    }).catch((error) => {
+      Alert.alert("SignIn Error", "Invalid email");
+      console.log(error);
+    })
+  };
 
   return (
     <View style={styles.container}>
@@ -18,99 +51,126 @@ export default function SignIn() {
         style={styles.logo}
         source={require('./shopdee_icon.png')}
       />
-
       <Text style={styles.title}>SHOPDEE</Text>
 
-      <TextInput
-        style={styles.input}
-        onChangeText={getEmail}
-        value={email}
-        placeholder="Enter Email Address"
-      />
 
-      <TextInput
-        style={styles.input}
-        onChangeText={getPassword}
-        value={password}
-        placeholder="Password"
-        secureTextEntry
-      />
+      <View style={{ flexDirection: "column", marginBottom: 6, alignSelf: 'center', display: 'flex', }}>
+        <View style={styles.emailContainer}>
+          <FontAwesome name="envelope" size={24} color="black" style={styles.Icon} />
+          <TextInput
+            style={styles.input}
+            onChangeText={getEmail}
+            value={email}
+            placeholder="Enter Email Address"
+          />
+        </View>
+      </View>
 
-      <TouchableOpacity style={styles.button} onPress={() => {}}>
+
+      <View style={{ flexDirection: "column", marginBottom: 0, alignSelf: 'center', display: 'flex', justifyContent: 'flex-end'}}>
+        <View style={styles.passwordContainer}>
+        <TouchableOpacity style={styles.Icon} onPress={handlePassword}>
+        <Entypo name= {hidePassword ? "eye" : "eye-with-line"} size={24} color="black" style={styles.Icon}/>
+      </TouchableOpacity>   
+
+          <TextInput
+            style={styles.input}
+            onChangeText={getPassword}
+            value={password}
+            placeholder="Password"
+            secureTextEntry = {hidePassword? false : true}
+          />          
+        </View>
+      </View>     
+
+      <TouchableOpacity style={styles.button} onPress={handleSignIn}>
         <Text style={styles.buttonText}>Sign In</Text>
       </TouchableOpacity>
 
-      <Pressable style={styles.registerLink} onPress={handleRegisterPress}>
-        <Text>Do not have an account? <Text style={styles.register}>Register</Text></Text>
-      </Pressable>
+      <TouchableOpacity style = {{alignItems: 'center', marginTop: 10}} onPress={handleSignUpPress}>
+        <Text>Do not have an account? Register </Text>
+      </TouchableOpacity> 
+
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-    container: {
-      flex: 1,
-      marginTop: 100,
-      justifyContent: 'top',
-      paddingHorizontal: 10,
-    },
-    logo: {
-      width: 150,
-      height: 150,
-      alignSelf: 'center',
-      marginTop: 0,
-      marginBottom: 10,
-    },
-    input: {
-      height: 40,
-      width: '70%',
-      alignSelf: 'center',
-      borderColor: 'transparent',
-      backgroundColor: 'rgba(51, 153, 255, 0.5)',
-      borderWidth: 1,
-      paddingLeft: 10,
-      marginBottom: 10,
-    },
+  container: {
+    flex: 1,
+    paddingHorizontal: 10,
+    backgroundColor: "#FFFFFF",
+    justifyContent: "center"
+  },
+  logo: {
+    width: 150,
+    height: 150,
+    alignSelf: 'center',
+    marginTop: 0,
+    marginBottom: 10,
+  },
+  input: {
+    height: 40,
+    width: '70%',
+    alignSelf: 'center',
+    borderColor: 'transparent',
+    backgroundColor: 'rgba(51, 153, 255, 0.5)',
+    borderWidth: 1,
+    paddingLeft: 50,
+    marginBottom: 10,
+    borderRadius: 8
+  },
 
-    title: {
-      textAlign: 'center',
-      marginBottom: 20,
-      fontSize: 24,
-      textTransform: 'uppercase',
-      fontWeight: 'bold',
-    },
-    
-    button: {
-      height: 50,
-      width: '40%',
-      backgroundColor:'rgba(51, 153, 255, 0.5)',
-      paddingHorizontal: 20,
-      paddingVertical: 10,
-      justifyContent: 'center', 
-      alignItems: 'center',
-      marginTop: 30,
-      borderRadius: 30,
-      marginLeft: '30%',
-    },
-
-    buttonText: {
-      color: 'black',
-      fontSize: 18,
-      textTransform: 'uppercase',
-      fontWeight: 'bold',
-    },
-
-    register: {
-    position: 'absolute',
-    bottom: 0,
-    left: 0,
-    right: 0,
-    alignItems: 'center',
-    fontSize: 16,
+  title: {
+    textAlign: 'center',
     marginBottom: 20,
-    },
+    fontSize: 24,
+    textTransform: 'uppercase',
+    fontWeight: 'bold',
+  },
 
-    registerLink: {
-      color: 'blue',
-    },
-  }); 
+  button: {
+    height: 50,
+    width: '40%',
+    backgroundColor: 'rgba(51, 153, 255, 0.5)',
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 10,
+    borderRadius: 30,
+    marginLeft: '30%',
+  },
+  buttonText: {
+    color: 'black',
+    fontSize: 18,
+    textTransform: 'uppercase',
+    fontWeight: 'bold',
+  },
+  Icon: {
+    position: 'absolute',
+    paddingLeft: 10,
+    zIndex: 2,
+  },
+  
+  emailContainer: {
+    height: 40,
+    width: '100%',
+    alignSelf: 'center',
+    borderColor: 'transparent',
+    borderWidth: 1,
+    marginBottom: 10,
+    justifyContent: "space-between",
+    flexDirection: "row",
+  },
+  passwordContainer: {
+    height: 40,
+    width: '100%',
+    alignSelf: 'center',
+    borderColor: 'transparent',
+    borderWidth: 1,
+    marginBottom: 10,
+    justifyContent: "space-between",
+    flexDirection: "row",
+  },
+}); 

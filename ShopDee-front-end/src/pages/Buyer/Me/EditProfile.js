@@ -11,11 +11,16 @@ import { View,
     Alert,
     Dimensions } from "react-native";
 import * as ImagePicker from 'expo-image-picker'
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect, useContext } from "react";
 import {COLORS} from "./Themes";
 import {MaterialIcons, AntDesign, Entypo} from '@expo/vector-icons';
 import DatePicker, { getFormatedDate } from "react-native-modern-datepicker";
 import { Dropdown } from "react-native-element-dropdown";
+import axios from "axios";
+import { UserType } from "../../../../UserContext";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { jwtDecode } from "jwt-decode";
+import "core-js/stable/atob";
 
 const EditProfile = ({navigation}) => {
 //Pop in animation
@@ -95,16 +100,16 @@ const handleOnPressStartDate = () => {
 
 //USER INFORMATION SETTING
 const [selectedImage, setSelectedImage] = useState();
-const [name, setName] = useState("Golden Papaya");
-const [mail, setMail] = useState("goldenpapaya@gmail.com");
-const [phone, setPhone] = useState("0921773092");
+const [name, setName] = useState("");
+const [mail, setMail] = useState("");
+const [phone, setPhone] = useState("");
 
 //Change information
-const [changName, setChangeName] = useState("Golden Papaya");
-const [changeMail, setChangeMail] = useState("goldenpapaya@gmail.com");
-const [changePhone, setChangePhone] = useState("0921773092");
-const [changeGender, setChangeGender] = useState("Not willing");
-const [changeStartedDate, setChangeStartedDate] = useState("2000/01/01");
+const [changName, setChangeName] = useState(name);
+const [changeMail, setChangeMail] = useState(mail);
+const [changePhone, setChangePhone] = useState(phone);
+const [changeGender, setChangeGender] = useState(gender);
+const [changeStartedDate, setChangeStartedDate] = useState(startedDate);
 
 const handleOnPressGoBack = ({navigation}) => {
     if (changName != name || changeMail != mail || changePhone != phone || changeGender != gender || changeStartedDate != startedDate)
@@ -131,7 +136,6 @@ const save = () => {
     setChangePhone(phone);
     setChangeGender(gender);
     setChangeStartedDate(startedDate);
-
     setStatus("success");
     popIn();
 }
@@ -192,6 +196,28 @@ function renderDatePicker() {
         </Modal>
     );
 };
+//User context
+const {userID, setUserID} = useContext(UserType);
+const [user, setUser] = useState("");
+useEffect(() => {
+    const fetchUserProfile = async () => {
+        try {
+            const token = await AsyncStorage.getItem("authToken");
+            const decodedToken = jwtDecode(token);
+            const userID = decodedToken.userID;
+            setUserID(userID);
+            const response = await axios.get(`http://10.0.2.2:3000/user/profile/${userID}`);
+            const user = response.data;
+            setUser(user);
+            setName(user?.User?.username);
+            setMail(user?.User?.email);
+        } catch (error)
+        {
+            console.log("error", error);
+        }
+    }
+    fetchUserProfile();
+}, []);
 return (
     <SafeAreaView style={{
         flex: 1,

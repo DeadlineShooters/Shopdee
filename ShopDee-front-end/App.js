@@ -18,109 +18,98 @@ import HelpSupport from "./src/pages/Buyer/Me/Support";
 import ChangePassword from "./src/pages/Buyer/Me/ChangePassword";
 import SignIn from "./src/pages/SignIn";
 import SignUp from "./src/pages/SignIn/SignUp/index.jsx";
-
+import { UserContext } from "./UserContext.js";
 const Stack = createNativeStackNavigator();
 
 export default function App() {
-  let loggedIn = true;
+  let loggedIn = false;
   let buyer = true;
   let seller = false;
 
   // var { height, width } = Dimensions.get("window");
   // console.log("Width is: " + width);
   // console.log("Height is: " + height);
-
-  if (!loggedIn)
-    return (
-      <>
-      <StatusBar />
-      <SafeAreaProvider>
-        <NavigationContainer>
-          <Stack.Navigator>
-            <Stack.Screen
-                name="SignIn"
-                component={SignIn}
-                options={{ headerShown: false }}
-            />
-            <Stack.Screen
-                name="SignUp"
-                component={SignUp}
-                options={{ headerShown: false }}
-            />
-          </Stack.Navigator>
-        </NavigationContainer>
-      </SafeAreaProvider>
-      </>
-    );
   return (
     <>
       <StatusBar />
-      <SafeAreaProvider>
-        <NavigationContainer>
-          <Stack.Navigator>
-            {buyer && (
-              <>
-                <Stack.Screen
-                  name="BuyerBottomNav"
-                  component={BuyerBottomNavigator}
-                  options={{
-                    headerShown: false,
-                  }}
-                />
-                <Stack.Screen 
-                  name="EditProfile"
-                  component={EditProfile}
-                  options={{headerShown: false}}
-                />
-                <Stack.Screen 
-                  name="Settings"
-                  component={Settings}
-                  options={{headerShown: false}}
-                />
-                <Stack.Screen 
-                  name="ChangePassword"
-                  component={ChangePassword}
-                  options={{headerShown: false}}
-                />
-                <Stack.Screen 
-                  name="SetAddress"
-                  component={SetAddress}
-                  options={{headerShown: false}}
-                />
-                <Stack.Screen 
-                  name="UserPrivacy"
-                  component={UserPrivacy}
-                  options={{headerShown: false}}
-                />
-                <Stack.Screen 
-                  name="AboutShopDee"
-                  component={AboutShopDee}
-                  options={{headerShown: false}}
-                />
-                <Stack.Screen 
-                  name="HelpSupport"
-                  component={HelpSupport}
-                  options={{headerShown: false}}
-                />
-                <Stack.Screen
-                  name="Product Details"
-                  component={ProductDetails}
-                  options={{ headerShown: false }}
-                />
-              </>
-            )}
-            {seller && (
-              <Stack.Screen
-                name="SellerBottomNav"
-                component={SellerBottomNavigator}
-                options={{
-                  headerShown: false,
-                }}
-              />
-            )}
-          </Stack.Navigator>
-        </NavigationContainer>
-      </SafeAreaProvider>
+        <UserContext>
+          <SafeAreaProvider>
+            <NavigationContainer>
+              <Stack.Navigator>
+                {buyer && (
+                  <>
+                    <Stack.Screen
+                      name="SignIn"
+                      component={SignIn}
+                      options={{ headerShown: false }}
+                    />
+                    <Stack.Screen
+                      name="SignUp"
+                      component={SignUp}
+                      options={{ headerShown: false }}
+                    />
+                    <Stack.Screen
+                      name="BuyerBottomNav"
+                      component={BuyerBottomNavigator}
+                      options={{
+                        headerShown: false,
+                      }}
+                    />
+                    <Stack.Screen
+                      name="EditProfile"
+                      component={EditProfile}
+                      options={{ headerShown: false }}
+                    />
+                    <Stack.Screen
+                      name="Settings"
+                      component={Settings}
+                      options={{ headerShown: false }}
+                    />
+                    <Stack.Screen
+                      name="ChangePassword"
+                      component={ChangePassword}
+                      options={{ headerShown: false }}
+                    />
+                    <Stack.Screen
+                      name="SetAddress"
+                      component={SetAddress}
+                      options={{ headerShown: false }}
+                    />
+                    <Stack.Screen
+                      name="UserPrivacy"
+                      component={UserPrivacy}
+                      options={{ headerShown: false }}
+                    />
+                    <Stack.Screen
+                      name="AboutShopDee"
+                      component={AboutShopDee}
+                      options={{ headerShown: false }}
+                    />
+                    <Stack.Screen
+                      name="HelpSupport"
+                      component={HelpSupport}
+                      options={{ headerShown: false }}
+                    />
+                    <Stack.Screen
+                      name="Product Details"
+                      component={ProductDetails}
+                      options={{ headerShown: false }}
+                    />
+                  </>
+                )}
+                {seller && (
+                  <Stack.Screen
+                    name="SellerBottomNav"
+                    component={SellerBottomNavigator}
+                    options={{
+                      headerShown: false,
+                    }}
+                  />
+                )}
+              </Stack.Navigator>
+            </NavigationContainer>
+          </SafeAreaProvider >
+        </UserContext>
     </>
   );
 }
