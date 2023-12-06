@@ -2,7 +2,7 @@ import { StatusBar } from "react-native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { NavigationContainer } from "@react-navigation/native";
 
-// import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
 // import { Dimensions } from "react-native";
 
@@ -10,6 +10,7 @@ import Home from "./src/pages/Buyer/Home";
 import BuyerBottomNavigator from "./src/components/BuyerBottomNavigator";
 import SellerBottomNavigator from "./src/components/SellerBottomNavigator";
 import ProductDetails from "./src/pages/Buyer/ProductDetails";
+import Checkout from "./src/pages/Buyer/Checkout/index.jsx";
 
 import EditProfile from "./src/pages/Buyer/Me/EditProfile.js";
 import Settings from "./src/pages/Buyer/Me/Settings.js";
@@ -93,8 +94,13 @@ export default function App() {
                       options={{ headerShown: false }}
                     />
                     <Stack.Screen
-                      name="Product Details"
+                      name="ProductDetails"
                       component={ProductDetails}
+                      options={{ headerShown: false }}
+                    />
+                    <Stack.Screen
+                      name="Checkout"
+                      component={Checkout}
                       options={{ headerShown: false }}
                     />
                   </>
