@@ -1,10 +1,13 @@
-import { View, Text } from "react-native";
+import { View, Text, SafeAreaView } from "react-native";
+
+import GoBack from "../../../components/goBackPanel";
 
 //  testing code please replace!!
 export default function MyProduct() {
   return (
-    <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: "#fff" }}>
+      {/* <GoBack  */}
       <Text>My Product!</Text>
-    </View>
+    </SafeAreaView>
   );
 }

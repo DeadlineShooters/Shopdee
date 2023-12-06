@@ -1,11 +1,11 @@
 import { StatusBar } from "react-native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
-import { StatusBar } from "react-native";
-import { SafeAreaProvider } from "react-native-safe-area-context";
+// import { StatusBar } from "react-native";
+// import { SafeAreaProvider } from "react-native-safe-area-context";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
+// import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
 // import { Dimensions } from "react-native";
 
@@ -20,7 +20,7 @@ import SignUp from "./src/pages/SignIn/SignUp";
 const Stack = createNativeStackNavigator();
 
 export default function App() {
-  let loggedIn = false;
+  let loggedIn = true;
   let buyer = true;
   let seller = false;
 

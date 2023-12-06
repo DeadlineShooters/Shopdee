@@ -112,7 +112,7 @@ export default function Home() {
         
         <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
           {products.map((product, index) => (
-            <View style={{ width: '50%', padding: 5 }}>
+            <View style={{ width: '50%', padding: 5 }}  key={index}>
               <TouchableOpacity key={product.id} style={styles.productItem} onPress={() => {}}>
                   <Image source={product.imageUrl} style={styles.productImage} />
                   <View style={styles.productDetails}>
