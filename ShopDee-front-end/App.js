@@ -23,13 +23,12 @@ import AboutShopDee from "./src/pages/Buyer/Me/About.js";
 import HelpSupport from "./src/pages/Buyer/Me/Support";
 import ChangePassword from "./src/pages/Buyer/Me/ChangePassword";
 import SignIn from "./src/pages/SignIn";
-import SignUp from "./src/pages/SignIn/SignUp/index.jsx";
 import { UserContext } from "./UserContext.js";
 const Stack = createNativeStackNavigator();
 
 export default function App() {
-  let buyer = true;
-  let seller = false;
+  let buyer = false;
+  let seller = true;
 
   // var { height, width } = Dimensions.get("window");
   // console.log("Width is: " + width);
@@ -43,7 +42,7 @@ export default function App() {
             <Stack.Navigator>
               {buyer && (
                 <>
-                  <Stack.Screen
+                  {/* <Stack.Screen
                     name="SignIn"
                     component={SignIn}
                     options={{ headerShown: false }}
@@ -52,7 +51,7 @@ export default function App() {
                     name="SignUp"
                     component={SignUp}
                     options={{ headerShown: false }}
-                  />
+                  /> */}
                   <Stack.Screen
                     name="BuyerBottomNav"
                     component={BuyerBottomNavigator}
