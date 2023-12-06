@@ -228,6 +228,12 @@ const styles = StyleSheet.create({
     zIndex: 2,
   },
 
+  Icon: {
+    position: 'absolute',
+    paddingLeft: 10,
+    zIndex: 2,
+  },
+
   button: {
     justifyContent: "center",
     alignSelf: "center",
