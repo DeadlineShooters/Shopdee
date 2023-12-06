@@ -13,6 +13,8 @@ import SignIn from "./src/pages/SignIn";
 import Home from "./src/pages/Buyer/Home";
 import BuyerBottomNavigator from "./src/components/BuyerBottomNavigator";
 import SellerBottomNavigator from "./src/components/SellerBottomNavigator";
+import ProductDetails from "./src/pages/Buyer/ProductDetails";
+import Checkout from './src/pages/Buyer/Checkout';
 import SignUp from "./src/pages/SignIn/SignUp";
 
 const Stack = createNativeStackNavigator();
@@ -66,6 +68,11 @@ export default function App() {
                 <Stack.Screen
                   name="Home"
                   component={Home}
+                  options={{ headerShown: false }}
+                />
+                <Stack.Screen
+                  name="Checkout"
+                  component={Checkout}
                   options={{ headerShown: false }}
                 />
                 <Stack.Screen 
