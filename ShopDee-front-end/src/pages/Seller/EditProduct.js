@@ -4,10 +4,12 @@ import {
   StyleSheet,
   TextInput,
   TouchableOpacity,
+  Image,
 } from "react-native";
 import { COLORS } from "../../../assets/Themes";
 import { useState } from "react";
 import { Picker } from "@react-native-picker/picker";
+import * as ImagePicker from "expo-image-picker";
 
 export default function EditProduct() {
   const [productNameText, setProductNameText] = useState("");
@@ -56,6 +58,23 @@ export default function EditProduct() {
 
   const handleCategoryChange = (itemValue) => {
     setSelectedCategory(itemValue);
+  };
+
+  const pickImage = async () => {
+    // No permissions request is necessary for launching the image library
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+      canceled: true,
+    });
+
+    console.log(result);
+
+    if (!result.canceled) {
+      setProductPhotos(result.assets.map((item) => ({ uri: item.uri })));
+    }
   };
 
   return (
@@ -182,7 +201,10 @@ export default function EditProduct() {
               <Image key={index} source={photo} style={styles.productImage} />
             ))}
             {productPhotos.length < 5 && (
-              <TouchableOpacity style={styles.addPhotoButton}>
+              <TouchableOpacity
+                style={styles.addPhotoButton}
+                onPress={pickImage}
+              >
                 <Text>Add Photo</Text>
               </TouchableOpacity>
             )}
@@ -236,5 +258,10 @@ const styles = StyleSheet.create({
   categoryLabel: {
     fontSize: 15,
     color: COLORS.black,
+  },
+  productImage: {
+    width: 50,
+    height: 50,
+    resizeMode: "contain",
   },
 });
