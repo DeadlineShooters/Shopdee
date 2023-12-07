@@ -5,11 +5,13 @@ import {
   TextInput,
   TouchableOpacity,
   Image,
+  FlatList,
 } from "react-native";
 import { COLORS } from "../../../assets/Themes";
 import { useState } from "react";
 import { Picker } from "@react-native-picker/picker";
 import * as ImagePicker from "expo-image-picker";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 export default function EditProduct() {
   const [productNameText, setProductNameText] = useState("");
@@ -64,10 +66,11 @@ export default function EditProduct() {
     // No permissions request is necessary for launching the image library
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
-      allowsEditing: true,
       aspect: [4, 3],
       quality: 1,
       canceled: true,
+      allowsMultipleSelection: true,
+      selectionLimit: 5,
     });
 
     console.log(result);
@@ -159,12 +162,7 @@ export default function EditProduct() {
           </View>
         </View>
         {/* Category field */}
-        <View
-          style={[
-            styles.fieldContainer,
-            { padding: 0, alignItems: "flex-start" },
-          ]}
-        >
+        <View style={[styles.fieldContainer, { alignItems: "flex-start" }]}>
           <View style={{ flexDirection: "row", alignSelf: "center" }}>
             <Text style={{ fontSize: 15 }}>Category: </Text>
             <Text style={{ color: COLORS.lightBlue, fontSize: 15 }}>*</Text>
@@ -197,17 +195,21 @@ export default function EditProduct() {
         <View style={styles.fieldContainer}>
           <Text style={{ fontSize: 15 }}>Product Photos: </Text>
           <View style={styles.photoContainer}>
-            {productPhotos.map((photo, index) => (
-              <Image key={index} source={photo} style={styles.productImage} />
-            ))}
-            {productPhotos.length < 5 && (
-              <TouchableOpacity
-                style={styles.addPhotoButton}
-                onPress={pickImage}
-              >
-                <Text>Add Photo</Text>
-              </TouchableOpacity>
-            )}
+            <TouchableOpacity style={styles.addPhotoButton} onPress={pickImage}>
+              <MaterialCommunityIcons
+                name="file-image-plus"
+                size={30}
+                color="black"
+              />
+            </TouchableOpacity>
+            <FlatList
+              data={productPhotos}
+              renderItem={({ item, index }) => (
+                <Image key={index} source={item} style={styles.productImage} />
+              )}
+              keyExtractor={(item, index) => index.toString()}
+              numColumns={3} // Set the number of columns
+            />
           </View>
         </View>
       </View>
@@ -250,6 +252,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     borderBottomColor: COLORS.secondaryGray,
     borderBottomWidth: 1,
+    paddingBottom: 10,
   },
   pickerStyle: {
     width: "100%",
@@ -260,8 +263,9 @@ const styles = StyleSheet.create({
     color: COLORS.black,
   },
   productImage: {
-    width: 50,
-    height: 50,
+    width: 80,
+    height: 80,
     resizeMode: "contain",
   },
+  photoContainer: {},
 });
