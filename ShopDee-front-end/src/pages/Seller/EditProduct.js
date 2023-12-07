@@ -3,23 +3,54 @@ import {
   Text,
   StyleSheet,
   TextInput,
-  TouchableOpacity,
   Image,
   FlatList,
+  TouchableOpacity,
+  Alert,
 } from "react-native";
 import { COLORS } from "../../../assets/Themes";
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Picker } from "@react-native-picker/picker";
 import * as ImagePicker from "expo-image-picker";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
+import GoBack from "../../components/goBackPanel";
+import { Axios } from "../../api/axios";
+import { useNavigation } from "@react-navigation/native";
 
-export default function EditProduct() {
+export default function EditProduct({ productId }) {
+  const navigation = useNavigation();
+
   const [productNameText, setProductNameText] = useState("");
   const [productDescText, setProductDescText] = useState("");
   const [price, setPrice] = useState(""); // New state for price
   const [stock, setStock] = useState(""); // New state for stock
   const [selectedCategory, setSelectedCategory] = useState("");
   const [productPhotos, setProductPhotos] = useState([]);
+
+  const handleUpdate = async () => {
+    try {
+      const response = await Axios.patch(`/products/${productId}`, {
+        productName: productNameText,
+        productDesc: productDescText,
+        price,
+        stock,
+        selectedCategory,
+        // Include other fields as needed
+      });
+
+      // Assuming your API returns a success status code (e.g., 200)
+      if (response.status === 200) {
+        // Update was successful, handle the response accordingly
+        console.log("Update successful");
+      } else {
+        // Update failed, handle the error
+        console.error("Update failed");
+      }
+    } catch (error) {
+      // Handle Axios or network errors
+      console.error("Error during update:", error);
+    }
+  };
 
   const categories = [
     "Flowers and Vases",
@@ -80,8 +111,62 @@ export default function EditProduct() {
     }
   };
 
+  // check form changes
+  const isFormEdited = useRef(false);
+
+  useEffect(() => {
+    // This effect runs when any of the form fields change
+    isFormEdited.current = true;
+
+    // Cleanup function to reset the flag when the component unmounts
+    return () => {
+      isFormEdited.current = false;
+    };
+  }, [
+    productNameText,
+    productDescText,
+    price,
+    stock,
+    selectedCategory,
+    productPhotos,
+  ]);
+
+  const handleGoBack = () => {
+    if (isFormEdited.current) {
+      // If there are unsaved changes, show a confirmation prompt
+      Alert.alert(
+        "Unsaved Changes",
+        "You have unsaved changes. Do you want to discard?",
+        [
+          {
+            text: "Cancel",
+            style: "cancel",
+          },
+          {
+            text: "Discard",
+            onPress: () => {
+              // Reset the flag and navigate back
+              isFormEdited.current = false;
+              navigation.goBack();
+            },
+          },
+        ],
+        { cancelable: false }
+      );
+    } else {
+      // If no changes, simply navigate back
+      navigation.goBack();
+    }
+  };
+
   return (
     <View style={styles.mainContainer}>
+      <GoBack
+        currentTitle="Edit Product"
+        prevTitle="My Products"
+        func={handleGoBack}
+      ></GoBack>
+
       <View style={styles.mainPanel}>
         {/* Product name  */}
         <View style={styles.fieldContainer}>
@@ -213,6 +298,10 @@ export default function EditProduct() {
           </View>
         </View>
       </View>
+
+      <TouchableOpacity onPress={handleUpdate} style={styles.updateButton}>
+        <Text style={styles.updateText}>Update</Text>
+      </TouchableOpacity>
     </View>
   );
 }
@@ -220,9 +309,9 @@ export default function EditProduct() {
 const styles = StyleSheet.create({
   mainContainer: {
     flex: 1,
-    paddingTop: 10,
   },
   mainPanel: {
+    marginTop: 10,
     backgroundColor: COLORS.white,
   },
   fieldContainer: {
@@ -268,4 +357,21 @@ const styles = StyleSheet.create({
     resizeMode: "contain",
   },
   photoContainer: {},
+  updateContainer: {
+    backgroundColor: COLORS.white,
+    padding: 10,
+  },
+  updateText: {
+    color: COLORS.lightBlue,
+    fontSize: 16,
+    fontWeight: "bold",
+  },
+  updateButton: {
+    position: "absolute",
+    right: 10,
+    top: 35,
+    zIndex: 100,
+    padding: 10,
+    borderRadius: 5,
+  },
 });

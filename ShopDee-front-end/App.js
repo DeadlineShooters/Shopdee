@@ -114,8 +114,7 @@ export default function App() {
                     name="Edit product"
                     component={EditProduct}
                     options={{
-                      headerTitleStyle: { color: COLORS.lightBlue },
-                      headerTintColor: COLORS.lightBlue,
+                      headerShown: false,
                     }}
                   />
                 </>
