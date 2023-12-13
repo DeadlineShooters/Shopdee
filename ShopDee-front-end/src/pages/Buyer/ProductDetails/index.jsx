@@ -337,6 +337,6 @@ const styles = StyleSheet.create({
     padding: 15,
     backgroundColor: COLORS.white,
     borderBottomWidth: 1,
-    borderBottomColor: COLORS.gray,
+    borderBottomColor: COLORS.darkGray,
   },
 });
