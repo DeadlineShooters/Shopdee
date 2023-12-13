@@ -1,12 +1,13 @@
 import { View, Text, StyleSheet, TextInput, Image, FlatList, TouchableOpacity, Alert } from "react-native";
 import { COLORS } from "../../../assets/Themes";
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useContext } from "react";
 import { Picker } from "@react-native-picker/picker";
 import * as ImagePicker from "expo-image-picker";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import GoBack from "../../components/goBackPanel";
 import { Axios } from "../../api/axios";
 import { useNavigation } from "@react-navigation/native";
+import { UserType } from "../../../UserContext";
 
 export default function EditProduct({ productId }) {
   const navigation = useNavigation();
@@ -17,38 +18,56 @@ export default function EditProduct({ productId }) {
   const [stock, setStock] = useState(""); // New state for stock
   const [selectedCategory, setSelectedCategory] = useState("");
   const [productPhotos, setProductPhotos] = useState([]);
+  const { userID, setUserID } = useContext(UserType);
+  const [categories, setCategories] = useState([]);
 
-  const handleUpdate = async () => {
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const response = await Axios.get("http://localhost:3000/categories", {
+          timeout: 5000, // Set timeout to 5 seconds (adjust as needed)
+        });
+        const fetchedCategories = response.data;
+        console.log("{GET http://localhost:3000/categories}", fetchedCategories);
+        setCategories(fetchedCategories); // Update the state
+      } catch (error) {
+        console.error("Error fetching categories:", error);
+        setCategories([]); // Set an empty array in case of an error
+      }
+    };
+
+    fetchCategories();
+  }, []);
+
+  const handleEdit = async () => {
+    // Validate that all required fields are filled
+    if (!productNameText || !productDescText || !price || !stock || !selectedCategory || productPhotos.length === 0) {
+      Alert.alert("Missing Information", "Please fill in all required fields.");
+      return;
+    }
+
     try {
-      const response = await Axios.patch(`/products/${productId}`, {
-        productName: productNameText,
-        productDesc: productDescText,
+      const response = await Axios.put(`/products/${productId}`, {
+        name: productNameText,
+        description: productDescText,
+        images: [],
         price,
-        stock,
-        selectedCategory,
+        quantity: stock,
+        category: selectedCategory,
       });
 
-      // Assuming your API returns a success status code (e.g., 200)
+      // Assuming your API returns a success status code (e.g., 200 for OK)
       if (response.status === 200) {
-        // Update was successful, handle the response accordingly
-        console.log("Update successful");
+        // Edit was successful, handle the response accordingly
+        console.log("Product edited successfully");
       } else {
-        // Update failed, handle the error
-        console.error("Update failed");
+        // Edit failed, handle the error
+        console.error("Product editing failed");
       }
     } catch (error) {
       // Handle Axios or network errors
-      console.error("Error during update:", error);
+      console.error("Error during product editing:", error);
     }
-  };
-
-  const categories = ["Fashion", "Electronics", "Health & Wellness"];
-
-  const onChangeProductName = (text) => {
-    setProductNameText(text);
-  };
-  const onChangeProductDesc = (text) => {
-    setProductDescText(text);
   };
 
   // Handler for price input
@@ -88,12 +107,30 @@ export default function EditProduct({ productId }) {
     }
   };
 
-  // check form changes
+  // Check form changes
+  const initialFormState = useRef({
+    productNameText,
+    productDescText,
+    price,
+    stock,
+    selectedCategory,
+    productPhotos,
+  });
+
   const isFormEdited = useRef(false);
 
   useEffect(() => {
-    // This effect runs when any of the form fields change
-    isFormEdited.current = true;
+    // Compare the current form state with the initial state
+    const isEdited =
+      productNameText !== initialFormState.current.productNameText ||
+      productDescText !== initialFormState.current.productDescText ||
+      price !== initialFormState.current.price ||
+      stock !== initialFormState.current.stock ||
+      selectedCategory !== initialFormState.current.selectedCategory ||
+      JSON.stringify(productPhotos) !== JSON.stringify(initialFormState.current.productPhotos);
+
+    // Set the flag accordingly
+    isFormEdited.current = isEdited;
 
     // Cleanup function to reset the flag when the component unmounts
     return () => {
@@ -205,7 +242,7 @@ export default function EditProduct({ productId }) {
             <Picker selectedValue={selectedCategory} style={styles.pickerStyle} onValueChange={handleCategoryChange}>
               <Picker.Item label="Select Category" value="" style={styles.categoryLabel} />
               {categories.map((category, index) => {
-                return <Picker.Item label={category} value={category} key={index} style={styles.categoryLabel} />;
+                return <Picker.Item label={category.name} value={category._id} key={index} style={styles.categoryLabel} />;
               })}
             </Picker>
           </View>
@@ -227,8 +264,8 @@ export default function EditProduct({ productId }) {
         </View>
       </View>
 
-      <TouchableOpacity onPress={handleUpdate} style={styles.updateButton}>
-        <Text style={styles.updateText}>Update</Text>
+      <TouchableOpacity onPress={handleEdit} style={styles.addButton}>
+        <Text style={styles.addText}>Edit</Text>
       </TouchableOpacity>
     </View>
   );
@@ -285,13 +322,12 @@ const styles = StyleSheet.create({
     resizeMode: "contain",
   },
   photoContainer: {},
-
-  updateText: {
+  addText: {
     color: COLORS.lightBlue,
     fontSize: 16,
     fontWeight: "bold",
   },
-  updateButton: {
+  addButton: {
     position: "absolute",
     right: 10,
     top: 35,

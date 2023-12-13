@@ -19,7 +19,7 @@ export default function AddProduct({ productId }) {
   const [selectedCategory, setSelectedCategory] = useState("");
   const [productPhotos, setProductPhotos] = useState([]);
   const { userID, setUserID } = useContext(UserType);
-  const categories = useRef([]);
+  const [categories, setCategories] = useState([]);
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -28,10 +28,11 @@ export default function AddProduct({ productId }) {
           timeout: 5000, // Set timeout to 5 seconds (adjust as needed)
         });
         const fetchedCategories = response.data;
-        categories.current = fetchedCategories; // Update the ref
+        console.log("{GET http://localhost:3000/categories}", fetchedCategories);
+        setCategories(fetchedCategories); // Update the state
       } catch (error) {
         console.error("Error fetching categories:", error);
-        categories.current = []; // Set an empty array in case of an error
+        setCategories([]); // Set an empty array in case of an error
       }
     };
 
@@ -39,6 +40,12 @@ export default function AddProduct({ productId }) {
   }, []);
 
   const handleAdd = async () => {
+    // Validate that all required fields are filled
+    if (!productNameText || !productDescText || !price || !stock || !selectedCategory || productPhotos.length === 0) {
+      Alert.alert("Missing Information", "Please fill in all required fields.");
+      return;
+    }
+
     try {
       const response = await Axios.post(`/products/${productId}`, {
         name: productNameText,
@@ -49,7 +56,7 @@ export default function AddProduct({ productId }) {
         category: selectedCategory,
       });
 
-      // Assuming your API returns a success status code (e.g., 201 for resource created)
+      // 201 for resource created)
       if (response.status === 201) {
         // Addition was successful, handle the response accordingly
         console.log("Product added successfully");
@@ -107,12 +114,30 @@ export default function AddProduct({ productId }) {
     }
   };
 
-  // check form changes
+  // Check form changes
+  const initialFormState = useRef({
+    productNameText,
+    productDescText,
+    price,
+    stock,
+    selectedCategory,
+    productPhotos,
+  });
+
   const isFormEdited = useRef(false);
 
   useEffect(() => {
-    // This effect runs when any of the form fields change
-    isFormEdited.current = true;
+    // Compare the current form state with the initial state
+    const isEdited =
+      productNameText !== initialFormState.current.productNameText ||
+      productDescText !== initialFormState.current.productDescText ||
+      price !== initialFormState.current.price ||
+      stock !== initialFormState.current.stock ||
+      selectedCategory !== initialFormState.current.selectedCategory ||
+      JSON.stringify(productPhotos) !== JSON.stringify(initialFormState.current.productPhotos);
+
+    // Set the flag accordingly
+    isFormEdited.current = isEdited;
 
     // Cleanup function to reset the flag when the component unmounts
     return () => {
@@ -223,7 +248,7 @@ export default function AddProduct({ productId }) {
           <View style={{ flex: 1, flexGrow: 1 }}>
             <Picker selectedValue={selectedCategory} style={styles.pickerStyle} onValueChange={handleCategoryChange}>
               <Picker.Item label="Select Category" value="" style={styles.categoryLabel} />
-              {categories.current.map((category, index) => {
+              {categories.map((category, index) => {
                 return <Picker.Item label={category.name} value={category._id} key={index} style={styles.categoryLabel} />;
               })}
             </Picker>
