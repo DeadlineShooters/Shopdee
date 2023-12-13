@@ -1,13 +1,18 @@
-import { SafeAreaView, ScrollView, Text, View, TouchableOpacity } from "react-native"
+import {
+  SafeAreaView,
+  ScrollView,
+  Text,
+  View,
+  TouchableOpacity,
+} from "react-native";
 import { SIZES, COLORS, FONTS } from "../../assets/Themes";
 
-
 import {
-    MaterialIcons,
-    Ionicons,
-    Feather,
-    AntDesign,
-    MaterialCommunityIcons,
+  MaterialIcons,
+  Ionicons,
+  Feather,
+  AntDesign,
+  MaterialCommunityIcons,
 } from "@expo/vector-icons";
 
 export default function GoBack({ prevTitle, currentTitle, func }) {

@@ -2,7 +2,13 @@ import ProductItem from "./ProductItem";
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 
-export default function Order({ buyer, buttonVisible, buttonText, itemList, totalPayment }) {
+export default function Order({
+  buyer,
+  buttonVisible,
+  buttonText,
+  itemList,
+  totalPayment,
+}) {
   const navigation = useNavigation();
 
   function confirmOrder() {
@@ -13,7 +19,13 @@ export default function Order({ buyer, buttonVisible, buttonText, itemList, tota
     <View style={styles.mainContainer}>
       <Text style={styles.buyer}>From {buyer}</Text>
       {itemList.map((item) => (
-        <ProductItem key={item.id} productName={item.name} productPrice={item.price} productQuantity={item.quantity} imagePath={item.imageLink} />
+        <ProductItem
+          key={item.id}
+          productName={item.name}
+          productPrice={item.price}
+          productQuantity={item.quantity}
+          imagePath={item.imageLink}
+        />
       ))}
       {/* <ProductItem
         productName="Nike Club Max"
@@ -25,10 +37,18 @@ export default function Order({ buyer, buttonVisible, buttonText, itemList, tota
       <View style={styles.bottomContainer}>
         <View style={styles.totalPaymentContainer}>
           <Text style={styles.totalPaymentText}>Total Price:</Text>
-          <Text style={styles.totalPrice}>{totalPayment.toLocaleString()}đ</Text>
+          <Text style={styles.totalPrice}>
+            {totalPayment.toLocaleString()}đ
+          </Text>
         </View>
         {buttonVisible && (
-          <TouchableOpacity style={styles.button} onPress={confirmOrder}>
+          // <TouchableOpacity style={styles.button} onPress={confirmOrder}>
+          //   <Text style={styles.buttonText}>{buttonText}</Text>
+          // </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.button}
+            onPress={() => navigation.navigate("Edit product")}
+          >
             <Text style={styles.buttonText}>{buttonText}</Text>
           </TouchableOpacity>
         )}

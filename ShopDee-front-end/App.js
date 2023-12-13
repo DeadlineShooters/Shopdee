@@ -18,15 +18,13 @@ import AboutShopDee from "./src/pages/Buyer/Me/About.js";
 import HelpSupport from "./src/pages/Buyer/Me/Support";
 import ChangePassword from "./src/pages/Buyer/Me/ChangePassword";
 import SignIn from "./src/pages/SignIn";
-import SignUp from "./src/pages/SignIn/SignUp/index.jsx";
 import { UserContext } from "./UserContext.js";
-import Checkout from "./src/pages/Buyer/Checkout/index.jsx";
+import AddProduct from "./src/pages/Seller/AddProduct.js";
 const Stack = createNativeStackNavigator();
 
 export default function App() {
-  let loggedIn = true;
-  let buyer = true;
-  let seller = false;
+  let buyer = false;
+  let seller = true;
 
   // var { height, width } = Dimensions.get("window");
   // console.log("Width is: " + width);
@@ -105,6 +103,7 @@ export default function App() {
                   </>
                 )}
                 {seller && (
+                  <>
                   <Stack.Screen
                     name="SellerBottomNav"
                     component={SellerBottomNavigator}
@@ -112,11 +111,19 @@ export default function App() {
                       headerShown: false,
                     }}
                   />
-                )}
-              </Stack.Navigator>
-            </NavigationContainer>
-          </SafeAreaProvider >
-        </UserContext>
+                  <Stack.Screen
+                    name="Edit product"
+                    component={AddProduct}
+                    options={{
+                      headerShown: false,
+                    }}
+                  />
+                </>
+              )}
+            </Stack.Navigator>
+          </NavigationContainer>
+        </SafeAreaProvider>
+      </UserContext>
     </>
   );
 }
