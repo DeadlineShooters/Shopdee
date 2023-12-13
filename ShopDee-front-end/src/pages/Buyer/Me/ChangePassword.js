@@ -9,9 +9,14 @@ import {
     Animated,
     Dimensions
 } from "react-native";
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useContext, useEffect } from "react";
 import { COLORS } from "./Themes.js";
 import { MaterialIcons, Ionicons, AntDesign, Entypo } from '@expo/vector-icons';
+import axios from "axios";
+import { UserType } from "../../../../UserContext";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { jwtDecode } from "jwt-decode";
+import "core-js/stable/atob";
 
 const ChangePassword = ({ navigation }) => {
     //Pop in animation
@@ -26,8 +31,8 @@ const ChangePassword = ({ navigation }) => {
     const failHeader = "Failed!";
     const failMessage = "Change password failed! Please retry";
 
-    const [password, setPassword] = useState("letmein");
-    const [confirmPassword, setConfirmPassword] = useState("letmein");
+    const [password, setPassword] = useState("");
+    const [confirmPassword, setConfirmPassword] = useState("");
     const [hidePassword, setHidePassword] = useState(false);
     const [hideConfirmPassword, setHideConfirmPassword] = useState(false);
 
@@ -65,22 +70,39 @@ const ChangePassword = ({ navigation }) => {
     const checkChangePassword = () => {
         //Check for the Name TextInput
         if (!password.trim()) {
-          alert('Please input your new password');
-          return;
+            alert('Please input your new password');
+            return;
         }
         //Check for the Email TextInput
         if (!confirmPassword.trim()) {
-          alert('Please confirm your new password');
-          return;
+            alert('Please confirm your new password');
+            return;
         }
-        if (password !== confirmPassword)
-        {
+        if (password !== confirmPassword) {
             alert('Your password and confirm password must match!');
             return;
         }
         save();
-      };
-    
+    };
+
+    const {userID, setUserID} = useContext(UserType);
+    const [user, setUser] = useState("");
+    useEffect(() => {
+        const fetchUserProfile = async () => {
+            try {
+                const token = await AsyncStorage.getItem("authToken");
+                const decodedToken = jwtDecode(token);
+                const userID = decodedToken.userID;
+                setUserID(userID);
+                const response = await axios.get(`http://10.0.2.2:3000/user/profile/${userID}`);
+                const user = response.data;
+                setUser(user);
+            } catch (error) {
+                console.log("error", error);
+            }
+        }
+        fetchUserProfile();
+    }, []);
     return (
         <SafeAreaView style={{
             flex: 1,
@@ -140,7 +162,7 @@ const ChangePassword = ({ navigation }) => {
                                 editable={true}
                                 secureTextEntry={hidePassword ? false : true}
                             />
-                            <TouchableOpacity onPress={()=> setHidePassword(!hidePassword)}>
+                            <TouchableOpacity onPress={() => setHidePassword(!hidePassword)}>
                                 <Ionicons name={hidePassword ? "eye-outline" : "eye-off-outline"} size={24} color="black" />
                             </TouchableOpacity>
                         </View>
@@ -184,11 +206,11 @@ const ChangePassword = ({ navigation }) => {
                 <Animated.View
                     style={[
                         styles.toastContainer,
-                            {
-                                transform: [{ translateY: popAnim }],
-                            },
-                        ]}>
-                        <View style={styles.toastRow}>
+                        {
+                            transform: [{ translateY: popAnim }],
+                        },
+                    ]}>
+                    <View style={styles.toastRow}>
                         <AntDesign
                             name={status === "success" ? "checkcircleo" : "closecircleo"}
                             size={24}
