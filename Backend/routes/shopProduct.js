@@ -6,12 +6,12 @@ const router = express.Router({mergeParams: true});
 // /shop/:shopId/products
 router.get('', shop.index);
 
-router.get('/create-product', shop.createProduct);
+router.post('/create-product', shop.createProduct);
 
 router.get('/:idProduct', shop.getOne);
 
 router.put('/:idProduct', shop.updateProduct);
 
-router.get('/:idProduct', shop.deleteProduct);
+router.delete('/:idProduct', shop.deleteProduct);
 
 export default router;

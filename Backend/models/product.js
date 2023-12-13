@@ -5,7 +5,7 @@ import Shop from "./shop.js";
 const productSchema = new Schema({
     name: String,
     image: String,
-    desciption: String,
+    description: String,
     price: Number,
     quantity: Number,
     status: String,
