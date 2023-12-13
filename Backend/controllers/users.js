@@ -3,7 +3,8 @@ import user from "../models/Users.js"
 import jwt from "jsonwebtoken"
 import randomBytes from "randombytes"
 import crypto from "crypto"
-
+import { getDataUri } from "../utils/feature.js"
+import cloudinary from "cloudinary"
 export const register = async (req, res) => {
     try {
         const { username, email, password} = req.body;
@@ -58,5 +59,33 @@ export const getprofile = async (req, res) => {
         res.status(200).json({User});
     } catch (error) {
         res.status(500).json({message: "Error retrieving the user profile"});
+    }
+}
+
+export const updateprofile = async (req, res) => {
+    console.log(req.body);
+    try {
+        const userID = req.params.userID;
+        const { username, email, phone, gender, birthday, profilePic} = req.body;
+        //await cloudinary.v2.uploader.destroy(EditUser.profilePic.public_id);
+        //const cdb = await cloudinary.v2.uploader.upload(profileimage.uri, {resource_type: "image"});
+        await user.findByIdAndUpdate(userID, {
+            username: username,
+            email: email,
+            phone: phone,
+            gender: gender,
+            birthDay: birthday,
+            profilePic: {
+                public_id: profilePic.publicId,
+                url: profilePic.secureUrl
+            }
+        })
+        res.status(200).send({
+            success: true,
+            message: "profile updated successfully",
+        })
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({message: "Error updating the user profile"});
     }
 }

@@ -34,7 +34,15 @@ const userSchema = new mongoose.Schema({
             phone: String,
             location: String,
         }
-    ]
+    ],
+    profilePic: {
+        public_id: {
+            type: String
+        },
+        url: {
+            type: String 
+        },
+    }
 })
 
 const user = mongoose.model("user", userSchema);
