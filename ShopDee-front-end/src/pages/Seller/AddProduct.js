@@ -1,12 +1,13 @@
 import { View, Text, StyleSheet, TextInput, Image, FlatList, TouchableOpacity, Alert } from "react-native";
 import { COLORS } from "../../../assets/Themes";
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useContext } from "react";
 import { Picker } from "@react-native-picker/picker";
 import * as ImagePicker from "expo-image-picker";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import GoBack from "../../components/goBackPanel";
 import { Axios } from "../../api/axios";
 import { useNavigation } from "@react-navigation/native";
+import { UserType } from "../../../UserContext";
 
 export default function AddProduct({ productId }) {
   const navigation = useNavigation();
@@ -17,15 +18,35 @@ export default function AddProduct({ productId }) {
   const [stock, setStock] = useState(""); // New state for stock
   const [selectedCategory, setSelectedCategory] = useState("");
   const [productPhotos, setProductPhotos] = useState([]);
+  const { userID, setUserID } = useContext(UserType);
+  const categories = useRef([]);
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const response = await Axios.get("http://localhost:3000/categories", {
+          timeout: 5000, // Set timeout to 5 seconds (adjust as needed)
+        });
+        const fetchedCategories = response.data;
+        categories.current = fetchedCategories; // Update the ref
+      } catch (error) {
+        console.error("Error fetching categories:", error);
+        categories.current = []; // Set an empty array in case of an error
+      }
+    };
+
+    fetchCategories();
+  }, []);
 
   const handleAdd = async () => {
     try {
       const response = await Axios.post(`/products/${productId}`, {
-        productName: productNameText,
-        productDesc: productDescText,
+        name: productNameText,
+        description: productDescText,
+        images: [],
         price,
-        stock,
-        selectedCategory,
+        quantity: stock,
+        category: selectedCategory,
       });
 
       // Assuming your API returns a success status code (e.g., 201 for resource created)
@@ -41,8 +62,6 @@ export default function AddProduct({ productId }) {
       console.error("Error during product addition:", error);
     }
   };
-
-  const categories = ["Fashion", "Electronics", "Health & Wellness"];
 
   const onChangeProductName = (text) => {
     setProductNameText(text);
@@ -204,8 +223,8 @@ export default function AddProduct({ productId }) {
           <View style={{ flex: 1, flexGrow: 1 }}>
             <Picker selectedValue={selectedCategory} style={styles.pickerStyle} onValueChange={handleCategoryChange}>
               <Picker.Item label="Select Category" value="" style={styles.categoryLabel} />
-              {categories.map((category, index) => {
-                return <Picker.Item label={category} value={category} key={index} style={styles.categoryLabel} />;
+              {categories.current.map((category, index) => {
+                return <Picker.Item label={category.name} value={category._id} key={index} style={styles.categoryLabel} />;
               })}
             </Picker>
           </View>
