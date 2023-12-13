@@ -1,8 +1,9 @@
 import express from "express";
 import mongoose from "mongoose";
 import bodyParser from "body-parser";
-import userRoutes from './routes/users.js'
-import productRoutes from './routes/products.js'
+import userRoutes from './routes/users.js';
+import productRoutes from './routes/products.js';
+import cloudinary from "cloudinary";
 
 const mongoUri = "mongodb+srv://shopdee:123@cluster0.1cwb6k0.mongodb.net/";
 try {
@@ -11,6 +12,13 @@ try {
 } catch (error) {
     console.log("Could not connect to the database", error);
 }
+
+//cloudinary config
+cloudinary.v2.config({ 
+    cloud_name: 'dqxtf297o', 
+    api_key: '415791974957894', 
+    api_secret: 'ArdTn7D-gE-HNQcQMYG4_OOfmhA',
+});
 
 const app = express();
 const PORT = 3000;
