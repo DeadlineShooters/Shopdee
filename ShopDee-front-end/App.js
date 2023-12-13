@@ -21,6 +21,7 @@ import ChangePassword from "./src/pages/Buyer/Me/ChangePassword";
 import SignIn from "./src/pages/SignIn";
 import SignUp from "./src/pages/SignIn/SignUp/index.jsx";
 import { UserContext } from "./UserContext.js";
+import Checkout from "./src/pages/Buyer/Checkout/index.jsx";
 const Stack = createNativeStackNavigator();
 
 export default function App() {
@@ -93,8 +94,13 @@ export default function App() {
                       options={{ headerShown: false }}
                     />
                     <Stack.Screen
-                      name="Product Details"
+                      name="ProductDetails"
                       component={ProductDetails}
+                      options={{ headerShown: false }}
+                    />
+                    <Stack.Screen
+                      name="Checkout"
+                      component={Checkout}
                       options={{ headerShown: false }}
                     />
                   </>

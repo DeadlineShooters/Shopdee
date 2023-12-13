@@ -19,85 +19,46 @@ export default function Home() {
   function onPressFunction() {
     navigation.navigate("Home");
   }
-
+    
   const localImageUrls = [require("./sunglasses.png"), require("./hat.png")];
-
+  const initialFavoriteStatus = {};
+  const [favoriteProducts, setFavoriteProducts] = useState(initialFavoriteStatus);
+  const product1 = {
+    id: "1",
+    name: "Sunglasses",
+    price: "$ 48.9",
+    imageUrl: localImageUrls[0],
+  }
+  const product2 = {
+    id: "2",
+    name: "Hat",
+    price: "$ 47.7",
+    imageUrl: localImageUrls[1],
+  }
   const products = [
-    {
-      id: "1",
-      name: "Sunglasses",
-      description: "$ 48.9",
-      imageUrl: localImageUrls[0],
-    },
-    {
-      id: "2",
-      name: "Hat",
-      description: "$ 47.7",
-      imageUrl: localImageUrls[1],
-    },
-    {
-      id: "3",
-      name: "Sunglasses",
-      description: "$ 48.9",
-      imageUrl: localImageUrls[0],
-    },
-    {
-      id: "4",
-      name: "Hat",
-      description: "$ 47.7",
-      imageUrl: localImageUrls[1],
-    },
-    {
-      id: "5",
-      name: "Sunglasses",
-      description: "$ 48.9",
-      imageUrl: localImageUrls[0],
-    },
-    {
-      id: "6",
-      name: "Hat",
-      description: "$ 47.7",
-      imageUrl: localImageUrls[1],
-    },
-    // {
-    //   id: '3',
-    //   name: 'Product 3',
-    //   description: 'Description for product 3',
-    //   imageUrl: 'https://example.com/product2.jpg',
-    // },
-    // {
-    //   id: '4',
-    //   name: 'Product 4',
-    //   description: 'Description for product 4',
-    //   imageUrl: 'https://example.com/product2.jpg',
-    // },
-    // {
-    //   id: '5',
-    //   name: 'Product 5',
-    //   description: 'Description for product 5',
-    //   imageUrl: 'https://example.com/product2.jpg',
-    // },
+    product1, product2, product1, product2, product1, product2, product1, product2,
   ];
-
+  const handleFavourite = (productId) => {
+    setFavoriteProducts({
+      ...favoriteProducts,
+      [productId]: !favoriteProducts[productId],
+    });
+  };
   const [search, getSearch] = useState("");
   return (
-    <View style={styles.container}>
-      <Pressable onPress={onPressFunction}></Pressable>
-
-      <View
+    <View style={styles.container} >
+           <View
         style={{
           flexDirection: "row",
           alignItems: "center",
-          paddingBottom: 10,
-          paddingLeft: 10,
-          paddingRight: 40,
-        }}
+          marginBottom: 10,
+          }}
       >
         <View
           style={{
             flexDirection: "row",
             alignItems: "center",
-            display: "flex",
+            flex: 1,
           }}
         >
           <AntDesign
@@ -113,10 +74,9 @@ export default function Home() {
             placeholder="Search"
           />
         </View>
-        <View style={{ flexDirection: "row", marginRight: 20 }}>
+       
           <TouchableOpacity
-            style={{
-              flexDirection: "row",
+            style={{          
               backgroundColor: "rgba(51, 153, 255, 0.5)",
               padding: 10,
               borderRadius: 20,
@@ -125,49 +85,36 @@ export default function Home() {
               alignItems: "center",
               justifyContent: "center",
             }}
-            onPress={() => {}}
+            onPress={() => { }}
           >
             <FontAwesome name="shopping-cart" size={20} color="gray" />
           </TouchableOpacity>
-        </View>
       </View>
 
-      <View style={{ flexDirection: "row", justifyContent: "flex-end" }}>
+      <View style={{ flexDirection: "row", justifyContent: "flex-end", paddingBottom:10 }}>
         <TouchableOpacity
-          style={{
-            flexDirection: "row",
-            backgroundColor: "#D3D3D3",
-            padding: 5,
-            borderRadius: 20,
-            marginRight: 20,
-          }}
-          onPress={() => {}}
+          style={styles.button}
+          onPress={() => { }}
         >
           <Text> Filter </Text>
           <AntDesign name="filter" size={20} color="gray" />
         </TouchableOpacity>
         <TouchableOpacity
-          style={{
-            flexDirection: "row",
-            backgroundColor: "#D3D3D3",
-            padding: 5,
-            borderRadius: 20,
-            marginRight: 20,
-            paddingRight: 10,
-          }}
-          onPress={() => {}}
+          style={styles.button}
+          onPress={() => { }}
         >
           <Text> Sort </Text>
-          <FontAwesome name="sort-amount-asc" size={20} color="gray" />
+          <FontAwesome name="sort-amount-asc" size={18} color="gray" />
         </TouchableOpacity>
       </View>
 
-      <ScrollView contentContainerStyle={styles.productList}>
+      <ScrollView contentContainerStyle={styles.productList} showsVerticalScrollIndicator={false}>
         <View style={{ flexDirection: "row", flexWrap: "wrap" }}>
           {products.map((product, index) => (
-            <View style={{ width: "50%", padding: 5 }} key={index}>
-              <TouchableOpacity
-                key={product.id}
+            <View style={{ 
+              width: "50%"
+              }} key={index}>
+              <TouchableOpacity 
                 style={styles.productItem}
                 onPress={() => {
                   navigation.navigate("ProductDetails");
@@ -176,9 +123,18 @@ export default function Home() {
                 <Image source={product.imageUrl} style={styles.productImage} />
                 <View style={styles.productDetails}>
                   <Text style={styles.productName}>{product.name}</Text>
-                  <Text>{product.description}</Text>
+                  <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
+                    <Text>{product.price}</Text>
+                    {<TouchableOpacity onPress={() => handleFavourite(product.id)}>
+                      <AntDesign 
+                        name={favoriteProducts[product.id] ? 'heart' : 'hearto'}
+                        size={24}
+                        color={favoriteProducts[product.id] ? 'red' : 'black'} />
+                    </TouchableOpacity>}
+                  </View>
                 </View>
               </TouchableOpacity>
+
             </View>
           ))}
         </View>
@@ -190,10 +146,11 @@ export default function Home() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    marginTop: 50,
+    marginTop: 10,
     justifyContent: "top",
     padding: 10,
     paddingHorizontal: 10,
+    backgroundColor: "white",
   },
   input: {
     height: 40,
@@ -205,54 +162,11 @@ const styles = StyleSheet.create({
     paddingLeft: 40,
   },
 
-  cartButton: {
-    position: "absolute",
-    left: 330,
-    top: 0,
-    zIndex: 2,
-    height: 40,
-    width: "12%",
-    borderColor: "transparent",
-    backgroundColor: "rgba(51, 153, 255, 0.5)",
-    borderWidth: 1,
-    borderRadius: 30,
-    paddingLeft: 10,
-    marginBottom: 10,
-    zIndex: 2,
-  },
   buttonText: {
     color: "black",
     fontSize: 18,
     textTransform: "uppercase",
     fontWeight: "bold",
-  },
-  filterButton: {
-    left: 275,
-    top: -40,
-    zIndex: 2,
-    height: 40,
-    width: "25%",
-    borderColor: "transparent",
-    backgroundColor: "#EAEAEA",
-    borderWidth: 1,
-    borderRadius: 30,
-    paddingLeft: 10,
-    marginBottom: 10,
-    zIndex: 1,
-  },
-  sortButton: {
-    left: 170,
-    top: -90,
-    zIndex: 2,
-    height: 40,
-    width: "25%",
-    borderColor: "transparent",
-    backgroundColor: "#EAEAEA",
-    borderWidth: 1,
-    borderRadius: 30,
-    paddingLeft: 10,
-    marginBottom: 10,
-    zIndex: 1,
   },
   text: {
     top: 7,
@@ -262,7 +176,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   productList: {
-    paddingHorizontal: 10,
+    marginTop:10
   },
   productRow: {
     flexDirection: "row",
@@ -276,12 +190,17 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "#ccc",
     padding: 10,
+    margin:5,
     height: 200,
+    borderRadius: 20,
+    backgroundColor: "white",
+    elevation: 10
   },
   productImage: {
     flex: 1,
     width: "100%",
     height: "100%",
+    borderRadius: 20,
   },
   productDetails: {
     flex: 1,
@@ -290,7 +209,18 @@ const styles = StyleSheet.create({
   },
   productName: {
     fontWeight: "bold",
-    marginBottom: 50,
+    marginTop: 10,
+    marginBottom: 30,
     textAlign: "left",
   },
+  button: {
+    flexDirection: "row",
+    backgroundColor: "#D3D3D3",
+    padding: 5,
+    paddingHorizontal:10,
+    borderRadius: 20,
+    marginLeft: 20,
+    justifyContent: 'center',
+    alignItems: 'center'
+  }
 });
