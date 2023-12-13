@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 const Schema = mongoose.Schema;
-import Shop from "./shop";
+import Shop from "./shop.js";
 
 const productSchema = new Schema({
     name: String,
