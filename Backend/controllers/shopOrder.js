@@ -2,7 +2,8 @@ import Order from "../models/order"
 
 export const index = async (req, res) => {
     try {
-        const orders = await Order.find({});
+        const { status } = req.query || '';
+        const orders = await Order.findAll({status: status});
         if (!orders) {
             res.status(404).json({ message: "Orders not found" });
         }
@@ -13,4 +14,16 @@ export const index = async (req, res) => {
     }
 }
 
-exp
+export const update = async (req, res) => {
+    try {
+        const { orderId } = req.params;
+        const order = new Order(req.body.order);
+        await Order.findByIdAndUpdate(orderId, order);
+        res.json({
+            message: "Order status updated",
+            order
+        })
+    } catch (e) {
+        res.status(500).json({ message: "Error retrieving order status" });
+    }
+}

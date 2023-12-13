@@ -6,7 +6,7 @@ import Category from "./category.js";
 const productSchema = new Schema({
   name: String,
   image: [String],
-  desciption: String,
+  description: String,
   price: Number,
   quantity: Number,
   category: { type: Schema.Types.ObjectId, ref: "Category" },
