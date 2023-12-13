@@ -90,6 +90,7 @@ const Me = ({ navigation }) => {
                 setUserID(userID);
                 const response = await axios.get(`http://10.0.2.2:3000/user/profile/${userID}`);
                 const user = response.data;
+                console.log(user);
                 setUser(user);
                 setUserName(user?.User?.username);
             } catch (error) {
@@ -112,7 +113,7 @@ const Me = ({ navigation }) => {
                     flexDirection: 'row'
                 }}>
                     <Image
-                        source={require('../../../../assets/avatar.jpg')}
+                        source={{uri: user?.User?.profilePic.url}}
                         style={{
                             height: 100,
                             width: 100,

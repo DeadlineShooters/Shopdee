@@ -67,7 +67,12 @@ const handleImageSelection = async () => {
     })
     if (!result.canceled) {
         setSelectedImage(result.assets[0].uri);
-        setFile(result);
+        let image = {
+            uri: result.assets[0].uri,
+            type: `test/${result.assets[0].uri.split(".")[1]}`,
+            name: `test.${result.assets[0].uri.split(".")[1]}`,
+        }
+        handleUpload(image);
     }
 }
 
@@ -98,7 +103,6 @@ const handleOnPressStartDate = () => {
 
 //USER INFORMATION SETTING
 const user = route.params.props.User;
-const [file, setFile] = useState();
 const [publicId, setPublicId] = useState("");
 const [secureUrl, setSecureUrl] = useState("");
 const [selectedImage, setSelectedImage] = useState();
@@ -147,6 +151,32 @@ const handleOnPressGoBack = ({navigation}) => {
     }
 }
 
+const handleUpload = async (image) => {
+    const data = new FormData();
+    data.append("file", image);
+    data.append("upload_preset", "ShopDeeImageStock");
+    data.append("cloud_name", "dqxtf297o");
+
+    try {
+        const response = await fetch("https://api.cloudinary.com/v1_1/dqxtf297o/image/upload", {
+            method: "post",
+            body: data,
+        });
+
+        if (response.ok) {
+            const result = await response.json();
+            console.log(result);
+            setPublicId(result.public_id);
+            setSecureUrl(result.secure_url);
+        } else {
+            console.error("API request failed:", response.status, response.statusText);
+        }
+    } catch (error) {
+        console.error("Error during API request:", error);
+    }
+};
+
+
 const save = async () => {
     setChangeName(username);
     setChangeMail(mail);
@@ -155,29 +185,7 @@ const save = async () => {
     setChangeStartedDate(startedDate);
     setChangeSelectedImage(selectedImage);
 
-    let image = {
-        uri: file.assets[0].uri,
-        type: `test/${file.assets[0].uri.split(".")[1]}`,
-        name: `test.${file.assets[0].uri.split(".")[1]}`,
-    }
-    const data = new FormData()
-    data.append("file", image)
-    data.append("upload_preset", "ShopDeeImageStock")
-    data.append("cloud_name", "dqxtf297o")
-
     try {
-        await fetch("https://api.cloudinary.com/v1_1/dqxtf297o/image/upload", {
-            method: 'POST',
-            body: data,
-            headers: {
-                'Accept': 'application/json',
-                'Content-type': 'multipart/form-data'
-            }}
-        ).then(res => res.text()).then(data => {
-            console.log(data);
-            setPublicId(data.public_id);
-            setSecureUrl(data.secure_url);
-        })
         const userID = user._id;
         const profilePic = {publicId, secureUrl};
         console.log(profilePic);
