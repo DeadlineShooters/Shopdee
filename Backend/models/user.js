@@ -35,6 +35,13 @@ const userSchema = new mongoose.Schema({
             location: String,
         },
     ],
+    publicID: {
+        type: String,
+    },
+    imageUrl: {
+        type: String,
+        require: false
+    }
 });
 
 const User = mongoose.model("User", userSchema);
