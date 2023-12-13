@@ -3,7 +3,7 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 import { FontAwesome5 } from "@expo/vector-icons";
 import { Feather } from "@expo/vector-icons";
 
-import MyProduct from "../../pages/Seller/MyProduct";
+import MyProduct from "../../pages/Seller/MyProducts";
 import EditProfile from "../../pages/Seller/EditProfile";
 import SellerMyOrderTopTabs from "../SellerMyOrderTopTabs";
 

@@ -10,6 +10,7 @@ import Home from "./src/pages/Buyer/Home";
 import BuyerBottomNavigator from "./src/components/BuyerBottomNavigator";
 import SellerBottomNavigator from "./src/components/SellerBottomNavigator";
 import ProductDetails from "./src/pages/Buyer/ProductDetails";
+import Checkout from "./src/pages/Buyer/Checkout/index.jsx";
 
 import EditProfile from "./src/pages/Buyer/Me/EditProfile.js";
 import Settings from "./src/pages/Buyer/Me/Settings.js";
@@ -25,7 +26,7 @@ import Checkout from "./src/pages/Buyer/Checkout/index.jsx";
 const Stack = createNativeStackNavigator();
 
 export default function App() {
-  let loggedIn = false;
+  let loggedIn = true;
   let buyer = true;
   let seller = false;
 
