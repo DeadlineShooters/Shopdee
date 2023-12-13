@@ -9,6 +9,7 @@ router.get('', shop.index);
 router.get('/create-product', shop.createProduct);
 
 router.get('/:idProduct', shop.getOne);
+
 router.put('/:idProduct', shop.updateProduct);
 
 router.get('/:idProduct', shop.deleteProduct);
