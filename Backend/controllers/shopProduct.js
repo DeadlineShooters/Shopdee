@@ -83,8 +83,6 @@ export const deleteProduct = async (req, res) => {
 
         await Product.findByIdAndDelete(idProduct);
 
-        //await product.save();
-
         res.json({
             message: 'Product deleted successfully',
         });
