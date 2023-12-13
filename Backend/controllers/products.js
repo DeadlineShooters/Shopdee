@@ -1,4 +1,5 @@
 import { response } from "express"
+import Product from '../models/product.js';
 
 const products = [
     {
