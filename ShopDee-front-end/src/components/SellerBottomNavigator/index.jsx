@@ -6,6 +6,7 @@ import { Feather } from "@expo/vector-icons";
 import MyProduct from "../../pages/Seller/MyProducts";
 import EditProfile from "../../pages/Seller/EditProfile";
 import SellerMyOrderTopTabs from "../SellerMyOrderTopTabs";
+import EditProduct from "../../pages/Seller/EditProduct";
 
 const Tab = createBottomTabNavigator();
 
