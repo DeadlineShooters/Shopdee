@@ -24,6 +24,7 @@ import HelpSupport from "./src/pages/Buyer/Me/Support";
 import ChangePassword from "./src/pages/Buyer/Me/ChangePassword";
 import SignIn from "./src/pages/SignIn";
 import { UserContext } from "./UserContext.js";
+import AddProduct from "./src/pages/Seller/AddProduct.js";
 const Stack = createNativeStackNavigator();
 
 export default function App() {
@@ -59,46 +60,14 @@ export default function App() {
                       headerShown: false,
                     }}
                   />
-                  <Stack.Screen
-                    name="EditProfile"
-                    component={EditProfile}
-                    options={{ headerShown: false }}
-                  />
-                  <Stack.Screen
-                    name="Settings"
-                    component={Settings}
-                    options={{ headerShown: false }}
-                  />
-                  <Stack.Screen
-                    name="ChangePassword"
-                    component={ChangePassword}
-                    options={{ headerShown: false }}
-                  />
-                  <Stack.Screen
-                    name="SetAddress"
-                    component={SetAddress}
-                    options={{ headerShown: false }}
-                  />
-                  <Stack.Screen
-                    name="UserPrivacy"
-                    component={UserPrivacy}
-                    options={{ headerShown: false }}
-                  />
-                  <Stack.Screen
-                    name="AboutShopDee"
-                    component={AboutShopDee}
-                    options={{ headerShown: false }}
-                  />
-                  <Stack.Screen
-                    name="HelpSupport"
-                    component={HelpSupport}
-                    options={{ headerShown: false }}
-                  />
-                  <Stack.Screen
-                    name="Product Details"
-                    component={ProductDetails}
-                    options={{ headerShown: false }}
-                  />
+                  <Stack.Screen name="EditProfile" component={EditProfile} options={{ headerShown: false }} />
+                  <Stack.Screen name="Settings" component={Settings} options={{ headerShown: false }} />
+                  <Stack.Screen name="ChangePassword" component={ChangePassword} options={{ headerShown: false }} />
+                  <Stack.Screen name="SetAddress" component={SetAddress} options={{ headerShown: false }} />
+                  <Stack.Screen name="UserPrivacy" component={UserPrivacy} options={{ headerShown: false }} />
+                  <Stack.Screen name="AboutShopDee" component={AboutShopDee} options={{ headerShown: false }} />
+                  <Stack.Screen name="HelpSupport" component={HelpSupport} options={{ headerShown: false }} />
+                  <Stack.Screen name="Product Details" component={ProductDetails} options={{ headerShown: false }} />
                 </>
               )}
               {seller && (
@@ -112,7 +81,7 @@ export default function App() {
                   />
                   <Stack.Screen
                     name="Edit product"
-                    component={EditProduct}
+                    component={AddProduct}
                     options={{
                       headerShown: false,
                     }}

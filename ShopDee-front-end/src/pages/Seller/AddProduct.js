@@ -8,7 +8,7 @@ import GoBack from "../../components/goBackPanel";
 import { Axios } from "../../api/axios";
 import { useNavigation } from "@react-navigation/native";
 
-export default function EditProduct({ productId }) {
+export default function AddProduct({ productId }) {
   const navigation = useNavigation();
 
   const [productNameText, setProductNameText] = useState("");
@@ -18,9 +18,9 @@ export default function EditProduct({ productId }) {
   const [selectedCategory, setSelectedCategory] = useState("");
   const [productPhotos, setProductPhotos] = useState([]);
 
-  const handleUpdate = async () => {
+  const handleAdd = async () => {
     try {
-      const response = await Axios.patch(`/products/${productId}`, {
+      const response = await Axios.post(`/products/${productId}`, {
         productName: productNameText,
         productDesc: productDescText,
         price,
@@ -28,17 +28,17 @@ export default function EditProduct({ productId }) {
         selectedCategory,
       });
 
-      // Assuming your API returns a success status code (e.g., 200)
-      if (response.status === 200) {
-        // Update was successful, handle the response accordingly
-        console.log("Update successful");
+      // Assuming your API returns a success status code (e.g., 201 for resource created)
+      if (response.status === 201) {
+        // Addition was successful, handle the response accordingly
+        console.log("Product added successfully");
       } else {
-        // Update failed, handle the error
-        console.error("Update failed");
+        // Addition failed, handle the error
+        console.error("Product addition failed");
       }
     } catch (error) {
       // Handle Axios or network errors
-      console.error("Error during update:", error);
+      console.error("Error during product addition:", error);
     }
   };
 
@@ -227,8 +227,8 @@ export default function EditProduct({ productId }) {
         </View>
       </View>
 
-      <TouchableOpacity onPress={handleUpdate} style={styles.updateButton}>
-        <Text style={styles.updateText}>Update</Text>
+      <TouchableOpacity onPress={handleAdd} style={styles.addButton}>
+        <Text style={styles.addText}>Add</Text>
       </TouchableOpacity>
     </View>
   );
@@ -285,13 +285,12 @@ const styles = StyleSheet.create({
     resizeMode: "contain",
   },
   photoContainer: {},
-
-  updateText: {
+  addText: {
     color: COLORS.lightBlue,
     fontSize: 16,
     fontWeight: "bold",
   },
-  updateButton: {
+  addButton: {
     position: "absolute",
     right: 10,
     top: 35,
