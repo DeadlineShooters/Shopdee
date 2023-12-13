@@ -3,12 +3,13 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 import { FontAwesome5 } from "@expo/vector-icons";
 
 import Home from "../../pages/Buyer/Home";
-import MyOrders from "../../pages/Buyer/MyOrders";
 import Me from "../../pages/Buyer/Me";
 import Likes from "../../pages/Buyer/Likes";
 import Notifcations from "../../pages/Buyer/Notifications";
 import CreateShop from "../../pages/Buyer/CreateShop";
 
+import SellerMyOrderTopTabs from "../SellerMyOrderTopTabs";
+import EditProfile from "../../pages/Buyer/Me/EditProfile";
 
 const Tab = createBottomTabNavigator();
 
@@ -36,16 +37,16 @@ export default function BuyerBottomNavigator() {
           headerShown: false,
         }}
       />
-      <Tab.Screen
+      {/* <Tab.Screen
         name="My Orders"
-        component={MyOrders}
+        component={SellerMyOrderTopTabs}
         options={{
           tabBarIcon: ({ focused, color }) => {
             return <FontAwesome5 name="list-alt" size={24} color={color} />;
           },
           headerShown: false,
         }}
-      />
+      /> */}
       <Tab.Screen
         name="Likes"
         component={Likes}
@@ -87,7 +88,7 @@ export default function BuyerBottomNavigator() {
       />
       <Tab.Screen
         name="Me"
-        component={CreateShop}
+        component={Me}
         options={{
           tabBarIcon: ({ focused, color }) => {
             if (focused)

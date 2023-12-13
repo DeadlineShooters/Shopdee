@@ -2,9 +2,12 @@ import React, { useState, useRef } from 'react';
 import { View, Text, TouchableOpacity, ToastAndroid, Image, TextInput, SafeAreaView, Animated, StyleSheet, Dimensions } from "react-native";
 import * as ImagePicker from 'expo-image-picker';
 import { AntDesign, Entypo } from '@expo/vector-icons';
-export default function Me() {
+
+import { COLORS } from '../../../../assets/Themes';
+
+export default function CreateShop({navigation}) {
   const [shopName, setShopName] = useState('');
-  const [selectedImage, setSelectedImage] = useState('');
+  const [setSelectedImage] = useState('');
   const [bio, setBio] = useState('');
   const [maxCharactersName] = useState(30); // Số ký tự tối đa cho phép
   const [maxCharactersBio] = useState(200);
@@ -42,9 +45,9 @@ export default function Me() {
             useNativeDriver: true,
         }).start();
     };
-  const showToast = () => {
-    ToastAndroid.show('Toast message displayed!', ToastAndroid.SHORT);
-  };
+    const showToast = () => {
+        ToastAndroid.show('Toast message displayed!', ToastAndroid.SHORT);
+    };
 
   const handleShopNameChange = (text) => {
     if (text.length <= maxCharactersName) {
@@ -72,6 +75,7 @@ export default function Me() {
       setSelectedImage(result.assets[0].url);
     }
   }
+  
   return (
     <SafeAreaView
       style={{
@@ -82,20 +86,21 @@ export default function Me() {
       }}>
       <View
         style={{
+          display: "flex",
           backgroundColor: 'white',
           flexDirection: 'row',
           alignItems: 'center',
           justifyContent: 'space-between',
           padding: 10,
-          marginTop: 22
+          marginTop: 22,
+          position:'relative'
         }}>
         <TouchableOpacity onPress={() => navigation.goBack()}>
           <AntDesign name="arrowleft" style={{ fontSize: 24 }} />
         </TouchableOpacity>
-        <Text style={{ fontSize: 16, fontWeight: 'bold' }}> Edit Profile </Text>
-        <TouchableOpacity onPress={() => {
-          navigation.goBack();
-        }}>
+        <Text style={{ fontSize: 16, fontWeight: 'bold', textAlign: 'center', alignSelf: "center"}}> Edit Shop </Text>
+        <TouchableOpacity onPress={() => navigation.goBack()}>
+          <AntDesign name="edit" size={24} color="black" />
         </TouchableOpacity>
       </View>
 
@@ -122,6 +127,8 @@ export default function Me() {
         padding: 10,
         alignItems: 'center',
         marginTop: 10,
+        marginBottom: 2
+  
       }}>
         <Text style={{ fontSize: 16 }}>Shop name</Text>
         <TextInput
@@ -136,16 +143,26 @@ export default function Me() {
           onChangeText={handleShopNameChange}
           maxLength={maxCharactersName}
         />
-        <Text>{shopName.length}/{maxCharactersName}</Text>
+        <Text style={{ color: COLORS.limitGray }}> {shopName.length}/{maxCharactersName}</Text>
       </View>
       <View style={{
         backgroundColor: 'white',
         flexDirection: 'row',
         padding: 10,
-        // alignItems: 'center',
+        alignItems: 'center',
+        justifyContent: "space-between",
       }}>
         <Text style={{ fontSize: 16 }}>Bio</Text>
-        <TextInput
+
+        <Text style={{ color: COLORS.limitGray }}>{bio.length}/{maxCharactersBio}</Text>
+
+      </View>
+      <View style={{
+        backgroundColor: 'white',
+        flexDirection: 'row',
+        padding: 10,
+      }}>
+      <TextInput
           multiline={true}
           placeholder="Shop description"
           style={{
@@ -160,7 +177,6 @@ export default function Me() {
           numberOfLines={5} // Số dòng hiển thị
           textAlignVertical="top" // Căn văn bản từ phía trên xuống
         />
-        <Text>{bio.length}/{maxCharactersBio}</Text>
       </View>
       <View style={{
         padding: 10,
@@ -169,6 +185,7 @@ export default function Me() {
         backgroundColor: 'white',
         justifyContent: 'space-between',
         marginTop: 10,
+        marginBottom: 2
       }}>
         <Text
           style={{ fontSize: 16 }}>
@@ -189,6 +206,7 @@ export default function Me() {
         alignItems: 'center',
         backgroundColor: 'white',
         justifyContent: 'space-between',
+        marginBottom: 2
       }}>
         <Text
           style={{ fontSize: 16 }}>
@@ -209,6 +227,7 @@ export default function Me() {
         alignItems: 'center',
         backgroundColor: 'white',
         justifyContent: 'space-between',
+        
       }}>
         <Text
           style={{ fontSize: 16 }}>
@@ -251,7 +270,7 @@ export default function Me() {
           </View>
         </Animated.View>
       </View>
-      <TouchableOpacity onPress={save}>
+      {/* <TouchableOpacity onPress={save}>
         <View style={{
           padding: 10,
           marginBottom: 20,
@@ -261,13 +280,14 @@ export default function Me() {
             backgroundColor: "#007EA7",
             alignItems: "center",
           }}>
-            <Text style={{ fontSize: 16, fontWeight: 600, marginVertical: 10, color: '#FFFFFF' }}>Save</Text>
+            <Text style={{ fontSize: 16, fontWeight: 600, marginVertical: 10, color: '#FFFFFF' }}>Create</Text>
           </View>
         </View>
-      </TouchableOpacity>
+      </TouchableOpacity> */}
     </SafeAreaView>
 
   );
+
   
 }
 
@@ -300,4 +320,6 @@ const styles = StyleSheet.create({
       width: "70%",
       padding: 2,
   },
-});
+  
+}
+);
