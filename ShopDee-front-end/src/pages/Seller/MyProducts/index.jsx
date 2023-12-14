@@ -4,9 +4,12 @@ import GoBack from "../../../components/goBackPanel";
 import { products } from "../../../../data/product";
 import { Colors } from "react-native/Libraries/NewAppScreen";
 import { MaterialIcons } from "@expo/vector-icons";
+import { useNavigation } from "@react-navigation/native";
 
 //  testing code please replace!!
 export default function MyProducts() {
+  const navigation = useNavigation();
+
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "#fff" }}>
       <View
@@ -17,7 +20,9 @@ export default function MyProducts() {
           zIndex: 9999,
         }}
       >
-        <MaterialIcons name="add-box" size={35} color={COLORS.blue} />
+        <TouchableOpacity onPress={() => navigation.navigate("Add product")}>
+          <MaterialIcons name="add-box" size={35} color={COLORS.blue} />
+        </TouchableOpacity>
       </View>
       <GoBack currentTitle="My Products"></GoBack>
       <ScrollView style={{ backgroundColor: COLORS.gray }}>
@@ -50,7 +55,7 @@ export default function MyProducts() {
                 marginTop: 10,
               }}
             >
-              <TouchableOpacity style={styles.button}>
+              <TouchableOpacity style={styles.button} onPress={() => navigation.navigate("Edit product")}>
                 <Text style={{ color: COLORS.white }}>Edit</Text>
               </TouchableOpacity>
               <TouchableOpacity style={styles.button}>

@@ -70,6 +70,13 @@ export default function EditProduct({ productId }) {
     }
   };
 
+  const onChangeProductName = (text) => {
+    setProductNameText(text);
+  };
+  const onChangeProductDesc = (text) => {
+    setProductDescText(text);
+  };
+
   // Handler for price input
   const onChangePrice = (text) => {
     // Check if the input is numeric

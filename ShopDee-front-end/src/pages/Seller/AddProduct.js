@@ -175,7 +175,7 @@ export default function AddProduct({ productId }) {
 
   return (
     <View style={styles.mainContainer}>
-      <GoBack currentTitle="Edit Product" prevTitle="My Products" func={handleGoBack}></GoBack>
+      <GoBack currentTitle="Add Product" prevTitle="My Products" func={handleGoBack}></GoBack>
 
       <View style={styles.mainPanel}>
         {/* Product name  */}

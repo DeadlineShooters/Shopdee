@@ -70,6 +70,13 @@ export default function App() {
                   />
                   <Stack.Screen
                     name="Edit product"
+                    component={EditProduct}
+                    options={{
+                      headerShown: false,
+                    }}
+                  />
+                  <Stack.Screen
+                    name="Add product"
                     component={AddProduct}
                     options={{
                       headerShown: false,
