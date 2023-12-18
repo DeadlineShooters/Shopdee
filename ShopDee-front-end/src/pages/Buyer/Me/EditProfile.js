@@ -124,7 +124,9 @@ useEffect(() => {
     setPhone(user.phone);
     setGender(user.gender);
     setStartedDate(user.birthday);
+    setSelectedImage(user.profilePic.url);
 
+    setChangeSelectedImage(user.profilePic.url);
     setChangeName(user.username);
     setChangeMail(user.email);
     setChangePhone(user.phone);
@@ -184,7 +186,6 @@ const save = async () => {
     setChangeGender(gender);
     setChangeStartedDate(startedDate);
     setChangeSelectedImage(selectedImage);
-
     try {
         const userID = user._id;
         const profilePic = {publicId, secureUrl};
