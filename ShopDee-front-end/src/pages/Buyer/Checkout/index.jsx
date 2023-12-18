@@ -19,12 +19,12 @@ export default function Checkout({ route }) {
     const product = route.params.product;
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: "#fff" }}>
+            <GoBack currentTitle="Checkout" prevTitle="Details" func={() => navigation.goBack()}></GoBack>
             <ScrollView
                 style={{
                     backgroundColor: COLORS.gray,
                 }}
             >
-                <GoBack currentTitle="Checkout" prevTitle="Details" func={() => navigation.goBack()}></GoBack>
                 <View style={styles.section}>
                     <View style={{flexDirection: 'row', alignItems: 'center'}}>
                         <SimpleLineIcons name="location-pin" size={24} color={COLORS.blue} />

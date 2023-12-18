@@ -18,14 +18,14 @@ import AboutShopDee from "./src/pages/Buyer/Me/About.js";
 import HelpSupport from "./src/pages/Buyer/Me/Support";
 import ChangePassword from "./src/pages/Buyer/Me/ChangePassword";
 import SignIn from "./src/pages/SignIn";
-import SignUp from "./src/pages/SignIn/SignUp/index.jsx";
 import { UserContext } from "./UserContext.js";
+import AddProduct from "./src/pages/Seller/AddProduct.js";
+import EditProduct from "./src/pages/Seller/EditProduct.js";
 const Stack = createNativeStackNavigator();
 
 export default function App() {
-  let loggedIn = false;
-  let buyer = true;
-  let seller = false;
+  let buyer = false;
+  let seller = true;
 
   // var { height, width } = Dimensions.get("window");
   // console.log("Width is: " + width);
@@ -33,72 +33,34 @@ export default function App() {
   return (
     <>
       <StatusBar />
-        <UserContext>
-          <SafeAreaProvider>
-            <NavigationContainer>
-              <Stack.Navigator>
-                {buyer && (
-                  <>
-                    <Stack.Screen
-                      name="SignIn"
-                      component={SignIn}
-                      options={{ headerShown: false }}
-                    />
-                    <Stack.Screen
-                      name="SignUp"
-                      component={SignUp}
-                      options={{ headerShown: false }}
-                    />
-                    <Stack.Screen
-                      name="BuyerBottomNav"
-                      component={BuyerBottomNavigator}
-                      options={{
-                        headerShown: false,
-                      }}
-                    />
-                    <Stack.Screen
-                      name="EditProfile"
-                      component={EditProfile}
-                      options={{ headerShown: false }}
-                    />
-                    <Stack.Screen
-                      name="Settings"
-                      component={Settings}
-                      options={{ headerShown: false }}
-                    />
-                    <Stack.Screen
-                      name="ChangePassword"
-                      component={ChangePassword}
-                      options={{ headerShown: false }}
-                    />
-                    <Stack.Screen
-                      name="SetAddress"
-                      component={SetAddress}
-                      options={{ headerShown: false }}
-                    />
-                    <Stack.Screen
-                      name="UserPrivacy"
-                      component={UserPrivacy}
-                      options={{ headerShown: false }}
-                    />
-                    <Stack.Screen
-                      name="AboutShopDee"
-                      component={AboutShopDee}
-                      options={{ headerShown: false }}
-                    />
-                    <Stack.Screen
-                      name="HelpSupport"
-                      component={HelpSupport}
-                      options={{ headerShown: false }}
-                    />
-                    <Stack.Screen
-                      name="Product Details"
-                      component={ProductDetails}
-                      options={{ headerShown: false }}
-                    />
-                  </>
-                )}
-                {seller && (
+      <UserContext>
+        <SafeAreaProvider>
+          <NavigationContainer>
+            <Stack.Navigator>
+              {buyer && (
+                <>
+                  <Stack.Screen name="SignIn" component={SignIn} options={{ headerShown: false }} />
+                  <Stack.Screen name="SignUp" component={SignUp} options={{ headerShown: false }} />
+                  <Stack.Screen
+                    name="BuyerBottomNav"
+                    component={BuyerBottomNavigator}
+                    options={{
+                      headerShown: false,
+                    }}
+                  />
+                  <Stack.Screen name="EditProfile" component={EditProfile} options={{ headerShown: false }} />
+                  <Stack.Screen name="Settings" component={Settings} options={{ headerShown: false }} />
+                  <Stack.Screen name="ChangePassword" component={ChangePassword} options={{ headerShown: false }} />
+                  <Stack.Screen name="SetAddress" component={SetAddress} options={{ headerShown: false }} />
+                  <Stack.Screen name="UserPrivacy" component={UserPrivacy} options={{ headerShown: false }} />
+                  <Stack.Screen name="AboutShopDee" component={AboutShopDee} options={{ headerShown: false }} />
+                  <Stack.Screen name="HelpSupport" component={HelpSupport} options={{ headerShown: false }} />
+                  <Stack.Screen name="ProductDetails" component={ProductDetails} options={{ headerShown: false }} />
+                  <Stack.Screen name="Checkout" component={Checkout} options={{ headerShown: false }} />
+                </>
+              )}
+              {seller && (
+                <>
                   <Stack.Screen
                     name="SellerBottomNav"
                     component={SellerBottomNavigator}
@@ -106,11 +68,26 @@ export default function App() {
                       headerShown: false,
                     }}
                   />
-                )}
-              </Stack.Navigator>
-            </NavigationContainer>
-          </SafeAreaProvider >
-        </UserContext>
+                  <Stack.Screen
+                    name="Edit product"
+                    component={EditProduct}
+                    options={{
+                      headerShown: false,
+                    }}
+                  />
+                  <Stack.Screen
+                    name="Add product"
+                    component={AddProduct}
+                    options={{
+                      headerShown: false,
+                    }}
+                  />
+                </>
+              )}
+            </Stack.Navigator>
+          </NavigationContainer>
+        </SafeAreaProvider>
+      </UserContext>
     </>
   );
 }

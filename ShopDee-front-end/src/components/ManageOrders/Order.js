@@ -28,7 +28,10 @@ export default function Order({ buyer, buttonVisible, buttonText, itemList, tota
           <Text style={styles.totalPrice}>{totalPayment.toLocaleString()}đ</Text>
         </View>
         {buttonVisible && (
-          <TouchableOpacity style={styles.button} onPress={confirmOrder}>
+          // <TouchableOpacity style={styles.button} onPress={confirmOrder}>
+          //   <Text style={styles.buttonText}>{buttonText}</Text>
+          // </TouchableOpacity>
+          <TouchableOpacity style={styles.button}>
             <Text style={styles.buttonText}>{buttonText}</Text>
           </TouchableOpacity>
         )}

@@ -12,15 +12,17 @@ export default function ManageOrders({ orders, buttonVisible }) {
         data={orders}
         renderItem={(itemData) => {
           const order = itemData.item;
+          let buttonText;
+
+          if (order.status === "To Deliver") {
+            buttonText = "Complete";
+          } else if (order.status === "To Confirm") {
+            buttonText = "Confirm";
+          }
+
           return (
             <View key={order.id} style={styles.orderContainer}>
-              <Order
-                buyer={order.buyer}
-                buttonVisible={buttonVisible}
-                buttonText={buttonVisible && order.status === "To Confirm" ? "Confirm" : undefined}
-                itemList={order.items}
-                totalPayment={order.totalPayment}
-              />
+              <Order buyer={order.buyer} buttonVisible={buttonVisible} buttonText={buttonText} itemList={order.items} totalPayment={order.totalPayment} />
             </View>
           );
         }}
@@ -46,7 +48,7 @@ export function ConfirmOrders() {
 
 // Inside ToDeliverOrders component
 export function ToDeliverOrders() {
-  return <ManageOrders orders={ORDER_LIST_TO_DELIVER} buttonVisible={false} />;
+  return <ManageOrders orders={ORDER_LIST_TO_DELIVER} buttonVisible={true} />;
 }
 
 // Inside CompletedOrders component
