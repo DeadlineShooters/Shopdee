@@ -7,6 +7,7 @@ import {
   ScrollView,
   Modal,
   Pressable,
+  FlatList
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useState } from "react";
@@ -22,6 +23,9 @@ import img from "./shoe.png";
 import shopProfilePicture from "./favicon.png";
 import { useNavigation } from "@react-navigation/native";
 import { product } from "../../../../data/product";
+import axios from "axios";
+import React from 'react';
+import Carousel from 'react-native-snap-carousel';
 
 export default function ProductDetails() {
   const [isFavorite, setIsFavorite] = useState(false);
@@ -182,8 +186,8 @@ export default function ProductDetails() {
               />
             </TouchableOpacity>
           </View>
-          <Image
-            source={img}
+          {/* <Image
+            source={product.image.url}
             // resizeMode="contain"
             // style={{ flex: 1, height: undefined, width: undefined }}
             style={{
@@ -191,7 +195,28 @@ export default function ProductDetails() {
               height: undefined,
               aspectRatio: 1,
             }}
+          /> */}
+          <Carousel
+            data={product.images}
+            renderItem={({ item }) => (
+              <Image
+                source={{ uri: item.url }}
+                style={{
+                  width: '100%',
+                  height: undefined,
+                  aspectRatio: 1,
+                }}
+              />
+            )}
+            sliderWidth={width}
+            itemWidth={width}
+            loop
           />
+          {/* <FlatList
+            data={carouselItem}
+            renderItem={renderItems}
+            keyExtractor={(item,index) => index.toString()}
+          ></FlatList> */}
 
           <View
             style={[

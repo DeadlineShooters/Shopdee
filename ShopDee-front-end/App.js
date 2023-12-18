@@ -23,8 +23,8 @@ import AddProduct from "./src/pages/Seller/AddProduct.js";
 const Stack = createNativeStackNavigator();
 
 export default function App() {
-  let buyer = false;
-  let seller = true;
+  let buyer = true;
+  let seller = false;
 
   // var { height, width } = Dimensions.get("window");
   // console.log("Width is: " + width);
