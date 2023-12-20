@@ -1,18 +1,20 @@
 import { response } from "express"
-import createShop from "../models/shopProfile.js"
+
 import jwt from "jsonwebtoken"
 import randomBytes from "randombytes"
 import crypto from "crypto"
+import Shop from "../models/shop.js"
 
-export const createShop = async (req, res) => {
+export const registerShop = async (req, res) => {
     try {
-        const {shopName, email, phone, address} = req.body;
+        const { image, shopName, email, phone, address, bio, userId } = req.body;
+        console.log(req.body)
         const existingUser = await Shop.findOne({email});
         if (existingUser)
         {
             return res.status(400).json({messages: "Email has been already registered!"});
         }
-        const newShop = new Shop({shopName, email, phone, address});
+        const newShop = new Shop({ image, name: shopName, email, phone, address, description: bio, user: userId });
         await newShop.save();
         res.status(201).json({ message: "Shop profile created successfully" });
     }

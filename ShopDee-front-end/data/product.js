@@ -27,6 +27,9 @@ export const product2 = {
     quantity: 20,
     shop: shop,
 };
+export const products = [
+    product, product2, product, product2, product, product2, product, product2
+]
 
 export const order = {
     

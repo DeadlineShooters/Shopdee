@@ -17,17 +17,13 @@ import {MaterialIcons, AntDesign, Entypo} from '@expo/vector-icons';
 import DatePicker, { getFormatedDate } from "react-native-modern-datepicker";
 import { Dropdown } from "react-native-element-dropdown";
 import axios from "axios";
-import { UserType } from "../../../../UserContext";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { jwtDecode } from "jwt-decode";
 import "core-js/stable/atob";
 
-const EditProfile = ({navigation}) => {
+const EditProfile = ({navigation, route}) => {
 //Pop in animation
 const windowHeight = Dimensions.get("window").height;
 const [status, setStatus] = useState(null);
 const popAnim = useRef(new Animated.Value(windowHeight *-1)).current;
-
 const successColor = "#6dcf81";
 const successHeader = "Success!";
 const successMessage = "Your information was saved";
@@ -67,9 +63,11 @@ const handleImageSelection = async () => {
         allowsEditing: true,
         aspect: [4, 4],
         quality: 1,
+        base64: true
     })
     if (!result.canceled) {
-        setSelectedImage(result.assets[0].url);
+        setSelectedImage(result.assets[0].uri);
+        setFile(result);
     }
 }
 
@@ -99,20 +97,39 @@ const handleOnPressStartDate = () => {
 }
 
 //USER INFORMATION SETTING
+const user = route.params.props.User;
+const [file, setFile] = useState();
+const [publicId, setPublicId] = useState("");
+const [secureUrl, setSecureUrl] = useState("");
 const [selectedImage, setSelectedImage] = useState();
-const [name, setName] = useState("");
+const [username, setUserName] = useState("");
 const [mail, setMail] = useState("");
 const [phone, setPhone] = useState("");
 
 //Change information
-const [changName, setChangeName] = useState(name);
-const [changeMail, setChangeMail] = useState(mail);
-const [changePhone, setChangePhone] = useState(phone);
-const [changeGender, setChangeGender] = useState(gender);
-const [changeStartedDate, setChangeStartedDate] = useState(startedDate);
+const [changeSelectedImage, setChangeSelectedImage] = useState();
+const [changName, setChangeName] = useState("");
+const [changeMail, setChangeMail] = useState("");
+const [changePhone, setChangePhone] = useState("");
+const [changeGender, setChangeGender] = useState("");
+const [changeStartedDate, setChangeStartedDate] = useState("");
+
+useEffect(() => {
+    setUserName(user.username);
+    setMail(user.email);
+    setPhone(user.phone);
+    setGender(user.gender);
+    setStartedDate(user.birthday);
+
+    setChangeName(user.username);
+    setChangeMail(user.email);
+    setChangePhone(user.phone);
+    setChangeGender(user.gender);
+    setChangeStartedDate(user.birthday);
+}, []);
 
 const handleOnPressGoBack = ({navigation}) => {
-    if (changName != name || changeMail != mail || changePhone != phone || changeGender != gender || changeStartedDate != startedDate)
+    if (changName != username || changeMail != mail || changePhone != phone || changeGender != gender || changeStartedDate != startedDate)
     {
       Alert.alert('Confirm message', 'Your profile is not saved. Exit now?', [
         {
@@ -130,14 +147,55 @@ const handleOnPressGoBack = ({navigation}) => {
     }
 }
 
-const save = () => {
-    setChangeName(name);
+const save = async () => {
+    setChangeName(username);
     setChangeMail(mail);
     setChangePhone(phone);
     setChangeGender(gender);
     setChangeStartedDate(startedDate);
-    setStatus("success");
-    popIn();
+    setChangeSelectedImage(selectedImage);
+
+    let image = {
+        uri: file.assets[0].uri,
+        type: `test/${file.assets[0].uri.split(".")[1]}`,
+        name: `test.${file.assets[0].uri.split(".")[1]}`,
+    }
+    const data = new FormData()
+    data.append("file", image)
+    data.append("upload_preset", "ShopDeeImageStock")
+    data.append("cloud_name", "dqxtf297o")
+
+    try {
+        await fetch("https://api.cloudinary.com/v1_1/dqxtf297o/image/upload", {
+            method: 'POST',
+            body: data,
+            headers: {
+                'Accept': 'application/json',
+                'Content-type': 'multipart/form-data'
+            }}
+        ).then(res => res.text()).then(data => {
+            console.log(data);
+            setPublicId(data.public_id);
+            setSecureUrl(data.secure_url);
+        })
+        const userID = user._id;
+        const profilePic = {publicId, secureUrl};
+        console.log(profilePic);
+        const userInfo = {
+            username: username,
+            email: mail,
+            phone: phone,
+            gender: gender,
+            birthday: startedDate,
+            profilePic: profilePic,
+        }
+        await axios.put(`http://10.0.2.2:3000/user/profile/update/${userID}`, userInfo);
+        setStatus("success");
+        popIn();
+    } catch (error)
+    {
+        console.log("error message", error);
+    }
 }
 
 function renderDatePicker() {
@@ -196,28 +254,6 @@ function renderDatePicker() {
         </Modal>
     );
 };
-//User context
-const {userID, setUserID} = useContext(UserType);
-const [user, setUser] = useState("");
-useEffect(() => {
-    const fetchUserProfile = async () => {
-        try {
-            const token = await AsyncStorage.getItem("authToken");
-            const decodedToken = jwtDecode(token);
-            const userID = decodedToken.userID;
-            setUserID(userID);
-            const response = await axios.get(`http://10.0.2.2:3000/user/profile/${userID}`);
-            const user = response.data;
-            setUser(user);
-            setName(user?.User?.username);
-            setMail(user?.User?.email);
-        } catch (error)
-        {
-            console.log("error", error);
-        }
-    }
-    fetchUserProfile();
-}, []);
 return (
     <SafeAreaView style={{
         flex: 1,
@@ -254,7 +290,7 @@ return (
             }}>
                 <TouchableOpacity onPress={handleImageSelection}>
                     <Image
-                        source={require('../../../../assets/avatar.jpg')}
+                        source={{uri: selectedImage}}
                         style={{
                             height: 100,
                             width: 100,
@@ -297,8 +333,8 @@ return (
                         paddingLeft: 8
                     }}>
                         <TextInput
-                            value={name}
-                            onChangeText={value => setName(value)}
+                            value={username}
+                            onChangeText={value => setUserName(value)}
                             editable={true}
                         />
                     </View>
@@ -445,7 +481,7 @@ return (
                 </View>
             </Animated.View>
         </View>
-        {changName != name || changeMail != mail || changePhone != phone || changeGender != gender || changeStartedDate != startedDate ?
+        {changName != username || changeMail != mail || changePhone != phone || changeGender != gender || changeStartedDate != startedDate || selectedImage != null ?
             <TouchableOpacity onPress={save}>
                 <View style={{
                     marginBottom: 20,

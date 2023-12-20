@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 const Schema = mongoose.Schema;
-import User from "./user";
-import Product from "./product";
+import User from "./user.js";
+import Product from "./product.js";
 
 const orderSchema = new Schema({
     totalPrice: String,

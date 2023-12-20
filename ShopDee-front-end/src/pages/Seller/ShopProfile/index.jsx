@@ -1,11 +1,15 @@
 import React, { useState, useRef } from 'react';
-import { View, Text, TouchableOpacity, ToastAndroid, Image, TextInput, SafeAreaView, Animated, StyleSheet, Dimensions } from "react-native";
+import { View, Text, TouchableOpacity, ToastAndroid, Image, TextInput, SafeAreaView, Animated, StyleSheet, Dimensions, useIsFocused  } from "react-native";
 import * as ImagePicker from 'expo-image-picker';
 import { AntDesign, Entypo } from '@expo/vector-icons';
-
+import axios from "axios";
+import { UserType } from "../../../../UserContext";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { jwtDecode } from "jwt-decode";
+import "core-js/stable/atob";
 import { COLORS } from '../../../../assets/Themes';
 
-export default function CreateShop({navigation}) {
+export default function EditShopProfile({navigation}) {
   const [shopName, setShopName] = useState('');
   const [setSelectedImage] = useState('');
   const [bio, setBio] = useState('');
@@ -75,7 +79,27 @@ export default function CreateShop({navigation}) {
       setSelectedImage(result.assets[0].url);
     }
   }
-  
+  const { userID, setUserID } = useContext(UserType);
+    const [user, setUser] = useState("");
+    const [username, setUserName] = useState("");
+    const isFocused = useIsFocused();
+    useEffect(() => {
+        const fetchUserProfile = async () => {
+            try {
+                const token = await AsyncStorage.getItem("authToken");
+                const decodedToken = jwtDecode(token);
+                const userID = decodedToken.userID;
+                setUserID(userID);
+                const response = await axios.get(`http://10.0.2.2:3000/shop/shopProfile/${userID}`);
+                const user = response.data;
+                setUser(user);
+                setUserName(user?.User?.username);
+            } catch (error) {
+                console.log("error", error);
+            }
+        }
+        fetchUserProfile();
+    }, [navigation, isFocused]);
   return (
     <SafeAreaView
       style={{
@@ -98,8 +122,8 @@ export default function CreateShop({navigation}) {
         <TouchableOpacity onPress={() => navigation.goBack()}>
           <AntDesign name="arrowleft" style={{ fontSize: 24 }} />
         </TouchableOpacity>
-        <Text style={{ fontSize: 16, fontWeight: 'bold', textAlign: 'center', alignSelf: "center"}}> Edit Shop </Text>
-        <TouchableOpacity onPress={() => navigation.goBack()}>
+        <Text style={{ fontSize: 16, fontWeight: 'bold', textAlign: 'center', alignSelf: "center"}}> Shop Profile </Text>
+        <TouchableOpacity onPress={() => navigation.navigate('Edit Profile')}>
           <AntDesign name="edit" size={24} color="black" />
         </TouchableOpacity>
       </View>
@@ -132,7 +156,7 @@ export default function CreateShop({navigation}) {
       }}>
         <Text style={{ fontSize: 16 }}>Shop name</Text>
         <TextInput
-          placeholder="Shop name"
+      
           style={{
             fontSize: 16,
             borderColor: '#CDCDCD',
@@ -142,6 +166,7 @@ export default function CreateShop({navigation}) {
           value={shopName}
           onChangeText={handleShopNameChange}
           maxLength={maxCharactersName}
+          editable={false}
         />
         <Text style={{ color: COLORS.limitGray }}> {shopName.length}/{maxCharactersName}</Text>
       </View>
@@ -164,7 +189,6 @@ export default function CreateShop({navigation}) {
       }}>
       <TextInput
           multiline={true}
-          placeholder="Shop description"
           style={{
             fontSize: 16,
             borderColor: '#CDCDCD',
@@ -176,6 +200,7 @@ export default function CreateShop({navigation}) {
           maxLength={maxCharactersBio}
           numberOfLines={5} // Số dòng hiển thị
           textAlignVertical="top" // Căn văn bản từ phía trên xuống
+          editable={false}
         />
       </View>
       <View style={{
@@ -192,13 +217,14 @@ export default function CreateShop({navigation}) {
           Pickup address
         </Text>
         <TextInput
-          placeholder="setup"
           style={{
             fontSize: 16,
             borderColor: '#CDCDCD',
             marginHorizontal: 10,
             flex: 1,
-          }} />
+          }} 
+          editable={false}/>
+          
       </View>
       <View style={{
         padding: 10,
@@ -207,19 +233,21 @@ export default function CreateShop({navigation}) {
         backgroundColor: 'white',
         justifyContent: 'space-between',
         marginBottom: 2
+        
       }}>
         <Text
           style={{ fontSize: 16 }}>
           Email
         </Text>
         <TextInput
-          placeholder="setup"
           style={{
             fontSize: 16,
             borderColor: '#CDCDCD',
             marginHorizontal: 10,
             flex: 1,
-          }} />
+          }} 
+          editable={false}
+          />
       </View>
       <View style={{
         padding: 10,
@@ -234,13 +262,13 @@ export default function CreateShop({navigation}) {
           Phone number
         </Text>
         <TextInput
-          placeholder="setup"
           style={{
             fontSize: 16,
             borderColor: '#CDCDCD',
             marginHorizontal: 10,
             flex: 1,
-          }} />
+          }}
+          editable={false} />
       </View>
       <View>
         <Animated.View

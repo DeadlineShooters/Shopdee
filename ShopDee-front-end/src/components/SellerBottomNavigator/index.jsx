@@ -3,9 +3,10 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 import { FontAwesome5 } from "@expo/vector-icons";
 import { Feather } from "@expo/vector-icons";
 
-import MyProduct from "../../pages/Seller/MyProduct";
-import EditProfile from "../../pages/Seller/EditProfile";
+import MyProduct from "../../pages/Seller/MyProducts";
+import EditProfile from "../../pages/Seller/ShopProfile";
 import SellerMyOrderTopTabs from "../SellerMyOrderTopTabs";
+import EditProduct from "../../pages/Seller/EditProduct";
 
 const Tab = createBottomTabNavigator();
 
@@ -39,7 +40,7 @@ export default function SellerBottomNavigator() {
         }}
       />
       <Tab.Screen
-        name="Edit Profile"
+        name="Shop Profile"
         component={EditProfile}
         options={{
           tabBarIcon: ({ focused, color }) => {
