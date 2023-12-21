@@ -1,6 +1,6 @@
 import { View, Text, SafeAreaView, TouchableOpacity, Image, Alert } from "react-native";
 import { useState, useContext, useEffect } from "react";
-import { useFocusEffect, useIsFocused  } from '@react-navigation/native';
+import { useFocusEffect, useIsFocused } from '@react-navigation/native';
 import React from "react";
 import { COLORS } from "./Themes.js";
 import { MaterialIcons, AntDesign } from '@expo/vector-icons';
@@ -12,13 +12,34 @@ import "core-js/stable/atob";
 
 const Me = ({ navigation }) => {
     const navigateToEditProfile = () => {
-        navigation.navigate("EditProfile", {props: user});
+        navigation.navigate("EditProfile", { props: user });
     }
-    const navigateToShopOwner = () => {
-        console.log("Security function");
+    const navigateToShopOwner = async () => {
+        try {
+            console.log(userID)
+            await axios.get('http://10.0.2.2:3000/user/profile/checkShopOwner', userID);
+            navigation.navigate('SellerBottomNav', { screen: 'My Products' });
+
+        } catch (error) {
+            Alert.alert(
+                "Shop registration needed",
+                "Do you want to create shop?",
+                [
+                {
+                    text: 'Cancel',
+                    onPress: () => console.log('Cancel request'),
+                },
+                {
+                    text: 'Ok',
+                    onPress: () => navigation.navigate("CreateShop"),
+                }
+                ]
+            );
+            console.log("registration failed", error);
+        }
     }
     const navigateToSettings = () => {
-        navigation.navigate("Settings", {props: user});
+        navigation.navigate("Settings", { props: user });
     }
     const navigateToSetAddress = () => {
         navigation.navigate("SetAddress");

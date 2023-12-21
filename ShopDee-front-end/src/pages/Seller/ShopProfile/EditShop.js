@@ -1,12 +1,16 @@
 import React, { useState, useRef } from 'react';
-import { View, Text, TouchableOpacity, ToastAndroid, Image, TextInput, SafeAreaView, Animated, StyleSheet, Dimensions, Alert  } from "react-native";
+import { View, Text, TouchableOpacity, ToastAndroid, Image, TextInput, SafeAreaView, Animated, StyleSheet, Dimensions } from "react-native";
 import * as ImagePicker from 'expo-image-picker';
 import { AntDesign, Entypo } from '@expo/vector-icons';
+
 import { COLORS } from '../../../../assets/Themes';
-import axios from "axios"
 
 export default function CreateShop({navigation}) {
- 
+  const [shopName, setShopName] = useState('');
+  const [setSelectedImage] = useState('');
+  const [bio, setBio] = useState('');
+  const [maxCharactersName] = useState(30); // Số ký tự tối đa cho phép
+  const [maxCharactersBio] = useState(200);
   const windowHeight = Dimensions.get("window").height;
   const [status, setStatus] = useState(null);
   const popAnim = useRef(new Animated.Value(windowHeight *-1)).current;
@@ -16,125 +20,6 @@ export default function CreateShop({navigation}) {
   const failColor = "#bf6060";
   const failHeader = "Failed!";
   const failMessage = "Your information was still unsaved";
-
-
-  const [shopName, setShopName] = useState('');
-  const [bio, setBio] = useState('');
-  const [email, setEmail] = useState("");
-  const [address, setAddress] = useState("");
-  const [phone, setPhone] = useState("");
-  const [selectedImage, setSelectedImage] = useState();
-  const [maxCharactersName] = useState(30); // Số ký tự tối đa cho phép
-  const [maxCharactersBio] = useState(200);
-
-  const [badShopName, setBadShopName] = useState(false);
-  const [badBio, setBadBio] = useState(false);
-  const [badEmail, setBadEmail] = useState(false);
-  const [badAddress, setBadAddress] = useState(false);
-  const [badPhone, setBadPhone] = useState(false);
-
-const [changeShopName, setChangeShopName] = useState("");
-const [changeBio, setChangeBio] = useState("");
-const [changeEmail, setChangeEmail] = useState("");
-const [changeAddress, setChangeAddress] = useState("");
-const [changePhone, setChangePhone] = useState("");
-const [changeSelectedImage, setChangeSelectedImage] = useState();
-const handleOnPressGoBack = ({navigation}) => {
-  if (changeShopName != shopName || changeEmail != email || changePhone != phone || changeBio != bio || changeSelectedImage != selectedImage || changeAddress != address)
-  {
-    Alert.alert('Confirm message', 'Your shop information is not saved. Exit now?', [
-      {
-        text: 'Cancel',
-        onPress: () => console.log('Cancel request'),
-      },
-      {
-        text: 'Ok',
-        onPress: () => navigation.goBack(),
-      }
-    ]);
-  }
-  else {
-    navigation.goBack()
-  }
-}
-  let isValid = true;
-  const validate = () => {
-    if (email == '') {
-      setBadEmail(true);
-      isValid = false;
-    }
-    else {
-      setBadEmail(false);
-    }
-    if (shopName == '') {
-      setBadShopName(true);
-      isValid = false;
-    }
-    else {
-      setBadShopName(false);
-    }
-    if (Bio == '') {
-      setBadBio(true);
-      isValid = false;
-    }
-    else {
-      setBadBio(false);
-    }
-    if (address == '') {
-      setBadAddress(true);
-      isValid = false;
-    }
-    else {
-      setBadAddress(false);
-    }
-    if (phone == '') {
-      setBadPhone(true);
-      isValid = false;
-    }
-    else {
-      setBadPhone(false);
-    }
-
-    setTimeout(() => {
-      if (isValid == true) {
-        handleSignUp();
-        navigation.goBack();
-      }
-      else
-      {
-        setShopName("");
-        setBio("");   
-        setAddress("");
-        setEmail("");        
-        setPhone("");
-      }
-    }, 1000);
-  }
-
-  const handleSignUp = async () => {
-    // Xử lý logic đăng ký ở đây
-    const shop = {
-      image: 'null',
-      shopName: shopName,
-      bio: bio,
-      address: address,
-      email: email,
-      phone: phone,
-      userId: '65644251e1f8127c781b831c'
-    }
-    try {
-      await axios.post("http://10.0.2.2:3000/shop/createShop", shop)
-      setStatus("success");
-      popIn();
-      navigation.navigate('SellerBottomNav', { screen: 'My Products' });
-    } catch (error) {
-      Alert.alert(
-        "Create shop error", 
-        "An error occured during registration"
-      );
-      console.log("registration failed", error);
-    }
-  };
   const popIn = () => {
         Animated.timing(popAnim, {
             toValue: windowHeight * -0.7*0.95,
@@ -169,7 +54,10 @@ const handleOnPressGoBack = ({navigation}) => {
       setShopName(text);
     }
   };
-
+  const save = () => {
+    setStatus("success");
+    popIn();
+  };
 
   const handleBioChange = (text) => {
     if (text.length <= maxCharactersBio) {
@@ -184,7 +72,7 @@ const handleOnPressGoBack = ({navigation}) => {
       quality: 1,
     })
     if (!result.canceled) {
-      setSelectedImage(result.assets[0].uri);
+      setSelectedImage(result.assets[0].url);
     }
   }
   
@@ -194,29 +82,30 @@ const handleOnPressGoBack = ({navigation}) => {
         // width: '100%',
         // height: '100%',
         backgroundColor: '#E3E3E3',
-        flex: 1,
-
+        flex: 1
       }}>
       <View
-  style={{
-    display: "flex",
-    backgroundColor: 'white',
-    alignItems: 'center',
-    padding: 10,
-    flexDirection: "row",
-    justifyContent: "center"
-  }}
->
-  <TouchableOpacity onPress={() => navigation.goBack()} style={{ position: "absolute", left: 4 }}>
-    <AntDesign name="arrowleft" style={{ fontSize: 24 }} />
-  </TouchableOpacity>
-  <Text style={{ fontSize: 16, fontWeight: 'bold' }}> Create Shop </Text>
-</View>
+        style={{
+          display: "flex",
+          backgroundColor: 'white',
+         
+          alignItems: 'center',
+          justifyContent:'center',
+          padding: 10,
 
+          position:'relative'
+        }}>
+        <TouchableOpacity onPress={() => navigation.goBack()}
+        style ={{position: "absolute", left: 10}}>
+          <AntDesign name="arrowleft" style={{ fontSize: 24 }} />
+        </TouchableOpacity>
+        <Text style={{ fontSize: 16, fontWeight: 'bold'}}> Edit Profile </Text>
+
+      </View>
 
       <View style={{ padding: 20, alignItems: 'center', backgroundColor: '#00a7e1' }}>
         <Image
-          source={{uri: selectedImage}}
+          source={require('./avatar.jpg')}
           style={{ width: 80, height: 80, borderRadius: 100 }}
         />
         <View>
@@ -234,7 +123,7 @@ const handleOnPressGoBack = ({navigation}) => {
       <View style={{
         backgroundColor: 'white',
         flexDirection: 'row',
-        padding: 10,
+        padding: 10, 
         alignItems: 'center',
         marginTop: 10,
         marginBottom: 2
@@ -302,8 +191,6 @@ const handleOnPressGoBack = ({navigation}) => {
           Pickup address
         </Text>
         <TextInput
-          value ={address}
-          onChangeText={value => setAddress(value)}
           placeholder="setup"
           style={{
             fontSize: 16,
@@ -325,8 +212,6 @@ const handleOnPressGoBack = ({navigation}) => {
           Email
         </Text>
         <TextInput
-           value ={email}
-           onChangeText={value => setEmail(value)}
           placeholder="setup"
           style={{
             fontSize: 16,
@@ -348,10 +233,8 @@ const handleOnPressGoBack = ({navigation}) => {
           Phone number
         </Text>
         <TextInput
-           value ={phone}
-           onChangeText={value => setPhone(value)}
-           keyboardType = {'number-pad'}
           placeholder="setup"
+          keyboardType = {'number-pad'}
           style={{
             fontSize: 16,
             borderColor: '#CDCDCD',
@@ -387,34 +270,35 @@ const handleOnPressGoBack = ({navigation}) => {
           </View>
         </Animated.View>
       </View>
+
   
-      {shopName != '' && email != '' && phone != '' && bio != '' && selectedImage != null && address != '' ?
-            <TouchableOpacity onPress={handleSignUp}>
-                <View style={{
-                    marginBottom: 20,
-                    padding: 10,
-                }}>                        
-                    <View style={{
-                        borderRadius: 12,
-                            backgroundColor: COLORS.blue,
-                            alignItems: "center",
-                        }}>                        
-                        <Text style={{fontSize:16, fontWeight:600, marginVertical: 10, color: COLORS.white}}>Create</Text>
-                    </View>
-                </View>
-            </TouchableOpacity> :
+  {changeShopName != shopName || changeEmail != email || changePhone != phone || changeBio != bio || changeSelectedImage != selectedImage || changeAddress != address?
+        <TouchableOpacity onPress={save}>
             <View style={{
                 marginBottom: 20,
+                padding: 10,
             }}>                        
                 <View style={{
                     borderRadius: 12,
-                        backgroundColor: COLORS.secondaryGray,
+                        backgroundColor: COLORS.blue,
                         alignItems: "center",
                     }}>                        
-                    <Text style={{fontSize:16, fontWeight:600, marginVertical: 10, color: COLORS.white}}>Create</Text>
+                    <Text style={{fontSize:16, fontWeight:600, marginVertical: 10, color: COLORS.white}}>Save</Text>
                 </View>
             </View>
-        }
+        </TouchableOpacity> :
+        <View style={{
+            marginBottom: 20,
+        }}>                        
+            <View style={{
+                borderRadius: 12,
+                    backgroundColor: COLORS.secondaryGray,
+                    alignItems: "center",
+                }}>                        
+                <Text style={{fontSize:16, fontWeight:600, marginVertical: 10, color: COLORS.white}}>Create</Text>
+            </View>
+        </View>
+    }
     </SafeAreaView>
 
   );
@@ -423,34 +307,35 @@ const handleOnPressGoBack = ({navigation}) => {
 }
 
 const styles = StyleSheet.create({
-  toastContainer: {
-      height: 60,
-      // width: 350,
-      backgroundColor: "#f5f5f5",
-      justifyContent: "center",
-      alignItems: "center",
-      borderRadius: 10,
-
-      shadowColor: "#000",
-      shadowOffset: {
-          width: 0,
-          height: 2,
-      },
-      shadowOpacity: 0.25,
-      shadowRadius: 3.84,
-
-      elevation: 5,
-  },
-  toastRow: {
-      width: "100%",
-      flexDirection: "row",
-      alignItems: "center",
-      justifyContent: "space-evenly",
-  },
-  toastText: {
-      width: "70%",
-      padding: 2,
-  },
+    toastContainer: {
+        height: 60,
+        // width: 350,
+        backgroundColor: "#f5f5f5",
+        justifyContent: "center",
+        alignItems: "center",
+        borderRadius: 10,
   
-}
-);
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 2,
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+  
+        elevation: 5,
+    },
+    toastRow: {
+        width: "100%",
+        flexDirection: "row",
+        alignItems: "center",
+        justifyContent: "space-evenly",
+    },
+    toastText: {
+        width: "70%",
+        padding: 2,
+    },
+    
+  }
+  );
+  

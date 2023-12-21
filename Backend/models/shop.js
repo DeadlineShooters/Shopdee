@@ -5,6 +5,7 @@ import User from "./user.js";
 const shopSchema = new Schema({
     image: String,
     name: String,
+    email: String,
     phone: String,
     address: String,
     description: String,

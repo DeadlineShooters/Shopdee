@@ -5,6 +5,24 @@ import randomBytes from "randombytes"
 import crypto from "crypto"
 import { getDataUri } from "../utils/feature.js"
 import cloudinary from "cloudinary"
+import Shop from "../models/shop.js"
+export const checkShopOwner = async (req, res) => {
+    try {
+        const {id} =req.body;
+        console.log(id)
+        const existingUser = await Shop.findById({user:id});
+        console.log(existingUser);
+        if (!existingUser)
+        {
+            return res.status(400).json({messages: "Email has been already registered!"});
+        } 
+        res.status(200).json({existingUser})
+    }
+    catch (error) {
+        console.log("error registering user", error);
+        res.status(500).json({messages: "Notfound user"});
+    }
+}
 export const register = async (req, res) => {
     try {
         const { username, email, password} = req.body;
