@@ -18,9 +18,11 @@ import AboutShopDee from "./src/pages/Buyer/Me/About.js";
 import HelpSupport from "./src/pages/Buyer/Me/Support";
 import ChangePassword from "./src/pages/Buyer/Me/ChangePassword";
 import SignIn from "./src/pages/SignIn";
+import SignUp from "./src/pages/SignIn/SignUp/index.jsx"
 import { UserContext } from "./UserContext.js";
 import AddProduct from "./src/pages/Seller/AddProduct.js";
 import EditProduct from "./src/pages/Seller/EditProduct.js";
+import Checkout from "./src/pages/Buyer/Checkout/index.jsx"
 const Stack = createNativeStackNavigator();
 
 export default function App() {
