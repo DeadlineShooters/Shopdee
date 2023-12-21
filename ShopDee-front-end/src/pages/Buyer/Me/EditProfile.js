@@ -189,7 +189,6 @@ const save = async () => {
     try {
         const userID = user._id;
         const profilePic = {publicId, secureUrl};
-        console.log(profilePic);
         const userInfo = {
             username: username,
             email: mail,

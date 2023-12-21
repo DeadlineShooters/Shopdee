@@ -15,11 +15,10 @@ const Me = ({ navigation }) => {
         navigation.navigate("EditProfile", { props: user });
     }
     const navigateToShopOwner = async () => {
+        const findUser = {userID};
         try {
-            console.log(userID)
-            await axios.get('http://10.0.2.2:3000/user/profile/checkShopOwner', userID);
+            await axios.post('http://10.0.2.2:3000/user/profile/checkShopOwner', findUser);
             navigation.navigate('SellerBottomNav', { screen: 'My Products' });
-
         } catch (error) {
             Alert.alert(
                 "Shop registration needed",
@@ -35,7 +34,7 @@ const Me = ({ navigation }) => {
                 }
                 ]
             );
-            console.log("registration failed", error);
+            console.log("error retrieving user data", error);
         }
     }
     const navigateToSettings = () => {
