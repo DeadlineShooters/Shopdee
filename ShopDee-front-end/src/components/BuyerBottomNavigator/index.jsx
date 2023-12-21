@@ -6,7 +6,10 @@ import Home from "../../pages/Buyer/Home";
 import Me from "../../pages/Buyer/Me";
 import Likes from "../../pages/Buyer/Likes";
 import Notifcations from "../../pages/Buyer/Notifications";
+import CreateShop from "../../pages/Buyer/CreateShop";
+
 import SellerMyOrderTopTabs from "../SellerMyOrderTopTabs";
+import EditProfile from "../../pages/Buyer/Me/EditProfile";
 import MyProducts from "../../pages/Seller/MyProducts";
 
 const Tab = createBottomTabNavigator();

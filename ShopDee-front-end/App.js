@@ -9,8 +9,11 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import BuyerBottomNavigator from "./src/components/BuyerBottomNavigator";
 import SellerBottomNavigator from "./src/components/SellerBottomNavigator";
 import ProductDetails from "./src/pages/Buyer/ProductDetails";
+import Me from "./src/pages/Seller/ShopProfile";
 
+import CreateShop from "./src/pages/Buyer/CreateShop";
 import EditProfile from "./src/pages/Buyer/Me/EditProfile.js";
+import EditShopProfile from "./src/pages/Seller/ShopProfile/EditShop.js";
 import Settings from "./src/pages/Buyer/Me/Settings.js";
 import SetAddress from "./src/pages/Buyer/Me/SetAddress.js";
 import UserPrivacy from "./src/pages/Buyer/Me/UserPrivacy.js";
@@ -18,13 +21,15 @@ import AboutShopDee from "./src/pages/Buyer/Me/About.js";
 import HelpSupport from "./src/pages/Buyer/Me/Support";
 import ChangePassword from "./src/pages/Buyer/Me/ChangePassword";
 import SignIn from "./src/pages/SignIn";
+import SignUp from "./src/pages/SignIn/SignUp/index.jsx"
 import { UserContext } from "./UserContext.js";
 import AddProduct from "./src/pages/Seller/AddProduct.js";
 import EditProduct from "./src/pages/Seller/EditProduct.js";
+import Checkout from "./src/pages/Buyer/Checkout/index.jsx"
 const Stack = createNativeStackNavigator();
 
 export default function App() {
-  let buyer = false;
+  let buyer = true;
   let seller = true;
 
   // var { height, width } = Dimensions.get("window");
@@ -48,6 +53,7 @@ export default function App() {
                       headerShown: false,
                     }}
                   />
+                  <Stack.Screen name="CreateShop" component={CreateShop} options={{ headerShown: false }} />
                   <Stack.Screen name="EditProfile" component={EditProfile} options={{ headerShown: false }} />
                   <Stack.Screen name="Settings" component={Settings} options={{ headerShown: false }} />
                   <Stack.Screen name="ChangePassword" component={ChangePassword} options={{ headerShown: false }} />
@@ -82,6 +88,9 @@ export default function App() {
                       headerShown: false,
                     }}
                   />
+                  <Stack.Screen name="Edit Profile" 
+                  component={EditShopProfile} 
+                  options={{ headerShown: false }} />
                 </>
               )}
             </Stack.Navigator>
