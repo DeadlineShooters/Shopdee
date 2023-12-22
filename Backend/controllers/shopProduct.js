@@ -3,8 +3,8 @@ import Product from '../models/product.js';
 import Shop from '../models/shop.js';
 export const index = async (req, res) => {
     try {
-        const {shopId} = req.params;
-        console.log(shopId)
+        const {shopId} = req.body;
+        console.log(shopId);
         const products = await Product.find({shop: shopId});
         if (!products) {
             res.status(404).json({ message: "Products not found" });
@@ -33,6 +33,7 @@ export const createProduct = async (req, res) => {
         const product = new Product(req.body.product);
         product.shop = shopId;
         await product.save();
+        console.log(product);
         res.json({
             message: "Product created successfully",
             product,

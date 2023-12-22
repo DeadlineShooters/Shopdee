@@ -10,9 +10,9 @@ import Shop from "../models/shop.js"
 export const checkShopOwner = async (req, res) => {
     try {
         const user = req.body.userID;
-        console.log(user);
+        //console.log(user);
         const existingUser = await Shop.findOne({user : user});
-        console.log(existingUser);
+        //console.log(existingUser);
         if (!existingUser)
         {
             return res.status(500).json({messages: "Email has been already registered!"});

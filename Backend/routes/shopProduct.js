@@ -4,7 +4,7 @@ import * as shop from '../controllers/shopProduct.js'
 const router = express.Router({mergeParams: true});
 
 // /shop/:shopId/products
-router.get('', shop.index);
+router.get('/index', shop.index); 
 
 router.post('/create-product', shop.createProduct);
 
