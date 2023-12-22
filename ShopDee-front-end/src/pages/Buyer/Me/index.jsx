@@ -16,10 +16,15 @@ const Me = ({ navigation }) => {
     }
     const navigateToShopOwner = async () => {
         try {
+<<<<<<< Updated upstream
             console.log(userID)
             await axios.get('http://10.0.2.2:3000/user/profile/checkShopOwner', userID);
             navigation.navigate('SellerBottomNav', { screen: 'My Products' });
 
+=======
+            await axios.post('http://10.0.2.2:3000/user/profile/checkShopOwner', findUser);
+            navigation.navigate('SellerBottomNav', { screen: 'My Products' } ,{ props: user });
+>>>>>>> Stashed changes
         } catch (error) {
             Alert.alert(
                 "Shop registration needed",

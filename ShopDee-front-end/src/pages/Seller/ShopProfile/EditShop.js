@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef,  useEffect, useContext } from 'react';
 import { View, Text, TouchableOpacity, ToastAndroid, Image, TextInput, SafeAreaView, Animated, StyleSheet, Dimensions } from "react-native";
 import * as ImagePicker from 'expo-image-picker';
 import { AntDesign, Entypo } from '@expo/vector-icons';
