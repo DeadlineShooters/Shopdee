@@ -19,25 +19,25 @@ import {
   AntDesign,
   MaterialCommunityIcons,
 } from "@expo/vector-icons";
-import img from "./shoe.png";
 import shopProfilePicture from "./favicon.png";
 import { useNavigation } from "@react-navigation/native";
 import { product } from "../../../../data/product";
 import axios from "axios";
 import React from 'react';
-import Carousel from 'react-native-snap-carousel';
+import Carousel, { Pagination } from 'react-native-snap-carousel';
 
 export default function ProductDetails() {
   const [isFavorite, setIsFavorite] = useState(false);
-  const [selectedSize, setSelectedSize] = useState(null);
+  // const [selectedSize, setSelectedSize] = useState(null);
   const [quantity, setQuantity] = useState(1);
   const [openModal, setOpenModel] = useState(false);
+  const [activeSlide, setActiveSlide] = useState(0);
 
   const navigation = useNavigation();
 
-  const handelSizeSelection = (size) => {
-    setSelectedSize(size);
-  };
+  // const handelSizeSelection = (size) => {
+  //   setSelectedSize(size);
+  // };
 
   function renderModal() {
     return (
@@ -47,18 +47,9 @@ export default function ProductDetails() {
           onPress={() => setOpenModel(false)}
         ></Pressable>
         <View
-          style={{
-            backgroundColor: "#00000050",
-            width: "100%",
-          }}
-        >
+          style={{backgroundColor: "#00000050", width: "100%",}}>
           <View
-            style={{
-              position: "absolute",
-              bottom: 0,
-              width: "100%",
-            }}
-          >
+            style={{position: "absolute",bottom: 0,width: "100%",}}>
             <View
               style={{
                 zIndex: 999,
@@ -97,13 +88,7 @@ export default function ProductDetails() {
                 >
                   <Feather name="minus" size={20} color={COLORS.black} />
                 </TouchableOpacity>
-                <Text
-                  style={{
-                    ...FONTS.body3,
-                    flex: 1,
-                    textAlign: "center",
-                  }}
-                >
+                <Text style={{...FONTS.body3,flex: 1,textAlign: "center",}}>
                   {quantity}
                 </Text>
 
@@ -143,14 +128,7 @@ export default function ProductDetails() {
   }
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "#fff" }}>
-      <ScrollView
-        style={{
-          // flex: 1,
-          backgroundColor: COLORS.gray,
-          // paddingBottom: 100,
-          marginBottom: 56,
-        }}
-      >
+      <ScrollView style={{backgroundColor: COLORS.gray, marginBottom: 56,}}>
         <View>
           <View
             style={{
@@ -165,11 +143,7 @@ export default function ProductDetails() {
             }}
           >
             <TouchableOpacity onPress={() => navigation.goBack()}>
-              <MaterialIcons
-                name="keyboard-arrow-left"
-                size={24}
-                color={COLORS.black}
-              />
+              <MaterialIcons name="keyboard-arrow-left" size={24} color={COLORS.black}/>
             </TouchableOpacity>
 
             <TouchableOpacity
@@ -179,44 +153,47 @@ export default function ProductDetails() {
                 borderRadius: 50,
               }}
             >
-              <MaterialCommunityIcons
-                name="cart-outline"
-                size={24}
-                color="black"
-              />
+              <MaterialCommunityIcons name="cart-outline" size={24} color="black"/>
             </TouchableOpacity>
           </View>
-          {/* <Image
-            source={product.image.url}
-            // resizeMode="contain"
-            // style={{ flex: 1, height: undefined, width: undefined }}
-            style={{
-              width: "100%",
-              height: undefined,
-              aspectRatio: 1,
-            }}
-          /> */}
-          <Carousel
-            data={product.images}
-            renderItem={({ item }) => (
-              <Image
-                source={{ uri: item.url }}
-                style={{
-                  width: '100%',
-                  height: undefined,
-                  aspectRatio: 1,
-                }}
-              />
-            )}
-            sliderWidth={width}
-            itemWidth={width}
-            loop
-          />
-          {/* <FlatList
-            data={carouselItem}
-            renderItem={renderItems}
-            keyExtractor={(item,index) => index.toString()}
-          ></FlatList> */}
+
+          <View>
+            <Carousel
+              data={product.images}
+              renderItem={({ item }) => (
+                <Image
+                  source={{ uri: item.url }}
+                  style={{
+                    width: '100%',
+                    height: undefined,
+                    aspectRatio: 1,
+                    resizeMode: 'contain',
+                  }}
+                />
+              )}
+              sliderWidth={SIZES.width}
+              itemWidth={SIZES.width}
+              loop={false}
+              onSnapToItem={(index) => setActiveSlide(index)}
+            />
+            <Pagination
+              dotsLength={product.images.length}
+              activeDotIndex={activeSlide}
+              containerStyle={{ position: 'absolute', bottom: 0, alignSelf: 'center' }}
+              dotStyle={{
+                width: 10,
+                height: 10,
+                borderRadius: 5,
+                backgroundColor: COLORS.lightBlue,
+              }}
+              inactiveDotStyle={{
+                // Define styles for inactive dots if needed
+                backgroundColor: 'lightgray',
+              }}
+              inactiveDotOpacity={0.6}
+              inactiveDotScale={0.8}
+            />
+          </View>
 
           <View
             style={[
@@ -231,21 +208,13 @@ export default function ProductDetails() {
               {isFavorite ? (
                 <Ionicons name="md-heart-sharp" size={24} color />
               ) : (
-                <Ionicons
-                  name="md-heart-outline"
-                  size={24}
-                  color={COLORS.black}
-                />
+                <Ionicons name="md-heart-outline" size={24} color={COLORS.black}/>
               )}
             </TouchableOpacity>
-            <View
-              style={{
-                flex: 1,
-              }}
-            >
-              <Text style={{ ...FONTS.h3 }}>Nike air water</Text>
-              <Text style={{ ...FONTS.h1 }}>500,000đ</Text>
-              <Text>4.5 *</Text>
+            <View style={{flex: 1,}}>
+              <Text style={{ ...FONTS.h3 }}>{product.name}</Text>
+              <Text style={{ ...FONTS.h1 }}>{product.price.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}</Text>
+              {/* <Text>4.5 *</Text> */}
             </View>
           </View>
 
@@ -270,20 +239,15 @@ export default function ProductDetails() {
               }}
             />
             <View>
-              <Text style={{ ...FONTS.h4 }}>Golden Papaya</Text>
+              <Text style={{ ...FONTS.h4 }}>{product.shop.name}</Text>
               <Text style={{ color: "gray" }}>Active 28 minutes ago</Text>
-              <Text style={{ color: "gray" }}>Hồ Chí Minh</Text>
+              <Text style={{ color: "gray" }}>{product.shop.address}</Text>
             </View>
           </View>
 
           <View style={[styles.contentBox]}>
             <Text style={{ ...FONTS.h4 }}>Product description</Text>
-            <Text>
-              Lorem ipsum dolor sit amet consectetur adipisicing elit.
-              Architecto commodi nulla dolor hic maxime sit! Impedit iusto eos
-              cumque culpa assumenda voluptatibus animi asperiores error neque
-              facilis voluptatum, similique earum.
-            </Text>
+            <Text>{product.description}</Text>
           </View>
         </View>
       </ScrollView>

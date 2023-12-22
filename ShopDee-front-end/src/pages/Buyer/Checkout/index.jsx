@@ -13,10 +13,21 @@ import {
     SimpleLineIcons 
 } from "@expo/vector-icons";
 
+const user = {
+    name: 'Nguyễn Tuấn Kiệt',
+    phone: '0902800628',
+    
+}
+
 export default function Checkout({ route }) {
     const [selectedPayment, setSelectedPayment] = useState('');
     const navigation = useNavigation();
     const product = route.params.product;
+    const price = product.price.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })
+    const deliveryFee = 15000;
+    const total = (product.price+deliveryFee).toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })
+    
+    
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: "#fff" }}>
             <GoBack currentTitle="Checkout" prevTitle="Details" func={() => navigation.goBack()}></GoBack>
@@ -30,7 +41,7 @@ export default function Checkout({ route }) {
                         <SimpleLineIcons name="location-pin" size={24} color={COLORS.blue} />
                         <Text style={{marginLeft: 10}}>Delivery Address</Text>
                     </View>
-                    <Text style={{ paddingLeft: 36 }}>Nguyễn Tuấn Kiệt | 0902800628{'\n'}27 Nguyễn Văn Cừ{'\n'}P. Bình Trị Đông, Q. Bình Tân, TPHCM</Text>
+                    <Text style={{ paddingLeft: 36 }}>{user.name} | {user.phone}{'\n'}27 Nguyễn Văn Cừ{'\n'}P. Bình Trị Đông, Q. Bình Tân, TPHCM</Text>
                     <Pressable onPress={() => {}} style={{
                             position: 'absolute', top:35, right:20,
                         }} >
@@ -42,11 +53,11 @@ export default function Checkout({ route }) {
                     <Text style={{marginBottom: 15}}>{ product.shop.name }</Text>
                     <View style={{ flexDirection: "row" }}>
                         <View style={styles.imageContainer}>
-                            <Image source={{uri: product.imgUrl}} style={styles.image}></Image>
+                            <Image source={{uri: product.images[0].url}} style={styles.image}></Image>
                         </View>
                         <View>
                             <Text>{product.name}</Text>
-                            <Text style={{marginTop: 10}}>{product.price} x 1</Text>
+                            <Text style={{marginTop: 10}}>{price} x 1</Text>
                         </View>
                     </View>
                 </View>
@@ -58,18 +69,18 @@ export default function Checkout({ route }) {
                     </View>
                     <View style={{ flexDirection: 'row', justifyContent: "space-between", marginBottom: 5}}>
                         <Text>Merchandise Subtotal</Text>
-                        <Text>đ500,000</Text>
+                        <Text>{price}</Text>
                     </View>
                     <View style={{ flexDirection: 'row', justifyContent: "space-between", marginBottom: 5}}>
                         <Text>Delivery</Text>
-                        <Text>đ15,000</Text>
+                        <Text>{deliveryFee.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}</Text>
                     </View>
                     <View style={{
                         flexDirection: 'row', justifyContent: "space-between", marginBottom: 5,
                         fontSize: 20
                     }}>
                         <Text style={{fontSize: 18, fontWeight: 'bold'}}>Merchandise Subtotal</Text>
-                        <Text style={{fontSize: 18, color: 'red'}}>đ500,000</Text>
+                        <Text style={{fontSize: 18, color: 'red'}}>{total}</Text>
                     </View>
 
                 </View>
@@ -105,7 +116,7 @@ export default function Checkout({ route }) {
                 <View style={styles.section}>
                     <View style={{flexDirection: 'row', alignItems: 'center', paddingRight: 1}}>
                         <AntDesign name="profile" size={24} color={COLORS.blue} />
-                        <Text style={{marginLeft: 10}}>By clicking “Place Order”, you are agreeing to ShopDee's General Transaction Terms</Text>
+                        <Text style={{marginHorizontal: 10}}>By clicking “Place Order”, you are agreeing to ShopDee's General Transaction Terms</Text>
                     </View>
                 </View>
             </ScrollView>
@@ -127,7 +138,7 @@ export default function Checkout({ route }) {
                 }}>
                     <View style={{marginRight: 10, alignItems: 'flex-end'}}>
                         <Text>Total Payment</Text>
-                        <Text style={{ fontSize: 20, color: 'red' }}>đ515,000</Text>
+                        <Text style={{ fontSize: 20, color: 'red' }}>{total}</Text>
                     </View>
                 </View>
                 <TouchableOpacity

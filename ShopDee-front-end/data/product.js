@@ -20,7 +20,7 @@ export const product = {
     category: "shoes",
     description:
         'Giày thể thao thông dụng nam Biti\'s Basic BSM000600 được xem là mẫu giày "quốc dân" chưa bao giờ ngừng hot. Mặc dù đã ra mắt từ rất lâu nhưng đây vẫn được xem là sự lựa chọn hàng đầu cho những bạn yêu thích sự đơn giản. Thiết kế giày full đen hoặc trắng sẽ là điểm nhấn làm rung động biết bao nhiêu tín đồ mê phong cách thời trang hiện đại, trẻ trung.',
-    price: 500000,
+    price: 650000,
     size: ['35', '36', '37', '38', '39', '40'],
     quantity: 153,
     shop: shop,

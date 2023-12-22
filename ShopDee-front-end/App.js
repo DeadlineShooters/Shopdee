@@ -9,6 +9,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import BuyerBottomNavigator from "./src/components/BuyerBottomNavigator";
 import SellerBottomNavigator from "./src/components/SellerBottomNavigator";
 import ProductDetails from "./src/pages/Buyer/ProductDetails";
+import Checkout from "./src/pages/Buyer/Checkout";
 
 import EditProfile from "./src/pages/Buyer/Me/EditProfile.js";
 import Settings from "./src/pages/Buyer/Me/Settings.js";
@@ -18,6 +19,7 @@ import AboutShopDee from "./src/pages/Buyer/Me/About.js";
 import HelpSupport from "./src/pages/Buyer/Me/Support";
 import ChangePassword from "./src/pages/Buyer/Me/ChangePassword";
 import SignIn from "./src/pages/SignIn";
+import SignUp from "./src/pages/SignIn/SignUp";
 import { UserContext } from "./UserContext.js";
 import AddProduct from "./src/pages/Seller/AddProduct.js";
 import EditProduct from "./src/pages/Seller/EditProduct.js";
