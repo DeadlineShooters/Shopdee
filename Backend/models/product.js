@@ -6,7 +6,10 @@ import Category from "./category.js";
 const productSchema = new Schema({
 
   name: String,
-  image: [String],
+  image: [{
+    public_id: String,
+    url: String,
+  }],
   description: String,
   price: Number,
   quantity: Number,
