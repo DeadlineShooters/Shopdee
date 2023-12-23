@@ -85,6 +85,14 @@ const Me = ({ navigation }) => {
             </View>
         </TouchableOpacity>
     )
+    const clearTokenAndLogout = async () => {
+        try {
+            await AsyncStorage.removeItem('authToken');
+            navigation.navigate('SignIn');
+        } catch (e) {
+            console.log(e);
+        }
+    };
     const handleOnPressLogout = () => {
         Alert.alert('Confirm message', 'Do you really want to log out?', [
             {
@@ -93,7 +101,7 @@ const Me = ({ navigation }) => {
             },
             {
                 text: 'Ok',
-                onPress: () => console.log('Exit the program')
+                onPress: () => clearTokenAndLogout(),
             }
         ]);
     }
