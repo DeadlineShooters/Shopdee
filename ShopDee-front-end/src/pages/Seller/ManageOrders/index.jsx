@@ -1,8 +1,9 @@
 import { View, Text, StyleSheet, SafeAreaView, FlatList } from "react-native";
 import Order from "../../../components/ManageOrders/Order";
-import { ORDER_LIST_TO_CONFIRM } from "../../../../data/order";
-import { ORDER_LIST_TO_DELIVER } from "../../../../data/order";
-import { ORDER_LIST_COMPLETED } from "../../../../data/order";
+import { Axios } from "../../../api/axios";
+// import { ORDER_LIST_TO_CONFIRM } from "../../../../data/order";
+// import { ORDER_LIST_TO_DELIVER } from "../../../../data/order";
+// import { ORDER_LIST_COMPLETED } from "../../../../data/order";
 
 //  testing code please replace!!
 export default function ManageOrders({ orders, buttonVisible }) {
@@ -41,9 +42,16 @@ export default function ManageOrders({ orders, buttonVisible }) {
   );
 }
 
+const token = await AsyncStorage.getItem("authToken");
+const userID = jwtDecode(token).userID;
+
+const shop = await Axios.get("/shop/shopProfile/${userID}");
+console.log("Shop: ", shop); 
+
+
 // Inside ConfirmOrders component
 export function ConfirmOrders() {
-  return <ManageOrders orders={ORDER_LIST_TO_CONFIRM} buttonVisible={true} />;
+  return <ManageOrders orders={order_list_to_confirm} buttonVisible={true} />;
 }
 
 // Inside ToDeliverOrders component

@@ -1,10 +1,5 @@
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
-import ManageOrders from "../pages/Seller/ManageOrders";
-import {
-  ConfirmOrders,
-  ToDeliverOrders,
-  CompletedOrders,
-} from "../pages/Seller/ManageOrders";
+import { ConfirmOrders, ToDeliverOrders, CompletedOrders } from "../pages/Seller/ManageOrders";
 
 const Tab = createMaterialTopTabNavigator();
 

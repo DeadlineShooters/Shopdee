@@ -5,8 +5,9 @@ import { useNavigation } from "@react-navigation/native";
 export default function Order({ buyer, buttonVisible, buttonText, itemList, totalPayment }) {
   const navigation = useNavigation();
 
-  function confirmOrder() {
-    navigation.navigate("To Deliver");
+  function handleOrder() {
+    if (buttonText == "Confirm") navigation.navigate("To Deliver");
+    else if (buttonText == "Complete") navigation.navigate("Completed");
     // update database
   }
   return (
@@ -31,7 +32,7 @@ export default function Order({ buyer, buttonVisible, buttonText, itemList, tota
           // <TouchableOpacity style={styles.button} onPress={confirmOrder}>
           //   <Text style={styles.buttonText}>{buttonText}</Text>
           // </TouchableOpacity>
-          <TouchableOpacity style={styles.button}>
+          <TouchableOpacity style={styles.button} onPress={handleOrder}>
             <Text style={styles.buttonText}>{buttonText}</Text>
           </TouchableOpacity>
         )}

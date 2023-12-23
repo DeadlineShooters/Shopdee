@@ -5,6 +5,7 @@ import bodyParser from "body-parser";
 import userRoutes from "./routes/users.js";
 import productRoutes from "./routes/shopProduct.js";
 import shopRoutes from "./routes/shopProfile.js";
+
 import cloudinary from "cloudinary";
 import Category from "./models/category.js";
 

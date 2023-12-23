@@ -21,17 +21,14 @@ import AboutShopDee from "./src/pages/Buyer/Me/About.js";
 import HelpSupport from "./src/pages/Buyer/Me/Support";
 import ChangePassword from "./src/pages/Buyer/Me/ChangePassword";
 import SignIn from "./src/pages/SignIn";
-import SignUp from "./src/pages/SignIn/SignUp/index.jsx"
+import SignUp from "./src/pages/SignIn/SignUp/index.jsx";
 import { UserContext } from "./UserContext.js";
 import AddProduct from "./src/pages/Seller/AddProduct.js";
 import EditProduct from "./src/pages/Seller/EditProduct.js";
-import Checkout from "./src/pages/Buyer/Checkout/index.jsx"
+import Checkout from "./src/pages/Buyer/Checkout/index.jsx";
 const Stack = createNativeStackNavigator();
 
 export default function App() {
-  let buyer = true;
-  let seller = true;
-
   // var { height, width } = Dimensions.get("window");
   // console.log("Width is: " + width);
   // console.log("Height is: " + height);
@@ -42,7 +39,8 @@ export default function App() {
         <SafeAreaProvider>
           <NavigationContainer>
             <Stack.Navigator>
-              {buyer && (
+              {
+                // buyer
                 <>
                   <Stack.Screen name="SignIn" component={SignIn} options={{ headerShown: false }} />
                   <Stack.Screen name="SignUp" component={SignUp} options={{ headerShown: false }} />
@@ -64,8 +62,9 @@ export default function App() {
                   <Stack.Screen name="ProductDetails" component={ProductDetails} options={{ headerShown: false }} />
                   <Stack.Screen name="Checkout" component={Checkout} options={{ headerShown: false }} />
                 </>
-              )}
-              {seller && (
+              }
+              {
+                // seller
                 <>
                   <Stack.Screen
                     name="SellerBottomNav"
@@ -88,11 +87,9 @@ export default function App() {
                       headerShown: false,
                     }}
                   />
-                  <Stack.Screen name="Edit Profile" 
-                  component={EditShopProfile} 
-                  options={{ headerShown: false }} />
+                  <Stack.Screen name="Edit Profile" component={EditShopProfile} options={{ headerShown: false }} />
                 </>
-              )}
+              }
             </Stack.Navigator>
           </NavigationContainer>
         </SafeAreaProvider>
