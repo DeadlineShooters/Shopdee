@@ -21,8 +21,9 @@ import AboutShopDee from "./src/pages/Buyer/Me/About.js";
 import HelpSupport from "./src/pages/Buyer/Me/Support";
 import ChangePassword from "./src/pages/Buyer/Me/ChangePassword";
 import SignIn from "./src/pages/SignIn";
-import SignUp from "./src/pages/SignIn/SignUp/index.jsx"
-import { UserContext } from "./UserContext.js";
+import SignUp from "./src/pages/SignIn/SignUp/index.jsx";
+import SendMailVerify from "./src/pages/Helper/SendMailVerify.js";
+import {UserContext} from "./context/UserContext.js";
 import AddProduct from "./src/pages/Seller/AddProduct.js";
 import EditProduct from "./src/pages/Seller/EditProduct.js";
 import Checkout from "./src/pages/Buyer/Checkout/index.jsx"
@@ -46,13 +47,8 @@ export default function App() {
                 <>
                   <Stack.Screen name="SignIn" component={SignIn} options={{ headerShown: false }} />
                   <Stack.Screen name="SignUp" component={SignUp} options={{ headerShown: false }} />
-                  <Stack.Screen
-                    name="BuyerBottomNav"
-                    component={BuyerBottomNavigator}
-                    options={{
-                      headerShown: false,
-                    }}
-                  />
+                  <Stack.Screen name="SendMail" component={SendMailVerify} options={{ headerShown: false }} />
+                  <Stack.Screen name="BuyerBottomNav" component={BuyerBottomNavigator} options={{headerShown: false,}}/>
                   <Stack.Screen name="CreateShop" component={CreateShop} options={{ headerShown: false }} />
                   <Stack.Screen name="EditProfile" component={EditProfile} options={{ headerShown: false }} />
                   <Stack.Screen name="Settings" component={Settings} options={{ headerShown: false }} />
@@ -67,30 +63,10 @@ export default function App() {
               )}
               {seller && (
                 <>
-                  <Stack.Screen
-                    name="SellerBottomNav"
-                    component={SellerBottomNavigator}
-                    options={{
-                      headerShown: false,
-                    }}
-                  />
-                  <Stack.Screen
-                    name="Edit product"
-                    component={EditProduct}
-                    options={{
-                      headerShown: false,
-                    }}
-                  />
-                  <Stack.Screen
-                    name="Add product"
-                    component={AddProduct}
-                    options={{
-                      headerShown: false,
-                    }}
-                  />
-                  <Stack.Screen name="Edit Profile" 
-                  component={EditShopProfile} 
-                  options={{ headerShown: false }} />
+                  <Stack.Screen name="SellerBottomNav" component={SellerBottomNavigator} options={{headerShown: false,}}/>
+                  <Stack.Screen name="Edit product" component={EditProduct} options={{headerShown: false,}}/>
+                  <Stack.Screen name="Add product" component={AddProduct} options={{headerShown: false,}}/>
+                  <Stack.Screen name="Edit Profile" component={EditShopProfile} options={{ headerShown: false }} />
                 </>
               )}
             </Stack.Navigator>

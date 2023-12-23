@@ -7,7 +7,7 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import GoBack from "../../components/goBackPanel";
 import { Axios } from "../../api/axios";
 import { useNavigation } from "@react-navigation/native";
-import { UserType } from "../../../UserContext";
+import { UserType } from "../../../../ShopDee-front-end/context/UserContext";
 
 export default function AddProduct({ productId }) {
   const navigation = useNavigation();
@@ -24,11 +24,11 @@ export default function AddProduct({ productId }) {
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const response = await Axios.get("http://localhost:3000/categories", {
+        const response = await Axios.get("http://10.0.2.2:3000/categories", {
           timeout: 5000, // Set timeout to 5 seconds (adjust as needed)
         });
         const fetchedCategories = response.data;
-        console.log("{GET http://localhost:3000/categories}", fetchedCategories);
+        console.log("{GET http://10.0.2.2:3000/categories}", fetchedCategories);
         setCategories(fetchedCategories); // Update the state
       } catch (error) {
         console.error("Error fetching categories:", error);
@@ -45,25 +45,33 @@ export default function AddProduct({ productId }) {
       Alert.alert("Missing Information", "Please fill in all required fields.");
       return;
     }
-
-    try {
-      const response = await Axios.post(`/products/${productId}`, {
+    const shopID = '6579412001a6e7d1a58a8df1';
+    const product= {
         name: productNameText,
         description: productDescText,
         images: [],
         price,
         quantity: stock,
         category: selectedCategory,
+    }
+    try {
+      const response = await Axios.post(`http://10.0.2.2:3000/shop/${shopID}/products/create-product`, {
+        // name: productNameText,
+        // description: productDescText,
+        // images: [],
+        // price,
+        // quantity: stock,
+        // category: selectedCategory,
+        product
       });
 
       // 201 for resource created)
-      if (response.status === 201) {
+      if (response.status === 200) {
         // Addition was successful, handle the response accordingly
         console.log("Product added successfully");
-      } else {
-        // Addition failed, handle the error
-        console.error("Product addition failed");
-      }
+        navigation.navigate("My Product");
+      } 
+      
     } catch (error) {
       // Handle Axios or network errors
       console.error("Error during product addition:", error);

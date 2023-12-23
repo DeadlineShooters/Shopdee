@@ -12,7 +12,7 @@ import { View,
     Dimensions } from "react-native";
 import * as ImagePicker from 'expo-image-picker'
 import React, { useState, useRef, useEffect, useContext } from "react";
-import {COLORS} from "./Themes";
+import { COLORS_v2 } from "../../../../constants/theme.js";
 import {MaterialIcons, AntDesign, Entypo} from '@expo/vector-icons';
 import DatePicker, { getFormatedDate } from "react-native-modern-datepicker";
 import { Dropdown } from "react-native-element-dropdown";
@@ -219,7 +219,7 @@ function renderDatePicker() {
             }}>
                 <View style={{
                     margin: 0,
-                    backgroundColor: COLORS.primary,
+                    backgroundColor: COLORS_v2.primary,
                     alignItems: "center",
                     justifyContent: "center",
                     borderRadius: 10,
@@ -242,19 +242,19 @@ function renderDatePicker() {
                         onDateChange={handleChangeStartDate}
                         onSelectedChange={(date) => setSelectedStartDate(date)}
                         options={{
-                            backgroundColor: COLORS.primary,
+                            backgroundColor: COLORS_v2.primary,
                             textHeaderColor: '#469ab6',
-                            textDefaultColor: COLORS.white,
-                            selectedTextColor: COLORS.white,
+                            textDefaultColor: COLORS_v2.white,
+                            selectedTextColor: COLORS_v2.white,
                             textHeaderFontSize: 18,
                             textFontSize: 14,
                             mainColor: '#469ab6',
-                            textSecondaryColor: COLORS.white,
+                            textSecondaryColor: COLORS_v2.white,
                             borderColor: "rgba(122, 146, 165, 0.1)"
                         }}
                     />
                     <TouchableOpacity onPress={handleOnPressStartDate}>
-                        <Text style={{ fontSize: 16, color: COLORS.white }}>Close</Text>
+                        <Text style={{ fontSize: 16, color: COLORS_v2.white }}>Close</Text>
                     </TouchableOpacity>
                 </View>
             </View>
@@ -264,7 +264,7 @@ function renderDatePicker() {
 return (
     <SafeAreaView style={{
         flex: 1,
-        backgroundColor: COLORS.white,
+        backgroundColor: COLORS_v2.white,
         paddingHorizontal: 22,
     }}>
         <View style={{
@@ -285,9 +285,9 @@ return (
                 <MaterialIcons
                     name="keyboard-arrow-left"
                     size={24}
-                    color={COLORS.lightBlue}
+                    color={COLORS_v2.lightBlue}
                 />
-                <Text style={{color: COLORS.lightBlue}}>Profile</Text>
+                <Text style={{color: COLORS_v2.lightBlue}}>Profile</Text>
             </TouchableOpacity>
             <Text style={{ fontSize: 20, fontWeight: 600 }}>User information</Text>
         </View>
@@ -303,7 +303,7 @@ return (
                             width: 100,
                             borderRadius: 85,
                             borderWidth: 2,
-                            borderColor: COLORS.primary
+                            borderColor: COLORS_v2.primary
                         }}
                     />
                     <View style={{
@@ -315,7 +315,7 @@ return (
                         <MaterialIcons
                             name="photo-camera"
                             size={32}
-                            color={COLORS.primary}
+                            color={COLORS_v2.primary}
                         />
 
                     </View>
@@ -332,7 +332,7 @@ return (
                     <View style={{
                         height: 44,
                         width: "100%",
-                        borderColor: COLORS.secondaryGray,
+                        borderColor: COLORS_v2.secondaryGray,
                         borderWidth: 1,
                         borderRadius: 4,
                         marginVertical: 6,
@@ -358,7 +358,7 @@ return (
                     <View style={{
                         height: 44,
                         width: "100%",
-                        borderColor: COLORS.secondaryGray,
+                        borderColor: COLORS_v2.secondaryGray,
                         borderWidth: 1,
                         borderRadius: 4,
                         marginVertical: 6,
@@ -384,7 +384,7 @@ return (
                     <View style={{
                         height: 44,
                         width: "100%",
-                        borderColor: COLORS.secondaryGray,
+                        borderColor: COLORS_v2.secondaryGray,
                         borderWidth: 1,
                         borderRadius: 4,
                         marginVertical: 6,
@@ -408,17 +408,17 @@ return (
                     <Text style={{ fontSize: 16 }}>Gender</Text>
                     <Dropdown
                         style={[ {height: 50,
-                            borderColor: COLORS.secondaryGray,
+                            borderColor: COLORS_v2.secondaryGray,
                             borderWidth: 1,
                             borderRadius: 4,
                             paddingHorizontal: 8,
                             marginVertical: 6},
                             isFocus && {borderColor: 'blue'}]}
                         containerStyle={{
-                            backgroundColor: COLORS.primary, 
+                            backgroundColor: COLORS_v2.primary, 
                             borderWidth: 0.5,
                             borderRadius: 8,}}
-                        itemTextStyle={{color: COLORS.lightBlue}}
+                        itemTextStyle={{color: COLORS_v2.lightBlue}}
                         placeholderStyle={{fontSize: 16}}
                         selectedTextStyle={{fontSize: 16}}
                         data={genderData}
@@ -447,7 +447,7 @@ return (
                         style={{
                             height: 44,
                             width: "100%",
-                            borderColor: COLORS.secondaryGray,
+                            borderColor: COLORS_v2.secondaryGray,
                             borderWidth: 1,
                             borderRadius: 4,
                             marginVertical: 6,
@@ -495,10 +495,10 @@ return (
                 }}>                        
                     <View style={{
                         borderRadius: 12,
-                            backgroundColor: COLORS.blue,
+                            backgroundColor: COLORS_v2.blue,
                             alignItems: "center",
                         }}>                        
-                        <Text style={{fontSize:16, fontWeight:600, marginVertical: 10, color: COLORS.white}}>Save</Text>
+                        <Text style={{fontSize:16, fontWeight:600, marginVertical: 10, color: COLORS_v2.white}}>Save</Text>
                     </View>
                 </View>
             </TouchableOpacity> :
@@ -507,10 +507,10 @@ return (
             }}>                        
                 <View style={{
                     borderRadius: 12,
-                        backgroundColor: COLORS.secondaryGray,
+                        backgroundColor: COLORS_v2.secondaryGray,
                         alignItems: "center",
                     }}>                        
-                    <Text style={{fontSize:16, fontWeight:600, marginVertical: 10, color: COLORS.white}}>Save</Text>
+                    <Text style={{fontSize:16, fontWeight:600, marginVertical: 10, color: COLORS_v2.white}}>Save</Text>
                 </View>
             </View>
         }

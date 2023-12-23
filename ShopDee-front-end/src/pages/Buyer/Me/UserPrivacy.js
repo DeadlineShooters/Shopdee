@@ -1,7 +1,7 @@
 import { View, Text, SafeAreaView, TouchableOpacity, ScrollView, Image, TextInput, Modal } from "react-native";
 import * as ImagePicker from 'expo-image-picker'
 import React, { useState } from "react";
-import { COLORS } from "./Themes";
+import {COLORS_v2} from "../../../../constants/theme.js";
 import { MaterialIcons, AntDesign } from '@expo/vector-icons';
 import DatePicker, { getFormatedDate } from "react-native-modern-datepicker";
 import { Dropdown } from "react-native-element-dropdown";
@@ -10,7 +10,7 @@ const UserPrivacy = ({ navigation }) => {
   return (
     <SafeAreaView style={{
       flex: 1,
-      backgroundColor: COLORS.white,
+      backgroundColor: COLORS_v2.white,
       paddingHorizontal: 22,
     }}>
         <View style={{
@@ -30,9 +30,9 @@ const UserPrivacy = ({ navigation }) => {
                 <MaterialIcons
                     name="keyboard-arrow-left"
                     size={24}
-                    color={COLORS.lightBlue}
+                    color={COLORS_v2.lightBlue}
                 />
-                <Text style={{color: COLORS.lightBlue}}>Profile</Text>
+                <Text style={{color: COLORS_v2.lightBlue}}>Profile</Text>
             </TouchableOpacity>
         <Text style={{ fontSize: 20, fontWeight: 600 }}>User Privacy</Text>
       </View>
@@ -47,7 +47,7 @@ const UserPrivacy = ({ navigation }) => {
                 <View style={{
                     height: 220,
                     width: "100%",
-                    borderColor: COLORS.secondaryGray,
+                    borderColor: COLORS_v2.secondaryGray,
                     borderWidth: 1,
                     borderRadius: 4,
                     marginVertical: 6,
@@ -72,7 +72,7 @@ const UserPrivacy = ({ navigation }) => {
                 <View style={{
                     height: 110,
                     width: "100%",
-                    borderColor: COLORS.secondaryGray,
+                    borderColor: COLORS_v2.secondaryGray,
                     borderWidth: 1,
                     borderRadius: 4,
                     marginVertical: 6,
@@ -92,7 +92,7 @@ const UserPrivacy = ({ navigation }) => {
                 <View style={{
                     height: 740,
                     width: "100%",
-                    borderColor: COLORS.secondaryGray,
+                    borderColor: COLORS_v2.secondaryGray,
                     borderWidth: 1,
                     borderRadius: 4,
                     marginVertical: 6,
@@ -132,7 +132,7 @@ const UserPrivacy = ({ navigation }) => {
                 <View style={{
                     height: 220,
                     width: "100%",
-                    borderColor: COLORS.secondaryGray,
+                    borderColor: COLORS_v2.secondaryGray,
                     borderWidth: 1,
                     borderRadius: 4,
                     marginVertical: 6,
@@ -158,7 +158,7 @@ const UserPrivacy = ({ navigation }) => {
                 <View style={{
                     height: 310,
                     width: "100%",
-                    borderColor: COLORS.secondaryGray,
+                    borderColor: COLORS_v2.secondaryGray,
                     borderWidth: 1,
                     borderRadius: 4,
                     marginVertical: 6,
@@ -185,7 +185,7 @@ const UserPrivacy = ({ navigation }) => {
                 <View style={{
                     height: 420,
                     width: "100%",
-                    borderColor: COLORS.secondaryGray,
+                    borderColor: COLORS_v2.secondaryGray,
                     borderWidth: 1,
                     borderRadius: 4,
                     marginVertical: 6,
@@ -215,7 +215,7 @@ const UserPrivacy = ({ navigation }) => {
                 <View style={{
                     height: 230,
                     width: "100%",
-                    borderColor: COLORS.secondaryGray,
+                    borderColor: COLORS_v2.secondaryGray,
                     borderWidth: 1,
                     borderRadius: 4,
                     marginVertical: 6,
@@ -238,7 +238,7 @@ const UserPrivacy = ({ navigation }) => {
                 <View style={{
                     height: 1360,
                     width: "100%",
-                    borderColor: COLORS.secondaryGray,
+                    borderColor: COLORS_v2.secondaryGray,
                     borderWidth: 1,
                     borderRadius: 4,
                     marginVertical: 6,
@@ -284,7 +284,7 @@ const UserPrivacy = ({ navigation }) => {
                 <View style={{
                     height: 280,
                     width: "100%",
-                    borderColor: COLORS.secondaryGray,
+                    borderColor: COLORS_v2.secondaryGray,
                     borderWidth: 1,
                     borderRadius: 4,
                     marginVertical: 6,
@@ -307,7 +307,7 @@ const UserPrivacy = ({ navigation }) => {
                 <View style={{
                     height: 380,
                     width: "100%",
-                    borderColor: COLORS.secondaryGray,
+                    borderColor: COLORS_v2.secondaryGray,
                     borderWidth: 1,
                     borderRadius: 4,
                     marginVertical: 6,
@@ -334,7 +334,7 @@ const UserPrivacy = ({ navigation }) => {
                 <View style={{
                     height: 120,
                     width: "100%",
-                    borderColor: COLORS.secondaryGray,
+                    borderColor: COLORS_v2.secondaryGray,
                     borderWidth: 1,
                     borderRadius: 4,
                     marginVertical: 6,
@@ -354,7 +354,7 @@ const UserPrivacy = ({ navigation }) => {
                 <View style={{
                     height: 120,
                     width: "100%",
-                    borderColor: COLORS.secondaryGray,
+                    borderColor: COLORS_v2.secondaryGray,
                     borderWidth: 1,
                     borderRadius: 4,
                     marginVertical: 6,
@@ -374,7 +374,7 @@ const UserPrivacy = ({ navigation }) => {
                 <View style={{
                     height: 220,
                     width: "100%",
-                    borderColor: COLORS.secondaryGray,
+                    borderColor: COLORS_v2.secondaryGray,
                     borderWidth: 1,
                     borderRadius: 4,
                     marginVertical: 6,
@@ -398,7 +398,7 @@ const UserPrivacy = ({ navigation }) => {
                 <View style={{
                     height: 160,
                     width: "100%",
-                    borderColor: COLORS.secondaryGray,
+                    borderColor: COLORS_v2.secondaryGray,
                     borderWidth: 1,
                     borderRadius: 4,
                     marginVertical: 6,
@@ -419,7 +419,7 @@ const UserPrivacy = ({ navigation }) => {
                 <View style={{
                     height: 300,
                     width: "100%",
-                    borderColor: COLORS.secondaryGray,
+                    borderColor: COLORS_v2.secondaryGray,
                     borderWidth: 1,
                     borderRadius: 4,
                     marginVertical: 6,
@@ -442,7 +442,7 @@ const UserPrivacy = ({ navigation }) => {
                 <View style={{
                     height: 160,
                     width: "100%",
-                    borderColor: COLORS.secondaryGray,
+                    borderColor: COLORS_v2.secondaryGray,
                     borderWidth: 1,
                     borderRadius: 4,
                     marginVertical: 6,
@@ -464,7 +464,7 @@ const UserPrivacy = ({ navigation }) => {
                 <View style={{
                     height: 210,
                     width: "100%",
-                    borderColor: COLORS.secondaryGray,
+                    borderColor: COLORS_v2.secondaryGray,
                     borderWidth: 1,
                     borderRadius: 4,
                     marginVertical: 6,
@@ -485,7 +485,7 @@ const UserPrivacy = ({ navigation }) => {
                 <View style={{
                     height: 80,
                     width: "100%",
-                    borderColor: COLORS.secondaryGray,
+                    borderColor: COLORS_v2.secondaryGray,
                     borderWidth: 1,
                     borderRadius: 4,
                     marginVertical: 6,

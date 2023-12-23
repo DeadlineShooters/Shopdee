@@ -10,10 +10,10 @@ import {
     Dimensions
 } from "react-native";
 import React, { useState, useRef, useContext, useEffect } from "react";
-import { COLORS } from "./Themes.js";
+import { COLORS_v2 } from "../../../../constants/theme.js";
 import { MaterialIcons, Ionicons, AntDesign, Entypo } from '@expo/vector-icons';
 import axios from "axios";
-import { UserType } from "../../../../UserContext";
+import { UserType } from "../../../../context/UserContext";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { jwtDecode } from "jwt-decode";
 import "core-js/stable/atob";
@@ -106,7 +106,7 @@ const ChangePassword = ({ navigation }) => {
     return (
         <SafeAreaView style={{
             flex: 1,
-            backgroundColor: COLORS.white,
+            backgroundColor: COLORS_v2.white,
             paddingHorizontal: 22,
         }}>
             <View style={{
@@ -128,9 +128,9 @@ const ChangePassword = ({ navigation }) => {
                     <MaterialIcons
                         name="keyboard-arrow-left"
                         size={24}
-                        color={COLORS.lightBlue}
+                        color={COLORS_v2.lightBlue}
                     />
-                    <Text style={{ color: COLORS.lightBlue }}>Settings</Text>
+                    <Text style={{ color: COLORS_v2.lightBlue }}>Settings</Text>
                 </TouchableOpacity>
                 <Text style={{ fontSize: 20, fontWeight: 600 }}>Change Password</Text>
             </View>
@@ -147,7 +147,7 @@ const ChangePassword = ({ navigation }) => {
                         <View style={{
                             height: 44,
                             width: "100%",
-                            borderColor: COLORS.secondaryGray,
+                            borderColor: COLORS_v2.secondaryGray,
                             borderWidth: 1,
                             borderRadius: 4,
                             marginVertical: 6,
@@ -180,7 +180,7 @@ const ChangePassword = ({ navigation }) => {
                         <View style={{
                             height: 44,
                             width: "100%",
-                            borderColor: COLORS.secondaryGray,
+                            borderColor: COLORS_v2.secondaryGray,
                             borderWidth: 1,
                             borderRadius: 4,
                             marginVertical: 6,
@@ -236,10 +236,10 @@ const ChangePassword = ({ navigation }) => {
                 }}>
                     <View style={{
                         borderRadius: 12,
-                        backgroundColor: COLORS.blue,
+                        backgroundColor: COLORS_v2.blue,
                         alignItems: "center",
                     }}>
-                        <Text style={{ fontSize: 16, fontWeight: 600, marginVertical: 10, color: COLORS.white }}>Save</Text>
+                        <Text style={{ fontSize: 16, fontWeight: 600, marginVertical: 10, color: COLORS_v2.white }}>Save</Text>
                     </View>
                 </View>
             </TouchableOpacity>
