@@ -26,7 +26,7 @@ import SignUp from "./src/pages/SignIn/SignUp";
 import { UserContext } from "./UserContext.js";
 import AddProduct from "./src/pages/Seller/AddProduct.js";
 import EditProduct from "./src/pages/Seller/EditProduct.js";
-import Checkout from "./src/pages/Buyer/Checkout/index.jsx"
+
 const Stack = createNativeStackNavigator();
 
 export default function App() {
