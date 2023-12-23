@@ -3,6 +3,8 @@ import { SIZES, COLORS, FONTS } from "../../../../assets/Themes";
 import GoBack from '../../../components/goBackPanel'
 import { useNavigation } from "@react-navigation/native";
 import React, { useState } from 'react';
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { jwtDecode } from "jwt-decode";
 
 import {
     MaterialIcons,
@@ -13,19 +15,48 @@ import {
     SimpleLineIcons 
 } from "@expo/vector-icons";
 
+import axios from "axios";
+
 const user = {
     name: 'Nguyễn Tuấn Kiệt',
     phone: '0902800628',
     
 }
 
+
 export default function Checkout({ route }) {
-    const [selectedPayment, setSelectedPayment] = useState('');
+    const [selectedPayment, setSelectedPayment] = useState('Cash');
     const navigation = useNavigation();
-    const product = route.params.product;
+    const {product, quantity} = route.params;
     const price = product.price.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })
     const deliveryFee = 15000;
     const total = (product.price+deliveryFee).toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })
+    
+    const placeOrder = async () => {
+        try {
+            const token = await AsyncStorage.getItem("authToken");
+            const userID = jwtDecode(token).userID;
+    
+            const order = {
+                quantity,
+                totalPrice: product.price+deliveryFee,
+                orderDate: new Date(),
+                deliveryDate: null, // Fix the typo here
+                status: "toConfirm",
+                paymentMethod: selectedPayment,
+                product: product._id,
+                user: userID,
+            };
+    
+            const response = await axios.post(`http://10.0.2.2:3000/shop/${product.shop._id}/orders`, order);
+            console.log(response.data);
+    
+            navigation.goBack();
+        } catch (error) {
+            console.error("Error placing order:", error);
+            // Handle the error, e.g., show an error message to the user
+        }
+    };
     
     
     return (
@@ -57,7 +88,7 @@ export default function Checkout({ route }) {
                         </View>
                         <View>
                             <Text>{product.name}</Text>
-                            <Text style={{marginTop: 10}}>{price} x 1</Text>
+                            <Text style={{marginTop: 10}}>{price} x {quantity}</Text>
                         </View>
                     </View>
                 </View>
@@ -149,7 +180,8 @@ export default function Checkout({ route }) {
                         alignItems: "center",
                     }}
                     onPress={() => {
-                        setOpenModel(true);
+                        // setOpenModel(true);
+                        placeOrder();
                     }}
                 >
                     <Text style={{ fontSize: 20, color: "white" }}>

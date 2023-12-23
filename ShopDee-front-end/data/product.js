@@ -10,11 +10,11 @@ export const product = {
     images: [
         {
             url: "https://cdn.discordapp.com/attachments/987699517497438218/1176447491177193542/nike-red.png?ex=656ee71b&is=655c721b&hm=762dc70ed9d73fa64eb157260b7686e3e0c77a205e637286944f75fddc2eadf6&",
-            filename: "alo"
+            public_id: "alo"
         },
         {
             url: "https://s3-alpha-sig.figma.com/img/5c73/7e2c/9a82f54116ae04171c97b2acdac77fd2?Expires=1701648000&Signature=oUeD46F8TkoJIdXXYdoyj9vY1ao9gyytJsls2UDO8GYZ4TJVqkSROk-DdPJAB6l0Z7HwpRKNqHcbIzWN6ojRZTlNpGKYebm9AGCxJPodxuC2d2b9E2CF2ctqT9SX9jEOp5gd8Kxg~x5R6RSQBiEcCTUsfgfAYu~QJD8d2Fov1f9XwALZ3KwGB56yo0f-bZ03pYNDCPY-EuN53g0xAqU7WOnmzINnN5cQDDcGbZ5pE5nZX64unIvxT4K0BpSoTFElkwWnDI6hBizAXE0fxpySS9fdZRjqijk4JtsxfW5OFURXk06~CGstU-9c0FvRQwYMoQqrfwdLFNZTK1OmQ7EkVQ__&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4",
-            filename: "alo"
+            public_id: "alo"
         }
     ],
     category: "shoes",
