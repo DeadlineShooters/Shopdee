@@ -1,6 +1,6 @@
 import { View, Text, SafeAreaView, TouchableOpacity, Image, Alert } from "react-native";
 import { useState, useContext, useEffect } from "react";
-import { useFocusEffect, useIsFocused  } from '@react-navigation/native';
+import { useFocusEffect, useIsFocused } from '@react-navigation/native';
 import React from "react";
 import { COLORS } from "./Themes.js";
 import { MaterialIcons, AntDesign } from '@expo/vector-icons';
@@ -12,13 +12,33 @@ import "core-js/stable/atob";
 
 const Me = ({ navigation }) => {
     const navigateToEditProfile = () => {
-        navigation.navigate("EditProfile", {props: user});
+        navigation.navigate("EditProfile", { props: user });
     }
-    const navigateToShopOwner = () => {
-        console.log("Security function");
+    const navigateToShopOwner = async () => {
+        const findUser = {userID};
+        try {
+            await axios.post('http://10.0.2.2:3000/user/profile/checkShopOwner', findUser);
+            navigation.navigate('SellerBottomNav', { screen: 'My Products' });
+        } catch (error) {
+            Alert.alert(
+                "Shop registration needed",
+                "Do you want to create shop?",
+                [
+                {
+                    text: 'Cancel',
+                    onPress: () => console.log('Cancel request'),
+                },
+                {
+                    text: 'Ok',
+                    onPress: () => navigation.navigate("CreateShop"),
+                }
+                ]
+            );
+            console.log("error retrieving user data", error);
+        }
     }
     const navigateToSettings = () => {
-        navigation.navigate("Settings", {props: user});
+        navigation.navigate("Settings", { props: user });
     }
     const navigateToSetAddress = () => {
         navigation.navigate("SetAddress");
@@ -90,6 +110,7 @@ const Me = ({ navigation }) => {
                 setUserID(userID);
                 const response = await axios.get(`http://10.0.2.2:3000/user/profile/${userID}`);
                 const user = response.data;
+                console.log(user);
                 setUser(user);
                 setUserName(user?.User?.username);
             } catch (error) {
@@ -112,7 +133,7 @@ const Me = ({ navigation }) => {
                     flexDirection: 'row'
                 }}>
                     <Image
-                        source={require('../../../../assets/avatar.jpg')}
+                        source={{uri: user?.User?.profilePic.url}}
                         style={{
                             height: 100,
                             width: 100,

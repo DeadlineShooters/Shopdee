@@ -32,7 +32,8 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use("/user", userRoutes);
 app.use("/shop/:shopId/products", productRoutes);
 app.use("/shop/:shopId/orders", shopRoutes);
-app.use("/shop/:shopId/profile", shopRoutes);
+// app.use("/shop/:shopId/profile", shopRoutes);
+app.use("/shop", shopRoutes);
 app.get("/categories", async (req, res) => {
   const categories = await Category.find({});
   res.json(categories);

@@ -4,6 +4,7 @@ import Shop from "./shop.js";
 import Category from "./category.js";
 
 const productSchema = new Schema({
+
   name: String,
   image: [{
     public_id: String,
