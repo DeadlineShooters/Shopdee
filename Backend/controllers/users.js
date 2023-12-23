@@ -6,32 +6,35 @@ import crypto from "crypto"
 import { getDataUri } from "../utils/feature.js"
 import cloudinary from "cloudinary"
 import Shop from "../models/shop.js"
+
 export const checkShopOwner = async (req, res) => {
     try {
-        const {id} =req.body;
-        console.log(id)
-        const existingUser = await Shop.findById({user:id});
-        console.log(existingUser);
+        const user = req.body.userID;
+        const existingUser = await Shop.findOne({user : user});
         if (!existingUser)
         {
-            return res.status(400).json({messages: "Email has been already registered!"});
+            return res.status(500).json({messages: "Email has been already registered!"});
         } 
         res.status(200).json({existingUser})
     }
     catch (error) {
-        console.log("error registering user", error);
-        res.status(500).json({messages: "Notfound user"});
+        console.log("error retrieving user data", error);
+        res.status(500).json({messages: "Not found user"});
     }
 }
 export const register = async (req, res) => {
     try {
-        const { username, email, password} = req.body;
+        const { username, email, password, name, phone, birthDay, gender, address} = req.body;
         const existingUser = await user.findOne({email});
         if (existingUser)
         {
             return res.status(400).json({messages: "Email has been already registered!"});
         }
-        const newUser = new user({username, email, password});
+        const newUser = new user({username, email, password, name, phone, birthDay, gender, address});
+        newUser.profilePic = {
+            public_id: "c7x3gucweyz19zpqvae8",
+            url: "https://res.cloudinary.com/dqxtf297o/image/upload/v1703247477/c7x3gucweyz19zpqvae8.jpg",
+        }
         await newUser.save();
     }
     catch (error) {
@@ -85,7 +88,7 @@ export const updateprofile = async (req, res) => {
     try {
         const userID = req.params.userID;
         const { username, email, phone, gender, birthday, profilePic} = req.body;
-        //await cloudinary.v2.uploader.destroy(EditUser.profilePic.public_id);
+        await cloudinary.v2.uploader.destroy(EditUser.profilePic.public_id);
         //const cdb = await cloudinary.v2.uploader.upload(profileimage.uri, {resource_type: "image"});
         await user.findByIdAndUpdate(userID, {
             username: username,
