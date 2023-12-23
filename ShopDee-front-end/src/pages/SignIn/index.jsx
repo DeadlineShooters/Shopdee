@@ -33,11 +33,13 @@ export default function SignIn() {
   const handleSignIn = () => {
     const user = {
       email:email,
-      password:password
+      password:password,
     }
     axios.post("http://10.0.2.2:3000/user/signin", user).then((res) => {
       const token = res.data.token;
       AsyncStorage.setItem("authToken", token);
+      getEmail("");
+      getPassword("");
       navigation.navigate('BuyerBottomNav', { screen: 'Home' });
     }).catch((error) => {
       Alert.alert("SignIn Error", "Invalid email");

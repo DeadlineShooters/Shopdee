@@ -126,16 +126,16 @@ useEffect(() => {
     setStartedDate(user.birthday);
     setSelectedImage(user.profilePic.url);
 
-    setChangeSelectedImage(user.profilePic.url);
     setChangeName(user.username);
     setChangeMail(user.email);
     setChangePhone(user.phone);
     setChangeGender(user.gender);
     setChangeStartedDate(user.birthday);
+    setChangeSelectedImage(user.profilePic.url);
 }, []);
 
 const handleOnPressGoBack = ({navigation}) => {
-    if (changName != username || changeMail != mail || changePhone != phone || changeGender != gender || changeStartedDate != startedDate)
+    if (changName != username || changeMail != mail || changePhone != phone || changeGender != gender || changeStartedDate != startedDate || changeSelectedImage != selectedImage)
     {
       Alert.alert('Confirm message', 'Your profile is not saved. Exit now?', [
         {
@@ -164,7 +164,6 @@ const handleUpload = async (image) => {
             method: "post",
             body: data,
         });
-
         if (response.ok) {
             const result = await response.json();
             console.log(result);
@@ -489,7 +488,7 @@ return (
                 </View>
             </Animated.View>
         </View>
-        {changName != username || changeMail != mail || changePhone != phone || changeGender != gender || changeStartedDate != startedDate || selectedImage != null ?
+        {changName != username || changeMail != mail || changePhone != phone || changeGender != gender || changeStartedDate != startedDate || selectedImage != changeSelectedImage ?
             <TouchableOpacity onPress={save}>
                 <View style={{
                     marginBottom: 20,

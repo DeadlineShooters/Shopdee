@@ -82,7 +82,12 @@ export default function SignUp() {
     const user = {
       username: username,
       email: email,
-      password: password
+      password: password,
+      name:"Default User",
+      phone:"",
+      birthDay:"2000/01/01",
+      gender:"Not willing",
+      address:"",
     }
     try {
       await axios.post("http://10.0.2.2:3000/user/register", user)
