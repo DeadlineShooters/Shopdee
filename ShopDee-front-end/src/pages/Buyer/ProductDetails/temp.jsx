@@ -33,3 +33,13 @@
         </TouchableOpacity>
     </View>
 </View>;
+          {/* <Image
+            source={product.image.url}
+            // resizeMode="contain"
+            // style={{ flex: 1, height: undefined, width: undefined }}
+            style={{
+              width: "100%",
+              height: undefined,
+              aspectRatio: 1,
+            }}
+          /> */}
