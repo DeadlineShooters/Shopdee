@@ -3,8 +3,11 @@ import { View, StyleSheet } from "react-native";
 import MapView, { Marker } from "react-native-maps";
 import * as Location from "expo-location";
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
+import { GOOGLE_MAPS_API_KEY } from "@env";
 
-const PickAddressScreen = ({ navigation }) => {
+const PickAddressScreen = ({ navigation, route }) => {
+  console.log("Key", GOOGLE_MAPS_API_KEY);
+  const { setNewAddress } = route.params;
   const [region, setRegion] = useState(null);
 
   useEffect(() => {
@@ -41,8 +44,12 @@ const PickAddressScreen = ({ navigation }) => {
     console.log("Details ", details);
 
     // Fetch latitude and longitude using place_id
-    const response = await fetch(`https://maps.googleapis.com/maps/api/place/details/json?placeid=${details.place_id}&key=`);
+    const response = await fetch(`https://maps.googleapis.com/maps/api/place/details/json?placeid=${details.place_id}&key=${GOOGLE_MAPS_API_KEY}`);
+    if (!response.ok) {
+      throw new Error("HTTP error " + response.status);
+    }
     const json = await response.json();
+    console.log("json", json);
     const location = json.result.geometry.location;
 
     // update marker
@@ -53,8 +60,9 @@ const PickAddressScreen = ({ navigation }) => {
       longitudeDelta: 0.0421,
     });
 
-    navigation.goBack({ selectedAddress });
     console.log(selectedAddress);
+    setNewAddress(selectedAddress);
+    navigation.goBack();
   };
 
   return (
@@ -69,7 +77,7 @@ const PickAddressScreen = ({ navigation }) => {
         placeholder="Enter your address"
         onPress={handleConfirmAddress}
         query={{
-          key: "",
+          key: GOOGLE_MAPS_API_KEY,
           language: "en",
         }}
         styles={{
@@ -90,7 +98,7 @@ const styles = StyleSheet.create({
   },
   addressContaier: {
     position: "absolute",
-    // width: "90%",
+    width: "90%",
     alignSelf: "center",
     top: 15,
   },
