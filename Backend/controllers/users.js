@@ -10,9 +10,7 @@ import Shop from "../models/shop.js"
 export const checkShopOwner = async (req, res) => {
     try {
         const user = req.body.userID;
-        //console.log(user);
         const existingUser = await Shop.findOne({user : user});
-        //console.log(existingUser);
         if (!existingUser)
         {
             return res.status(500).json({messages: "Email has been already registered!"});
@@ -26,13 +24,18 @@ export const checkShopOwner = async (req, res) => {
 }
 export const register = async (req, res) => {
     try {
-        const { username, email, password} = req.body;
+        const { username, email, password, name, phone, birthDay, gender, address} = req.body;
+        console.log(req.body);
         const existingUser = await user.findOne({email});
         if (existingUser)
         {
             return res.status(400).json({messages: "Email has been already registered!"});
         }
-        const newUser = new user({username, email, password});
+        const newUser = new user({username, email, password, name, phone, birthDay, gender, address});
+        newUser.profilePic = {
+            public_id: "c7x3gucweyz19zpqvae8",
+            url: "https://res.cloudinary.com/dqxtf297o/image/upload/v1703247477/c7x3gucweyz19zpqvae8.jpg",
+        }
         await newUser.save();
     }
     catch (error) {
@@ -86,7 +89,7 @@ export const updateprofile = async (req, res) => {
     try {
         const userID = req.params.userID;
         const { username, email, phone, gender, birthday, profilePic} = req.body;
-        //await cloudinary.v2.uploader.destroy(EditUser.profilePic.public_id);
+        await cloudinary.v2.uploader.destroy(EditUser.profilePic.public_id);
         //const cdb = await cloudinary.v2.uploader.upload(profileimage.uri, {resource_type: "image"});
         await user.findByIdAndUpdate(userID, {
             username: username,
@@ -98,6 +101,25 @@ export const updateprofile = async (req, res) => {
                 public_id: profilePic.publicId,
                 url: profilePic.secureUrl
             }
+        })
+        res.status(200).send({
+            success: true,
+            message: "profile updated successfully",
+        })
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({message: "Error updating the user profile"});
+    }
+}
+
+export const updateaddress = async (req, res) => {
+    console.log(req.body);
+    try {
+        const userID = req.params.userID;
+        const { address } = req.body;
+        console.log(address);
+        await user.findByIdAndUpdate(userID, {
+            address: address,
         })
         res.status(200).send({
             success: true,

@@ -2,10 +2,10 @@ import { View, Text, SafeAreaView, TouchableOpacity, Image, Alert } from "react-
 import { useState, useContext, useEffect } from "react";
 import { useFocusEffect, useIsFocused } from '@react-navigation/native';
 import React from "react";
-import { COLORS } from "./Themes.js";
+import { COLORS_v2 } from "../../../../constants/theme.js";
 import { MaterialIcons, AntDesign } from '@expo/vector-icons';
 import axios from "axios";
-import { UserType } from "../../../../UserContext";
+import { UserType } from "../../../../context/UserContext.js"
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { jwtDecode } from "jwt-decode";
 import "core-js/stable/atob";
@@ -23,16 +23,14 @@ const Me = ({ navigation }) => {
             Alert.alert(
                 "Shop registration needed",
                 "Do you want to create shop?",
-                [
-                {
+                [{
                     text: 'Cancel',
                     onPress: () => console.log('Cancel request'),
                 },
                 {
                     text: 'Ok',
                     onPress: () => navigation.navigate("CreateShop"),
-                }
-                ]
+                }]
             );
             console.log("error retrieving user data", error);
         }
@@ -41,7 +39,7 @@ const Me = ({ navigation }) => {
         navigation.navigate("Settings", { props: user });
     }
     const navigateToSetAddress = () => {
-        navigation.navigate("SetAddress");
+        navigation.navigate("SetAddress", {props: user});
     }
     const navigateToTermsAndPolicies = () => {
         navigation.navigate("UserPrivacy");
@@ -72,7 +70,7 @@ const Me = ({ navigation }) => {
                 paddingVertical: 8,
                 paddingLeft: 12,
                 borderWidth: 1,
-                borderColor: COLORS.gray,
+                borderColor: COLORS_v2.gray,
                 alignItems: "center"
             }}
         >
@@ -85,6 +83,14 @@ const Me = ({ navigation }) => {
             </View>
         </TouchableOpacity>
     )
+    const clearTokenAndLogout = async () => {
+        try {
+            await AsyncStorage.removeItem('authToken');
+            navigation.navigate('SignIn');
+        } catch (e) {
+            console.log(e);
+        }
+    };
     const handleOnPressLogout = () => {
         Alert.alert('Confirm message', 'Do you really want to log out?', [
             {
@@ -93,7 +99,7 @@ const Me = ({ navigation }) => {
             },
             {
                 text: 'Ok',
-                onPress: () => console.log('Exit the program')
+                onPress: () => clearTokenAndLogout(),
             }
         ]);
     }
@@ -122,11 +128,11 @@ const Me = ({ navigation }) => {
     return (
         <SafeAreaView style={{
             flex: 1,
-            backgroundColor: COLORS.gray,
+            backgroundColor: COLORS_v2.gray,
         }}>
             <View>
                 <View style={{
-                    backgroundColor: COLORS.lightBlue,
+                    backgroundColor: COLORS_v2.lightBlue,
                     alignItems: "center",
                     height: 150,
                     display: 'flex',
@@ -139,7 +145,7 @@ const Me = ({ navigation }) => {
                             width: 100,
                             borderRadius: 85,
                             borderWidth: 2,
-                            borderColor: COLORS.primary,
+                            borderColor: COLORS_v2.primary,
                             alignSelf: 'flex-start',
                             marginLeft: 16,
                             marginTop: 32,
@@ -149,7 +155,7 @@ const Me = ({ navigation }) => {
                         fontSize: 22,
                         fontWeight: 800,
                         marginVertical: 10,
-                        color: COLORS.white,
+                        color: COLORS_v2.white,
                         marginLeft: 10,
                     }}>{username}</Text>
                 </View>
@@ -160,7 +166,7 @@ const Me = ({ navigation }) => {
                     <Text style={{ fontSize: 16, fontWeight: 600, marginVertical: 10 }}>Account</Text>
                     <View style={{
                         borderRadius: 12,
-                        backgroundColor: COLORS.white
+                        backgroundColor: COLORS_v2.white
                     }}>
                         {
                             accountItems.map((item, index) => (
@@ -176,7 +182,7 @@ const Me = ({ navigation }) => {
                     <Text style={{ fontSize: 16, fontWeight: 600, marginVertical: 10 }}>Support & About</Text>
                     <View style={{
                         borderRadius: 12,
-                        backgroundColor: COLORS.white
+                        backgroundColor: COLORS_v2.white
                     }}>
                         {
                             supportItems.map((item, index) => (
@@ -196,17 +202,17 @@ const Me = ({ navigation }) => {
                         display: 'flex',
                         flexDirection: 'column',
                     }}>
-                        <Text style={{ fontSize: 12, color: COLORS.black }}>Version 1.0</Text>
-                        <Text style={{ fontSize: 12, color: COLORS.black }}>@ ShopDee 2023</Text>
+                        <Text style={{ fontSize: 12, color: COLORS_v2.black }}>Version 1.0</Text>
+                        <Text style={{ fontSize: 12, color: COLORS_v2.black }}>@ ShopDee 2023</Text>
                     </View>
                     <TouchableOpacity onPress={handleOnPressLogout}>
                         <View style={{ marginBottom: 20 }}>
                             <View style={{
                                 borderRadius: 12,
-                                backgroundColor: COLORS.blue,
+                                backgroundColor: COLORS_v2.blue,
                                 alignItems: "center",
                             }}>
-                                <Text style={{ fontSize: 16, fontWeight: 600, marginVertical: 10, color: COLORS.white }}>Logout</Text>
+                                <Text style={{ fontSize: 16, fontWeight: 600, marginVertical: 10, color: COLORS_v2.white }}>Logout</Text>
                             </View>
                         </View>
                     </TouchableOpacity>

@@ -5,6 +5,7 @@ import { useNavigation } from "@react-navigation/native";
 import { AntDesign, Entypo, FontAwesome } from '@expo/vector-icons';
 import AsyncStorage from "@react-native-async-storage/async-storage"
 import axios from "axios";
+import { COLORS_v2 } from "../../../constants/theme";
 
 export default function SignIn() {
   const [email, getEmail] = useState('');
@@ -13,10 +14,10 @@ export default function SignIn() {
   useEffect(() => {
     const checkSigninStatus = async () => {
       try {
-        const token = await AsyncStorage.getItem("authToken");
-        if (token) {
-          navigation.navigate('BuyerBottomNav', { screen: 'Home' });
-        }
+        // const token = await AsyncStorage.getItem("authToken");
+        // if (token) {
+        //   navigation.navigate('BuyerBottomNav', { screen: 'Home' });
+        // }
       } catch(err) {
         console.log("error message", err);
       }
@@ -26,6 +27,9 @@ export default function SignIn() {
   const handleSignUpPress = () => {
     navigation.navigate("SignUp");
   };
+  const handleForgetPasswordPress = () => {
+    navigation.navigate("SendMail");
+  };
   const [hidePassword, setHidePassword] =useState(false);
   const handlePassword = () => {
     setHidePassword(!hidePassword)
@@ -33,11 +37,13 @@ export default function SignIn() {
   const handleSignIn = () => {
     const user = {
       email:email,
-      password:password
+      password:password,
     }
     axios.post("http://10.0.2.2:3000/user/signin", user).then((res) => {
       const token = res.data.token;
       AsyncStorage.setItem("authToken", token);
+      getEmail("");
+      getPassword("");
       navigation.navigate('BuyerBottomNav', { screen: 'Home' });
     }).catch((error) => {
       Alert.alert("SignIn Error", "Invalid email");
@@ -88,7 +94,17 @@ export default function SignIn() {
       </TouchableOpacity>
 
       <TouchableOpacity style = {{alignItems: 'center', marginTop: 10}} onPress={handleSignUpPress}>
-        <Text>Do not have an account? Register </Text>
+        <Text style={{
+          color: COLORS_v2.darkBlue,
+          fontSize: 16,
+        }}>Sign up</Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity style = {{alignItems: 'center', marginTop: 10}} onPress={handleForgetPasswordPress}>
+      <Text style={{
+          color: COLORS_v2.darkBlue,
+          fontSize: 16,
+        }}>Forgot password</Text>
       </TouchableOpacity> 
 
     </View>

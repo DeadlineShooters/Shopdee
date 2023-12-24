@@ -7,7 +7,7 @@ import { MaterialIcons } from "@expo/vector-icons";
 import { useNavigation} from "@react-navigation/native";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { UserType } from "../../../../UserContext";
+import { UserType } from "../../../../context/UserContext.js";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { jwtDecode } from "jwt-decode";
 import "core-js/stable/atob";
@@ -35,6 +35,26 @@ export default function MyProducts() {
   }, [navigation, ]);
   // isFocused
 
+  const [products, setProductList] = useState([]);
+  // const isFocused = useIsFocused();
+  useEffect(() => {
+    const fetchShopProduct = async () => {
+    const shopID = '6579412001a6e7d1a58a8df1';
+    try {
+        const response = await axios.get(`http://10.0.2.2:3000/shop/${shopID}/products/index`);
+        if (response.status === 200) {
+          const productsData = response.data.products;
+          console.log(productsData);
+          setProductList(productsData);
+        }
+      } catch (error) {
+        console.log("error", error);
+      }
+    }
+    fetchShopProduct(); 
+  }, [navigation]);
+  // isFocused
+  console.log(products);
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "#fff" }}>
       <View
@@ -51,18 +71,17 @@ export default function MyProducts() {
       </View>
       <GoBack currentTitle="My Products"></GoBack>
       <ScrollView style={{ backgroundColor: COLORS.gray }}>
-                
-        {products.map((product, index) => (
+      {products.map((product, index) => (
           <View style={styles.section} key={index}>
             <Text style={{ marginBottom: 15, fontSize: 18, fontWeight: "bold" }}>{product.name}</Text>
-            <View
-              style={{
-                flexDirection: "row",
-                borderBottomWidth: 1,
-                borderBottomColor: COLORS.darkGray,
-                paddingBottom: 15,
-              }}
-            >
+              <View
+                style={{
+                  flexDirection: "row",
+                  borderBottomWidth: 1,
+                  borderBottomColor: COLORS.darkGray,
+                  paddingBottom: 15,
+                }}
+              >
               <View style={styles.imageContainer}>
                 <Image source={{ uri: product.imgUrl }} style={styles.image}></Image>
               </View>
@@ -89,7 +108,9 @@ export default function MyProducts() {
               </TouchableOpacity>
             </View>
           </View>
-        ))} 
+          )
+        )
+      }
       </ScrollView>
     </SafeAreaView>
   );

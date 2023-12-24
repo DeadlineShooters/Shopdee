@@ -28,13 +28,9 @@ const userSchema = new mongoose.Schema({
         default: false,
     },
     verificationToken: String,
-    address: [
-        {
-            name: String,
-            phone: String,
-            location: String,
-        }
-    ],
+    address: {
+        type : String,
+    },
     profilePic: {
         public_id: {
             type: String

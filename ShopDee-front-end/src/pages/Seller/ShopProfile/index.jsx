@@ -3,7 +3,7 @@ import { View, Text, TouchableOpacity, ToastAndroid, Image, TextInput, SafeAreaV
 import * as ImagePicker from 'expo-image-picker';
 import { AntDesign, Entypo } from '@expo/vector-icons';
 import axios from "axios";
-import { UserType } from "../../../../UserContext";
+import { UserType } from "../../../../context/UserContext.js";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { jwtDecode } from "jwt-decode";
 import "core-js/stable/atob";

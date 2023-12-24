@@ -7,7 +7,7 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import GoBack from "../../components/goBackPanel";
 import { Axios } from "../../api/axios";
 import { useNavigation } from "@react-navigation/native";
-import { UserType } from "../../../UserContext";
+import { UserType } from "../../../../ShopDee-front-end/context/UserContext";
 
 export default function EditProduct({ productId }) {
   const navigation = useNavigation();

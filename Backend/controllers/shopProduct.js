@@ -1,15 +1,22 @@
 import { response } from "express"
 import Product from '../models/product.js';
 import Shop from '../models/shop.js';
+
 export const index = async (req, res) => {
     try {
+<<<<<<< HEAD
         const {shopId} = req.body;
         console.log(shopId);
         const products = await Product.find({shop: shopId});
+=======
+        const {shopID} = req.params;
+        console.log(shopID);
+        const products = await Product.find({shop: shopID});
+>>>>>>> SD-45-new
         if (!products) {
             res.status(404).json({ message: "Products not found" });
         }
-        res.status(200).json(products);
+        res.status(200).json({products});
     } catch (error) {
         res.status(500).json({ message: "Error retrieving the shop products" });
     }
