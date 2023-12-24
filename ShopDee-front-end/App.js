@@ -9,6 +9,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import BuyerBottomNavigator from "./src/components/BuyerBottomNavigator";
 import SellerBottomNavigator from "./src/components/SellerBottomNavigator";
 import ProductDetails from "./src/pages/Buyer/ProductDetails";
+import Checkout from "./src/pages/Buyer/Checkout";
 import Me from "./src/pages/Seller/ShopProfile";
 
 import CreateShop from "./src/pages/Buyer/CreateShop";
