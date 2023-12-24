@@ -16,12 +16,12 @@ export const index = async (req, res) => {
       })
       .populate("user");
 
+    console.log("Orders ", orders);
     // const orders = await Order.findAll({ status: status });
     if (!orders) {
       res.status(404).json({ message: "Orders not found" });
     }
 
-    console.log("Orders ", orders);
     res.json(orders);
   } catch (e) {
     res.status(500).json({ message: "Error retrieving the shop orders" });
