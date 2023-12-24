@@ -5,7 +5,7 @@ export const index = async (req, res) => {
   try {
     const { shopId } = req.params;
     console.log(shopId);
-    const products = await Product.find({ shop: shopId });
+    const products = await Product.find({ shop: shopId }).populate(["category", "shop"]);
     if (!products) {
       res.status(404).json({ message: "Products not found" });
     }
@@ -51,17 +51,14 @@ export const createProduct = async (req, res) => {
 export const updateProduct = async (req, res) => {
   try {
     const { idProduct } = req.params;
-    const updatedFields = req.body.product;
 
-    let product = await Product.findById(idProduct);
+    console.log("@@ req body product ", req.body);
+    const newProduct = new Product(req.body);
+    let product = await Product.findByIdAndUpdate(idProduct, newProduct);
 
     if (!product) {
       return res.status(404).json({ message: "Product not found" });
     }
-
-    product = Object.assign(product, updatedFields);
-
-    await product.save();
 
     res.json({
       message: "Product updated successfully",
@@ -70,7 +67,7 @@ export const updateProduct = async (req, res) => {
     console.log("Product updated");
   } catch (err) {
     console.log(err);
-    res.status(500).send("Error updating product");
+    res.status(500).json({ message: "Error updating product" });
   }
 };
 

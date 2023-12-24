@@ -18,6 +18,7 @@ const Tab = createBottomTabNavigator();
 export default function BuyerBottomNavigator() {
   return (
     <Tab.Navigator
+      lazy={true}
       screenOptions={{
         tabBarActiveTintColor: "#007EA7",
         tabBarInactiveTintColor: "black",
