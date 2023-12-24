@@ -70,7 +70,7 @@ export default function BuyerBottomNavigator() {
         }}
       />
 
-      {/* <Tab.Screen
+      <Tab.Screen
         name="Me"
         component={Me}
         options={{
@@ -80,8 +80,8 @@ export default function BuyerBottomNavigator() {
           },
           headerShown: false,
         }}
-      /> */}
-      <Tab.Screen
+      />
+      {/* <Tab.Screen
         name="Me"
         component={SellerBottomNavigator}
         options={{
@@ -91,7 +91,7 @@ export default function BuyerBottomNavigator() {
           },
           headerShown: false,
         }}
-      />
+      /> */}
     </Tab.Navigator>
   );
 }
