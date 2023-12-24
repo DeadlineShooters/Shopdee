@@ -22,20 +22,18 @@ import AboutShopDee from "./src/pages/Buyer/Me/About.js";
 import HelpSupport from "./src/pages/Buyer/Me/Support";
 import ChangePassword from "./src/pages/Buyer/Me/ChangePassword";
 import SignIn from "./src/pages/SignIn";
-import SignUp from "./src/pages/SignIn/SignUp";
+import SignUp from "./src/pages/SignIn/SignUp/index.jsx";
 import { UserContext } from "./UserContext.js";
 import AddProduct from "./src/pages/Seller/AddProduct.js";
 import EditProduct from "./src/pages/Seller/EditProduct.js";
-
+import Checkout from "./src/pages/Buyer/Checkout/index.jsx";
+import PickAddressScreen from "./src/pages/PickAddressScreen.js";
 const Stack = createNativeStackNavigator();
 
 export default function App() {
   let buyer = true;
   let seller = true;
 
-  // var { height, width } = Dimensions.get("window");
-  // console.log("Width is: " + width);
-  // console.log("Height is: " + height);
   return (
     <>
       <StatusBar />
@@ -89,11 +87,10 @@ export default function App() {
                       headerShown: false,
                     }}
                   />
-                  <Stack.Screen name="Edit Profile" 
-                  component={EditShopProfile} 
-                  options={{ headerShown: false }} />
+                  <Stack.Screen name="Edit Profile" component={EditShopProfile} options={{ headerShown: false }} />
                 </>
               )}
+              <Stack.Screen name="AddressPicker" component={PickAddressScreen} options={{ headerShown: false }} />
             </Stack.Navigator>
           </NavigationContainer>
         </SafeAreaProvider>
