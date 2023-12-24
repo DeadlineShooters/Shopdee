@@ -67,18 +67,8 @@ export default function BuyerBottomNavigator() {
           headerShown: false,
         }}
       />
+
       <Tab.Screen
-        name="Me"
-        component={SellerMyOrderTopTabs}
-        options={{
-          tabBarIcon: ({ focused, color }) => {
-            if (focused) return <Ionicons name="ios-person" size={24} color={color} />;
-            else return <Ionicons name="ios-person-outline" size={24} color={color} />;
-          },
-          headerShown: false,
-        }}
-      />
-      {/* <Tab.Screen
         name="Me"
         component={Me}
         options={{
@@ -88,7 +78,7 @@ export default function BuyerBottomNavigator() {
           },
           headerShown: false,
         }}
-      /> */}
+      />
     </Tab.Navigator>
   );
 }
