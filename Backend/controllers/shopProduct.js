@@ -4,15 +4,9 @@ import Shop from '../models/shop.js';
 
 export const index = async (req, res) => {
     try {
-<<<<<<< HEAD
-        const {shopId} = req.body;
-        console.log(shopId);
-        const products = await Product.find({shop: shopId});
-=======
-        const {shopID} = req.params;
-        console.log(shopID);
+        const {shopID} = req.body;
+        console.log(shopID);;
         const products = await Product.find({shop: shopID});
->>>>>>> SD-45-new
         if (!products) {
             res.status(404).json({ message: "Products not found" });
         }
@@ -82,6 +76,7 @@ export const updateProduct = async (req, res) => {
 export const deleteProduct = async (req, res) => {
     try {
         const { idProduct } = req.params; 
+        console.log(idProduct);
 
         let product = await Product.findById(idProduct);
 

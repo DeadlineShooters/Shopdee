@@ -34,8 +34,7 @@ export default function AddProduct({ productId }) {
         console.error("Error fetching categories:", error);
         setCategories([]); // Set an empty array in case of an error
       }
-    };
-
+    } 
     fetchCategories();
   }, []);
 

@@ -78,12 +78,12 @@ export default function CreateShop() {
       } else {
         shop.image = shopDefaut;
       }
-      // await axios.post("http://10.0.2.2:3000/shop/createShop", shop)
+      await axios.post("http://10.0.2.2:3000/shop/createShop", shop)
       console.log(shopName);
       await handleImageUpload(shopDefaut);
       setStatus("success");
       popIn();
-      // navigation.navigate('SellerBottomNav', { screen: 'My Products' });
+      navigation.navigate('SellerBottomNav', { screen: 'My Products' });
     } catch (error) {
       Alert.alert(
         "Create shop error", 

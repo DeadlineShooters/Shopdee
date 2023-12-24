@@ -124,7 +124,7 @@ export default function Home() {
                 <View style={styles.productDetails}>
                   <Text style={styles.productName}>{product.name}</Text>
                   <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-                    <Text>{product.price}</Text>
+                    <Text>{product.price}</Text> 
                     {<TouchableOpacity onPress={() => handleFavourite(product.id)}>
                       <AntDesign 
                         name={favoriteProducts[product.id] ? 'heart' : 'hearto'}
