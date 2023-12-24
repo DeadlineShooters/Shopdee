@@ -118,7 +118,7 @@ const Me = ({ navigation }) => {
                 setUserID(userID);
                 const response = await axios.get(`http://10.0.2.2:3000/user/profile/${userID}`);
                 const user = response.data;
-                console.log(user);
+                // console.log(user);
                 setUser(user);
                 setUserName(user?.User?.username);
             } catch (error) {
