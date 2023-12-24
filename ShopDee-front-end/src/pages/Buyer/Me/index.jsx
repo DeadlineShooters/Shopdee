@@ -11,14 +11,18 @@ import { jwtDecode } from "jwt-decode";
 import "core-js/stable/atob";
 
 const Me = ({ navigation }) => {
+    const { userID, setUserID, setSellerData } = useContext(UserType);
     const navigateToEditProfile = () => {
         navigation.navigate("EditProfile", { props: user });
     }
     const navigateToShopOwner = async () => {
         const findUser = {userID};
         try {
-            await axios.post('http://10.0.2.2:3000/user/profile/checkShopOwner', findUser);
-            navigation.navigate('SellerBottomNav', { screen: 'My Products' });
+            const response = await axios.post('http://10.0.2.2:3000/user/profile/checkShopOwner', findUser);
+            const shopData = response.data;
+            console.log(shopData);
+            setSellerData(shopData);
+            navigation.navigate("SellerBottomNav", { screen: "My Products" , props: shopData});
         } catch (error) {
             Alert.alert(
                 "Shop registration needed",
@@ -103,7 +107,6 @@ const Me = ({ navigation }) => {
             }
         ]);
     }
-    const { userID, setUserID } = useContext(UserType);
     const [user, setUser] = useState("");
     const [username, setUserName] = useState("");
     const isFocused = useIsFocused();

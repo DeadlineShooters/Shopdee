@@ -5,7 +5,7 @@ import Shop from '../models/shop.js';
 export const index = async (req, res) => {
     try {
         const {shopID} = req.params;
-        console.log(shopID);
+        console.log("ID shop get product: ",shopID);;
         const products = await Product.find({shop: shopID});
         if (!products) {
             res.status(404).json({ message: "Products not found" });
@@ -29,12 +29,11 @@ export const getOne = async (req, res) => {
 }
 export const createProduct = async (req, res) => {    
     try {
-        const {shopId} = req.params;
-        console.log(req.body.product)
+        const {shopID} = req.params;
+        console.log("ID shop create product", shopID);
         const product = new Product(req.body.product);
-        product.shop = shopId;
+        product.shop = shopID;
         await product.save();
-        console.log(product);
         res.json({
             message: "Product created successfully",
             product,
@@ -76,6 +75,7 @@ export const updateProduct = async (req, res) => {
 export const deleteProduct = async (req, res) => {
     try {
         const { idProduct } = req.params; 
+        console.log(idProduct);
 
         let product = await Product.findById(idProduct);
 

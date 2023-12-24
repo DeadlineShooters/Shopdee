@@ -1,39 +1,62 @@
-import { View, Text, SafeAreaView, ScrollView, StyleSheet, Image, TouchableOpacity, useIsFocused  } from "react-native";
+import { View, Text, SafeAreaView, ScrollView, StyleSheet, Image, TouchableOpacity, Alert} from "react-native";
 import { SIZES, COLORS, FONTS } from "../../../../assets/Themes";
 import GoBack from "../../../components/goBackPanel";
 // import { products } from "../../../../data/product";
 import { Colors } from "react-native/Libraries/NewAppScreen";
 import { MaterialIcons } from "@expo/vector-icons";
-import { useNavigation} from "@react-navigation/native";
-import { useEffect, useState } from "react";
+import { useNavigation, useIsFocused} from "@react-navigation/native";
+import { useEffect, useState, useCallback, useContext } from "react";
 import axios from "axios";
 import { UserType } from "../../../../context/UserContext.js";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { jwtDecode } from "jwt-decode";
 import "core-js/stable/atob";
-//  testing code please replace!!
-export default function MyProducts() {
-  const navigation = useNavigation();
 
+const MyProducts = () => {
+  const navigation = useNavigation();
+  const { sellerData } = useContext(UserType);
+  const [shopID, setShopID] = useState(sellerData.existingUser._id);
   const [products, setProductList] = useState([]);
-  // const isFocused = useIsFocused();
+  const deleteThisProduct = async (productId) => {
+    try {
+      const response = await axios.delete(`http://10.0.2.2:3000/shop/${shopID}/products/delete/${productId}`)
+      if (response.status == 200) {
+        console.log("delete successfully");
+      } else console.error("Error");
+    } catch (error) {
+      console.log(error);
+    } 
+  } 
+  const handleDeleteProduct = (productId) => {
+    Alert.alert('Confirm message', 'Do you really want to delete this product?', [
+      {
+          text: 'Cancel',
+          onPress: () => console.log('Cancel request'),
+      },
+      {
+          text: 'Ok',
+          onPress: () => deleteThisProduct(productId),
+      }
+  ]);
+  }
+  const isFocused = useIsFocused();
   useEffect(() => {
     const fetchShopProduct = async () => {
-    const shopID = '6579412001a6e7d1a58a8df1';
-    try {
-        const response = await axios.get(`http://10.0.2.2:3000/shop/${shopID}/products/index`);
-        if (response.status === 200) {
-          const productsData = response.data.products;
-          console.log(productsData);
-          setProductList(productsData);
+      console.log("Shop ID: ", shopID);
+      try {
+          const response = await axios.get(`http://10.0.2.2:3000/shop/${shopID}/products/index`);
+          if (response.status === 200) {
+            const productsData = response.data.products;
+            console.log(productsData);
+            setProductList(productsData);
+          } 
+        } catch (error) {
+          console.log("error", error);
         }
-      } catch (error) {
-        console.log("error", error);
       }
-    }
-    fetchShopProduct(); 
-  }, [navigation]);
-  // isFocused
+      fetchShopProduct(); 
+  }, [navigation, isFocused]);
+  // 
   console.log(products);
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "#fff" }}>
@@ -83,7 +106,7 @@ export default function MyProducts() {
               <TouchableOpacity style={styles.button} onPress={() => navigation.navigate("Edit product")}>
                 <Text style={{ color: COLORS.white }}>Edit</Text>
               </TouchableOpacity>
-              <TouchableOpacity style={styles.button}>
+              <TouchableOpacity style={styles.button} onPress={() => handleDeleteProduct(product._id)}> 
                 <Text style={{ color: COLORS.white }}>Delete</Text>
               </TouchableOpacity>
             </View>
@@ -95,6 +118,7 @@ export default function MyProducts() {
     </SafeAreaView>
   );
 }
+export default MyProducts;
 const styles = StyleSheet.create({
   section: {
     backgroundColor: COLORS.white,

@@ -7,15 +7,13 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { jwtDecode } from "jwt-decode";
 import axios from "axios"
 import { useNavigation } from "@react-navigation/native";
-const shopDefaut = {
+const shopDefault = {
   url: "https://res.cloudinary.com/dqxtf297o/image/upload/v1703319888/rgbptr0a7ebx5njabzkl.png",
   public_id: 'rgbptr0a7ebx5njabzkl',
 }
 
 export default function CreateShop() {
-  
   const navigation = useNavigation();
- 
   const windowHeight = Dimensions.get("window").height;
   const [status, setStatus] = useState(null);
   const popAnim = useRef(new Animated.Value(windowHeight *-1)).current;
@@ -25,7 +23,6 @@ export default function CreateShop() {
   const failColor = "#bf6060";
   const failHeader = "Failed!";
   const failMessage = "Your information was still unsaved";
-
 
   const [shopName, setShopName] = useState('');
   const [bio, setBio] = useState('');
@@ -76,14 +73,14 @@ export default function CreateShop() {
         const { url, public_id } = handleImageUpload(selectedImage);
         shop.image = { url, public_id };
       } else {
-        shop.image = shopDefaut;
+        shop.image = shopDefault;
       }
-      // await axios.post("http://10.0.2.2:3000/shop/createShop", shop)
+      await axios.post("http://10.0.2.2:3000/shop/createShop", shop)
       console.log(shopName);
-      await handleImageUpload(shopDefaut);
+      await handleImageUpload(shopDefault);
       setStatus("success");
       popIn();
-      // navigation.navigate('SellerBottomNav', { screen: 'My Products' });
+      navigation.navigate('SellerBottomNav', { screen: 'My Products' });
     } catch (error) {
       Alert.alert(
         "Create shop error", 
@@ -404,6 +401,5 @@ const styles = StyleSheet.create({
       width: "70%",
       padding: 2,
   },
-  
 }
 );

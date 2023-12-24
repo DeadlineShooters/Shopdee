@@ -14,10 +14,10 @@ export default function SignIn() {
   useEffect(() => {
     const checkSigninStatus = async () => {
       try {
-        // const token = await AsyncStorage.getItem("authToken");
-        // if (token) {
-        //   navigation.navigate('BuyerBottomNav', { screen: 'Home' });
-        // }
+        const token = await AsyncStorage.getItem("authToken");
+        if (token) {
+          navigation.navigate('BuyerBottomNav', { screen: 'Home' });
+        }
       } catch(err) {
         console.log("error message", err);
       }

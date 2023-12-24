@@ -20,7 +20,6 @@ import axios from "axios";
 const user = {
     name: 'Nguyễn Tuấn Kiệt',
     phone: '0902800628',
-    
 }
 
 

@@ -18,7 +18,8 @@ export default function AddProduct({ productId }) {
   const [stock, setStock] = useState(""); // New state for stock
   const [selectedCategory, setSelectedCategory] = useState("");
   const [productPhotos, setProductPhotos] = useState([]);
-  const { userID, setUserID } = useContext(UserType);
+  const {sellerData} = useContext(UserType);
+  const [shopID, setShopID] = useState(sellerData.existingUser._id);
   const [categories, setCategories] = useState([]);
 
   useEffect(() => {
@@ -34,8 +35,7 @@ export default function AddProduct({ productId }) {
         console.error("Error fetching categories:", error);
         setCategories([]); // Set an empty array in case of an error
       }
-    };
-
+    } 
     fetchCategories();
   }, []);
 
@@ -45,7 +45,6 @@ export default function AddProduct({ productId }) {
       Alert.alert("Missing Information", "Please fill in all required fields.");
       return;
     }
-    const shopID = '6579412001a6e7d1a58a8df1';
     const product= {
         name: productNameText,
         description: productDescText,
@@ -55,25 +54,12 @@ export default function AddProduct({ productId }) {
         category: selectedCategory,
     }
     try {
-      const response = await Axios.post(`http://10.0.2.2:3000/shop/${shopID}/products/create-product`, {
-        // name: productNameText,
-        // description: productDescText,
-        // images: [],
-        // price,
-        // quantity: stock,
-        // category: selectedCategory,
-        product
-      });
-
-      // 201 for resource created)
+      const response = await Axios.post(`http://10.0.2.2:3000/shop/${shopID}/products/create-product`, { product });
       if (response.status === 200) {
-        // Addition was successful, handle the response accordingly
         console.log("Product added successfully");
         navigation.navigate("My Product");
       } 
-      
     } catch (error) {
-      // Handle Axios or network errors
       console.error("Error during product addition:", error);
     }
   };
