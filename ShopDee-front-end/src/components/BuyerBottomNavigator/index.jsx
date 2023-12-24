@@ -11,6 +11,7 @@ import CreateShop from "../../pages/Buyer/CreateShop";
 import SellerMyOrderTopTabs from "../SellerMyOrderTopTabs";
 import EditProfile from "../../pages/Buyer/Me/EditProfile";
 import MyProducts from "../../pages/Seller/MyProducts";
+import SellerBottomNavigator from "../SellerBottomNavigator";
 
 const Tab = createBottomTabNavigator();
 
@@ -68,9 +69,20 @@ export default function BuyerBottomNavigator() {
         }}
       />
 
-      <Tab.Screen
+      {/* <Tab.Screen
         name="Me"
         component={Me}
+        options={{
+          tabBarIcon: ({ focused, color }) => {
+            if (focused) return <Ionicons name="ios-person" size={24} color={color} />;
+            else return <Ionicons name="ios-person-outline" size={24} color={color} />;
+          },
+          headerShown: false,
+        }}
+      /> */}
+      <Tab.Screen
+        name="Me"
+        component={SellerBottomNavigator}
         options={{
           tabBarIcon: ({ focused, color }) => {
             if (focused) return <Ionicons name="ios-person" size={24} color={color} />;

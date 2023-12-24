@@ -8,6 +8,7 @@ import GoBack from "../../components/goBackPanel";
 import { Axios } from "../../api/axios";
 import { useNavigation } from "@react-navigation/native";
 import { UserContext } from "../../../context/UserContext";
+import mongoose from "mongoose";
 
 export default function AddProduct({ productId }) {
   const navigation = useNavigation();
@@ -20,6 +21,8 @@ export default function AddProduct({ productId }) {
   const [productPhotos, setProductPhotos] = useState([]);
   const { userID, setUserID } = useContext(UserContext);
   const [categories, setCategories] = useState([]);
+  const { shop } = useContext(UserContext);
+  const shopID = shop._id;
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -46,27 +49,73 @@ export default function AddProduct({ productId }) {
       return;
     }
 
+    // Upload images to Cloudinary
+    const imageUrls = await Promise.all(
+      productPhotos.map(async (photo) => {
+        const formData = new FormData();
+        const imageName = `image_${Date.now()}.jpg`;
+        const fileExtension = photo.uri.split(".").pop();
+
+        formData.append("file", {
+          uri: photo.uri,
+          type: `image/${fileExtension}`,
+          name: imageName,
+        });
+        formData.append("upload_preset", "ShopDeeImageStock");
+
+        try {
+          const response = await Axios.post("https://api.cloudinary.com/v1_1/dqxtf297o/image/upload", formData, {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          });
+
+          console.log("@@@ response: ", response.data);
+
+          return {
+            public_id: response.data.public_id,
+            url: response.data.secure_url,
+          };
+        } catch (error) {
+          console.error("Error uploading image to Cloudinary:", error);
+          if (error.response && error.response.data) {
+            const cloudinaryError = error.response.data;
+            console.error("Cloudinary error:", cloudinaryError);
+          }
+          return null;
+        }
+      })
+    );
+
+    console.log("@@@ imageURLs: ", imageUrls);
+    // Filter out any failed uploads
+    const successfulUploads = imageUrls.filter((url) => url !== null);
+
     try {
-      const response = await Axios.post(`/products/${productId}`, {
+      const response = await Axios.post(`/shop/${shopID}/products/create-product`, {
         name: productNameText,
         description: productDescText,
-        images: [],
+        image: successfulUploads,
         price,
         quantity: stock,
         category: selectedCategory,
+        shop: new mongoose.Types.ObjectId(shopID),
       });
 
-      // 201 for resource created)
-      if (response.status === 201) {
-        // Addition was successful, handle the response accordingly
-        console.log("Product added successfully");
-      } else {
-        // Addition failed, handle the error
-        console.error("Product addition failed");
-      }
+      console.log("@@ Product added successfully", response.data);
+      navigation.navigate("My Product");
     } catch (error) {
-      // Handle Axios or network errors
-      console.error("Error during product addition:", error);
+      console.error("@@ Error creating new product:", error);
+
+      // Check if the error has a response and data properties
+      if (error.response && error.response.data) {
+        const { message } = error.response.data;
+        console.error("@@ Backend error message:", message);
+        throw new Error(message); // Rethrow the error with the backend message
+      }
+
+      // If there's no specific backend error message, rethrow the original error
+      throw error;
     }
   };
 
@@ -106,8 +155,6 @@ export default function AddProduct({ productId }) {
       allowsMultipleSelection: true,
       selectionLimit: 5,
     });
-
-    console.log(result);
 
     if (!result.canceled) {
       setProductPhotos(result.assets.map((item) => ({ uri: item.uri })));
