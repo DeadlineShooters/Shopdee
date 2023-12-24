@@ -1,8 +1,5 @@
 import { View, Text, StyleSheet, SafeAreaView, FlatList } from "react-native";
 import Order from "../../../components/ManageOrders/Order";
-import { ORDER_LIST_TO_CONFIRM } from "../../../../data/order";
-import { ORDER_LIST_TO_DELIVER } from "../../../../data/order";
-import { ORDER_LIST_COMPLETED } from "../../../../data/order";
 
 //  testing code please replace!!
 export default function ManageOrders({ orders, buttonVisible }) {
