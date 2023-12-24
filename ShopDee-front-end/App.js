@@ -23,7 +23,7 @@ import HelpSupport from "./src/pages/Buyer/Me/Support";
 import ChangePassword from "./src/pages/Buyer/Me/ChangePassword";
 import SignIn from "./src/pages/SignIn";
 import SignUp from "./src/pages/SignIn/SignUp";
-import { UserContext } from "./UserContext.js";
+import { UserProvider } from "./context/UserContext.js";
 import AddProduct from "./src/pages/Seller/AddProduct.js";
 import EditProduct from "./src/pages/Seller/EditProduct.js";
 
@@ -36,7 +36,7 @@ export default function App() {
   return (
     <>
       <StatusBar />
-      <UserContext>
+      <UserProvider>
         <SafeAreaProvider>
           <NavigationContainer>
             <Stack.Navigator>
@@ -94,7 +94,7 @@ export default function App() {
             </Stack.Navigator>
           </NavigationContainer>
         </SafeAreaProvider>
-      </UserContext>
+      </UserProvider>
     </>
   );
 }

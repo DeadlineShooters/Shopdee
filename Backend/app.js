@@ -5,6 +5,7 @@ import bodyParser from "body-parser";
 import userRoutes from "./routes/users.js";
 import productRoutes from "./routes/shopProduct.js";
 import shopRoutes from "./routes/shopProfile.js";
+import shopOrderRoutes from "./routes/shopOrder.js";
 
 import cloudinary from "cloudinary";
 import Category from "./models/category.js";
@@ -32,7 +33,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 
 app.use("/user", userRoutes);
 app.use("/shop/:shopId/products", productRoutes);
-app.use("/shop/:shopId/orders", shopRoutes);
+app.use("/shop/:shopId/orders", shopOrderRoutes);
 // app.use("/shop/:shopId/profile", shopRoutes);
 app.use("/shop", shopRoutes);
 app.get("/categories", async (req, res) => {

@@ -7,7 +7,7 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import GoBack from "../../components/goBackPanel";
 import { Axios } from "../../api/axios";
 import { useNavigation } from "@react-navigation/native";
-import { UserType } from "../../../UserContext";
+import { UserContext } from "../../../context/UserContext";
 
 export default function EditProduct({ productId }) {
   const navigation = useNavigation();
@@ -18,7 +18,7 @@ export default function EditProduct({ productId }) {
   const [stock, setStock] = useState(""); // New state for stock
   const [selectedCategory, setSelectedCategory] = useState("");
   const [productPhotos, setProductPhotos] = useState([]);
-  const { userID, setUserID } = useContext(UserType);
+  const { userID, setUserID } = useContext(UserContext);
   const [categories, setCategories] = useState([]);
 
   useEffect(() => {

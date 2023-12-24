@@ -3,7 +3,7 @@ import { View, Text, TouchableOpacity, ToastAndroid, Image, TextInput, SafeAreaV
 import * as ImagePicker from "expo-image-picker";
 import { AntDesign, Entypo } from "@expo/vector-icons";
 import axios from "axios";
-import { UserType } from "../../../../UserContext";
+import { UserContext } from "../../../../context/UserContext";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { jwtDecode } from "jwt-decode";
 import "core-js/stable/atob";
@@ -79,7 +79,7 @@ export default function EditShopProfile({ navigation }) {
       setSelectedImage(result.assets[0].url);
     }
   };
-  const { userID, setUserID } = useContext(UserType);
+  const { userID, setUserID } = useContext(UserContext);
   const [user, setUser] = useState("");
   const [username, setUserName] = useState("");
   const isFocused = useIsFocused();
