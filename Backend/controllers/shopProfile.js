@@ -35,6 +35,7 @@ const secretKey = generateSecretKey();
 export const getprofile = async (req, res) => {
     try {
         const findUserID = req.params.shopID;
+        console.log("Finding ShopID profile:", findUserID);
         const shop = await Shop.findById(findUserID);
         if (!shop) {
             res.status(404).json({message: "Shop not found"});
@@ -48,10 +49,10 @@ export const updateShopProfile = async (req, res) => {
     console.log(req.body);
     try {
         const shopID = req.params.shopID; // Assuming you have the shop ID in the request parameters.
-        const { shopName, email, phone, address, profilePic } = req.body;
-
-        await shop.findByIdAndUpdate(shopID, {
+        const { shopName, bio, email, phone, address, profilePic } = req.body;
+        await Shop.findByIdAndUpdate(shopID, {
             shopName: shopName,
+            description: bio,
             email: email,
             phone: phone,
             address: address,
@@ -59,7 +60,6 @@ export const updateShopProfile = async (req, res) => {
                 public_id: profilePic.publicId,
                 url: profilePic.secureUrl
             }
-            // Add other fields as needed for updating the shop profile
         });
 
         res.status(200).send({

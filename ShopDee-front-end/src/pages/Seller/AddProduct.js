@@ -18,6 +18,7 @@ export default function AddProduct({ productId }) {
   const [stock, setStock] = useState(""); // New state for stock
   const [selectedCategory, setSelectedCategory] = useState("");
   const [productPhotos, setProductPhotos] = useState([]);
+  const [productPhotoUpload, setProductPhotoUpload] = useState([]);
   const {sellerData} = useContext(UserType);
   const [shopID, setShopID] = useState(sellerData.existingUser._id);
   const [categories, setCategories] = useState([]);
@@ -39,6 +40,55 @@ export default function AddProduct({ productId }) {
     fetchCategories();
   }, []);
 
+  const pickImage = async () => {
+    // No permissions request is necessary for launching the image library
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      aspect: [4, 3],
+      quality: 1,
+      canceled: true,
+      allowsMultipleSelection: true,
+      selectionLimit: 5,
+    });
+    if (!result.canceled) {
+      setProductPhotos(result.assets.map((item) => ({ uri: item.uri })));
+      result.assets.map((item) => {
+        let image = {
+          uri: item.uri,
+          type: `test/${item.uri.split(".")[1]}`,
+          name: `test.${item.uri.split(".")[1]}`,
+        }
+        handleUpload(image);
+      })
+    }
+  };
+
+  const handleUpload = async (image) => {
+    const data = new FormData();
+    data.append("file", image);
+    data.append("upload_preset", "ShopDeeImageStock");
+    data.append("cloud_name", "dqxtf297o");
+
+    try {
+      const response = await fetch("https://api.cloudinary.com/v1_1/dqxtf297o/image/upload", {
+        method: "post",
+        body: data,
+      });
+      if (response.ok) {
+        const result = await response.json();
+        console.log(result);
+        const public_id = result.public_id;
+        const url = result.url;
+        setProductPhotoUpload(productPhotoUpload => [...productPhotoUpload, {public_id, url}]);
+      } else {
+        console.error("API request failed:", response.status, response.statusText);
+      }
+    } catch (error) {
+      console.error("Error during API request:", error);
+    }
+  };
+  console.log(productPhotoUpload);
+
   const handleAdd = async () => {
     // Validate that all required fields are filled
     if (!productNameText || !productDescText || !price || !stock || !selectedCategory || productPhotos.length === 0) {
@@ -48,7 +98,7 @@ export default function AddProduct({ productId }) {
     const product= {
         name: productNameText,
         description: productDescText,
-        images: [],
+        image: productPhotoUpload,
         price,
         quantity: stock,
         category: selectedCategory,
@@ -88,24 +138,6 @@ export default function AddProduct({ productId }) {
 
   const handleCategoryChange = (itemValue) => {
     setSelectedCategory(itemValue);
-  };
-
-  const pickImage = async () => {
-    // No permissions request is necessary for launching the image library
-    let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.All,
-      aspect: [4, 3],
-      quality: 1,
-      canceled: true,
-      allowsMultipleSelection: true,
-      selectionLimit: 5,
-    });
-
-    console.log(result);
-
-    if (!result.canceled) {
-      setProductPhotos(result.assets.map((item) => ({ uri: item.uri })));
-    }
   };
 
   // Check form changes

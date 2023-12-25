@@ -31,6 +31,7 @@ export const createProduct = async (req, res) => {
     try {
         const {shopID} = req.params;
         console.log("ID shop create product", shopID);
+        console.log("Data product: ", req.body.product.image);
         const product = new Product(req.body.product);
         product.shop = shopID;
         await product.save();
@@ -47,18 +48,14 @@ export const createProduct = async (req, res) => {
 export const updateProduct = async (req, res) => {
     try {
         const { idProduct } = req.params; 
-        const updatedFields = req.body.product; 
-
+        const updatedFields = req.body;
+        console.log(req.body);
         let product = await Product.findById(idProduct);
-
         if (!product) {
             return res.status(404).json({ message: 'Product not found' });
         }
-
         product = Object.assign(product, updatedFields);
-
         await product.save();
-
         res.json({
             message: 'Product updated successfully',
             product,
@@ -69,22 +66,15 @@ export const updateProduct = async (req, res) => {
         res.status(500).send('Error updating product');
     }
 };
-
-
-
 export const deleteProduct = async (req, res) => {
     try {
         const { idProduct } = req.params; 
         console.log(idProduct);
-
         let product = await Product.findById(idProduct);
-
         if (!product) {
             return res.status(404).json({ message: 'Product not found' });
         }
-
         await Product.findByIdAndDelete(idProduct);
-
         res.json({
             message: 'Product deleted successfully',
         });

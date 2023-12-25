@@ -3,7 +3,14 @@ const Schema = mongoose.Schema;
 import user from "./Users.js";
 
 const shopSchema = new Schema({
-    image: String,
+    image: {
+        public_id: {
+            type: String
+        },
+        url: {
+            type: String
+        },
+    },
     name: String,
     email: String,
     phone: String,

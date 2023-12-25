@@ -89,8 +89,7 @@ export const updateprofile = async (req, res) => {
     try {
         const userID = req.params.userID;
         const { username, email, phone, gender, birthday, profilePic} = req.body;
-        await cloudinary.v2.uploader.destroy(EditUser.profilePic.public_id);
-        //const cdb = await cloudinary.v2.uploader.upload(profileimage.uri, {resource_type: "image"});
+        console.log(req.body);
         await user.findByIdAndUpdate(userID, {
             username: username,
             email: email,

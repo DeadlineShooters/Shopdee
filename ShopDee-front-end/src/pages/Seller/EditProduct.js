@@ -9,9 +9,10 @@ import { Axios } from "../../api/axios";
 import { useNavigation } from "@react-navigation/native";
 import { UserType } from "../../../../ShopDee-front-end/context/UserContext";
 
-export default function EditProduct({ productId }) {
+export default function EditProduct({ route }) {
   const navigation = useNavigation();
-
+  const productID = route.params.productID;
+  const shopID = route.params.shopID;
   const [productNameText, setProductNameText] = useState("");
   const [productDescText, setProductDescText] = useState("");
   const [price, setPrice] = useState(""); // New state for price
@@ -24,19 +25,33 @@ export default function EditProduct({ productId }) {
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const response = await Axios.get("http://localhost:3000/categories", {
+        const response = await Axios.get("http://10.0.2.2:3000/categories", {
           timeout: 5000, // Set timeout to 5 seconds (adjust as needed)
         });
         const fetchedCategories = response.data;
-        console.log("{GET http://localhost:3000/categories}", fetchedCategories);
+        console.log("{GET http://10.0.2.2:3000/categories}", fetchedCategories);
         setCategories(fetchedCategories); // Update the state
       } catch (error) {
         console.error("Error fetching categories:", error);
         setCategories([]); // Set an empty array in case of an error
       }
     };
-
     fetchCategories();
+    const fetchProductData = async () => {
+      try {
+        const response = await Axios.get(`http://10.0.2.2:3000/shop/${shopID}/products/${productID}/get-detail`);
+        const productData = response.data;
+        console.log(productData);
+        setProductNameText(productData.name);
+        setProductDescText(productData.description);
+        setPrice((productData.price).toString());
+        setStock((productData.quantity).toString());
+        setSelectedCategory(productData.category);
+      } catch (error) {
+        console.error("Error fetching product data: ", error);
+      }
+    }
+    fetchProductData();
   }, []);
 
   const handleEdit = async () => {
@@ -45,9 +60,8 @@ export default function EditProduct({ productId }) {
       Alert.alert("Missing Information", "Please fill in all required fields.");
       return;
     }
-
     try {
-      const response = await Axios.put(`/products/${productId}`, {
+      const response = await Axios.put(`http://10.0.2.2:3000/shop/${shopID}/products/${productID}/update-product`, {
         name: productNameText,
         description: productDescText,
         images: [],
@@ -55,7 +69,6 @@ export default function EditProduct({ productId }) {
         quantity: stock,
         category: selectedCategory,
       });
-
       // Assuming your API returns a success status code (e.g., 200 for OK)
       if (response.status === 200) {
         // Edit was successful, handle the response accordingly
@@ -106,9 +119,6 @@ export default function EditProduct({ productId }) {
       allowsMultipleSelection: true,
       selectionLimit: 5,
     });
-
-    console.log(result);
-
     if (!result.canceled) {
       setProductPhotos(result.assets.map((item) => ({ uri: item.uri })));
     }
@@ -135,10 +145,8 @@ export default function EditProduct({ productId }) {
       stock !== initialFormState.current.stock ||
       selectedCategory !== initialFormState.current.selectedCategory ||
       JSON.stringify(productPhotos) !== JSON.stringify(initialFormState.current.productPhotos);
-
     // Set the flag accordingly
     isFormEdited.current = isEdited;
-
     // Cleanup function to reset the flag when the component unmounts
     return () => {
       isFormEdited.current = false;

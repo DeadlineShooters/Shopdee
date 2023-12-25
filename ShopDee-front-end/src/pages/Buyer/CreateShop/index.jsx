@@ -30,11 +30,10 @@ export default function CreateShop() {
   const [address, setAddress] = useState("");
   const [phone, setPhone] = useState("");
   const [selectedImage, setSelectedImage] = useState(null);
-  // const [publicId, setPublicId] = useState("");
-  // const [secureUrl, setSecureUrl] = useState("");
+  const [publicId, setPublicId] = useState("");
+  const [secureUrl, setSecureUrl] = useState("");
   const maxCharactersName = 30; // Số ký tự tối đa cho phép
   const maxCharactersBio = 200;
-
   // const image = null;
 
   const handleOnPressGoBack = () => {
@@ -78,9 +77,11 @@ export default function CreateShop() {
       await axios.post("http://10.0.2.2:3000/shop/createShop", shop)
       console.log(shopName);
       await handleImageUpload(shopDefault);
-      setStatus("success");
-      popIn();
-      navigation.navigate('SellerBottomNav', { screen: 'My Products' });
+      setTimeout(() => {
+        setStatus("success");
+        popIn();
+        navigation.navigate('SellerBottomNav', { screen: 'My Products' });
+      }, 3000);
     } catch (error) {
       Alert.alert(
         "Create shop error", 
@@ -158,8 +159,6 @@ export default function CreateShop() {
   //     ToastAndroid.show('Toast message displayed!', ToastAndroid.SHORT);
   // };
 
-  
-  
   return (
     <SafeAreaView
       style={{backgroundColor: '#E3E3E3',flex: 1,}}>
@@ -189,8 +188,7 @@ export default function CreateShop() {
               width: undefined,
               height: undefined,
             }}
-            source={{uri: selectedImage? selectedImage.uri:shopDefaut.url}}
-            // source={shopDefaut}
+            source={{uri: selectedImage? selectedImage.uri:shopDefault.url}}
           />
         </View>
         <View>

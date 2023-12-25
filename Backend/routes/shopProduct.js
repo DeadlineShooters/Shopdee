@@ -8,9 +8,9 @@ router.get('/index', shop.index);
 
 router.post('/create-product', shop.createProduct);
 
-router.get('/:idProduct', shop.getOne);
+router.get('/:idProduct/get-detail', shop.getOne);
 
-router.put('/:idProduct', shop.updateProduct);
+router.put('/:idProduct/update-product', shop.updateProduct);
 
 router.delete('/delete/:idProduct', shop.deleteProduct);
 

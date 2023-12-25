@@ -177,7 +177,6 @@ const handleUpload = async (image) => {
     }
 };
 
-
 const save = async () => {
     setChangeName(username);
     setChangeMail(mail);

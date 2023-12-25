@@ -86,12 +86,12 @@ const MyProducts = () => {
                 }}
               >
               <View style={styles.imageContainer}>
-                <Image source={{ uri: product.imgUrl }} style={styles.image}></Image>
+                <Image source={{ uri: product.image[0]?.url }} style={styles.image}></Image>
               </View>
               <View>
                 {/* <Text>{product.name}</Text> */}
                 <Text>Category: {product.category}</Text>
-                <Text style={{ marginTop: 5 }}>{product.price} x 1</Text>
+                <Text style={{ marginTop: 5 }}>Price: {product.price}/1</Text>
                 <Text style={{ marginTop: 5 }}>Stock: {product.quantity}</Text>
               </View>
             </View>
@@ -103,7 +103,7 @@ const MyProducts = () => {
                 marginTop: 10,
               }}
             >
-              <TouchableOpacity style={styles.button} onPress={() => navigation.navigate("Edit product")}>
+              <TouchableOpacity style={styles.button} onPress={() => navigation.navigate("Edit product", {productID: product._id, shopID})}>
                 <Text style={{ color: COLORS.white }}>Edit</Text>
               </TouchableOpacity>
               <TouchableOpacity style={styles.button} onPress={() => handleDeleteProduct(product._id)}> 
