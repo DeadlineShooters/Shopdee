@@ -27,12 +27,10 @@ import { UserProvider } from "./context/UserContext.js";
 import AddProduct from "./src/pages/Seller/AddProduct.js";
 import EditProduct from "./src/pages/Seller/EditProduct.js";
 
+import PickAddressScreen from "./src/pages/PickAddressScreen.js";
 const Stack = createNativeStackNavigator();
 
 export default function App() {
-  // var { height, width } = Dimensions.get("window");
-  // console.log("Width is: " + width);
-  // console.log("Height is: " + height);
   return (
     <>
       <StatusBar />
@@ -91,6 +89,7 @@ export default function App() {
                   <Stack.Screen name="Edit Profile" component={EditShopProfile} options={{ headerShown: false }} />
                 </>
               }
+              <Stack.Screen name="AddressPicker" component={PickAddressScreen} options={{ headerShown: false }} />
             </Stack.Navigator>
           </NavigationContainer>
         </SafeAreaProvider>
