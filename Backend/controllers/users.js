@@ -11,7 +11,7 @@ import mongoose from "mongoose";
 export const checkShopOwner = async (req, res) => {
   try {
     const user = req.body.userID;
-    const existingUser = await Shop.findOne({ user: user });
+    const existingUser = await Shop.findOne({ user: user }).populate("user");
     if (!existingUser) {
       return res.status(500).json({ messages: "Email has been already registered!" });
     }

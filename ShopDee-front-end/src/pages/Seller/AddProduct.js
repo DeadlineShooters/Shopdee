@@ -21,8 +21,8 @@ export default function AddProduct({ productId }) {
   const [productPhotos, setProductPhotos] = useState([]);
   const { userID, setUserID } = useContext(UserContext);
   const [categories, setCategories] = useState([]);
-  const { shop } = useContext(UserContext);
-  const shopID = shop._id;
+  const { sellerData } = useContext(UserContext);
+  const shopID = sellerData._id;
 
   useEffect(() => {
     const fetchCategories = async () => {

@@ -22,8 +22,8 @@ export default function EditProduct({ route }) {
   const [stock, setStock] = useState(product.quantity.toString()); // Convert to string to set the initial value
   const [selectedCategory, setSelectedCategory] = useState(product.category._id);
   const [productPhotos, setProductPhotos] = useState(product.image.map((item) => ({ uri: item.url })));
-  const { shop } = useContext(UserContext);
-  const shopID = shop._id;
+  const { sellerData } = useContext(UserContext);
+  const shopID = sellerData._id;
   const [categories, setCategories] = useState([]);
   const [isFormEdited, setIsFormEdited] = useState(false);
 

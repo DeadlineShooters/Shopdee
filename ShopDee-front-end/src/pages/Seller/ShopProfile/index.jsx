@@ -149,7 +149,7 @@ export default function EditShopProfile({ navigation, route }) {
           <AntDesign name="arrowleft" style={{ fontSize: 24 }} />
         </TouchableOpacity>
         <Text style={{ fontSize: 16, fontWeight: "bold", textAlign: "center", alignSelf: "center" }}> Shop Profile </Text>
-        <TouchableOpacity onPress={() => navigation.navigate("Edit Profile", { shop: shop })}>
+        <TouchableOpacity onPress={() => navigation.navigate("Edit Profile", { shop })}>
           <AntDesign name="edit" size={24} color="black" />
         </TouchableOpacity>
       </View>

@@ -4,8 +4,10 @@ import mongoose from "mongoose";
 export const index = async (req, res) => {
   const { shopId } = req.params;
 
+  console.log("@@ shop id: " + shopId);
   try {
     const { status } = req.query || "";
+    console.log("@@ status: " + status);
     const orders = await Order.find({ status: status })
       .populate({
         path: "product",
@@ -16,7 +18,7 @@ export const index = async (req, res) => {
       })
       .populate("user");
 
-    console.log("Orders ", orders);
+    console.log("@@ Orders ", orders);
     // const orders = await Order.findAll({ status: status });
     if (!orders) {
       res.status(404).json({ message: "Orders not found" });
@@ -24,6 +26,7 @@ export const index = async (req, res) => {
 
     res.json(orders);
   } catch (e) {
+    console.error("Error fetching orders:", e);
     res.status(500).json({ message: "Error retrieving the shop orders" });
   }
 };
