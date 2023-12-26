@@ -1,37 +1,62 @@
 import ProductItem from "./ProductItem";
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import { useNavigation } from "@react-navigation/native";
+import { updateOrderStatus } from "../../api/shopApi";
+import { useContext } from "react";
+import { UserContext } from "../../../context/UserContext";
 
-export default function Order({ buyer, buttonVisible, buttonText, itemList, totalPayment }) {
+export default function Order({ order, buttonVisible, buttonText, item }) {
   const navigation = useNavigation();
+  const { shop, defaultImage } = useContext(UserContext);
 
-  function confirmOrder() {
-    navigation.navigate("To Deliver");
-    // update database
+  function handleOrder() {
+    if (buttonText == "Confirm") {
+      // change order status to toDeliver
+      order.status = "toDeliver";
+
+      updateOrderStatus(shop._id, order, "toDeliver")
+        .then(() => {
+          navigation.navigate("To Deliver");
+        })
+        .catch((error) => {
+          console.error("Error updating order status:", error);
+        });
+    } else if (buttonText == "Complete") {
+      order.status = "completed";
+
+      updateOrderStatus(shop._id, order, "completed")
+        .then(() => {
+          navigation.navigate("Completed");
+        })
+        .catch((error) => {
+          console.error("Error updating order status:", error);
+        });
+    }
   }
+
   return (
     <View style={styles.mainContainer}>
-      <Text style={styles.buyer}>From {buyer}</Text>
-      {itemList.map((item) => (
-        <ProductItem key={item.id} productName={item.name} productPrice={item.price} productQuantity={item.quantity} imagePath={item.imageLink} />
-      ))}
-      {/* <ProductItem
-        productName="Nike Club Max"
-        productPrice="500,000"
-        productQuantity={3}
-        imagePath="https://cdn.discordapp.com/attachments/987699517497438218/1176175153361723422/OIP.png?ex=656de978&is=655b7478&hm=976b420d3042b910c5824c5a3af1a3da0bdc6e697469363dd359a3cce48c2aaf&"
-      /> */}
+      <Text style={styles.buyer}>From {order.user.email}</Text>
+      {/* {itemList.map((item) => ( */}
+      <ProductItem
+        key={order.product._id}
+        productName={order.product.name}
+        productPrice={order.product.price}
+        productQuantity={order.product.quantity}
+        imagePath={order.product.image.length > 0 ? order.product.image[0].url : "defaultImage"}
+      />
+      {/* ))} */}
 
       <View style={styles.bottomContainer}>
         <View style={styles.totalPaymentContainer}>
           <Text style={styles.totalPaymentText}>Total Price:</Text>
-          <Text style={styles.totalPrice}>{totalPayment.toLocaleString()}đ</Text>
+          <Text style={styles.totalPrice}>{order.totalPrice.toLocaleString()}đ</Text>
         </View>
         {buttonVisible && (
           // <TouchableOpacity style={styles.button} onPress={confirmOrder}>
           //   <Text style={styles.buttonText}>{buttonText}</Text>
           // </TouchableOpacity>
-          <TouchableOpacity style={styles.button}>
+          <TouchableOpacity style={styles.button} onPress={handleOrder}>
             <Text style={styles.buttonText}>{buttonText}</Text>
           </TouchableOpacity>
         )}

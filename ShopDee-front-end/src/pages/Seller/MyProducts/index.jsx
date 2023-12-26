@@ -1,63 +1,55 @@
-import { View, Text, SafeAreaView, ScrollView, StyleSheet, Image, TouchableOpacity, Alert} from "react-native";
+import { View, Text, SafeAreaView, ScrollView, StyleSheet, Image, TouchableOpacity, Alert } from "react-native";
 import { SIZES, COLORS, FONTS } from "../../../../assets/Themes";
 import GoBack from "../../../components/goBackPanel";
 // import { products } from "../../../../data/product";
 import { Colors } from "react-native/Libraries/NewAppScreen";
 import { MaterialIcons } from "@expo/vector-icons";
-import { useNavigation, useIsFocused} from "@react-navigation/native";
-import { useEffect, useState, useCallback, useContext } from "react";
-import axios from "axios";
-import { UserType } from "../../../../context/UserContext.js";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { jwtDecode } from "jwt-decode";
-import "core-js/stable/atob";
+import { useNavigation, useFocusEffect, useIsFocused } from "@react-navigation/native";
+import { UserContext } from "../../../../context/UserContext";
+import React, { useContext, useEffect, useState } from "react";
 
 const MyProducts = () => {
   const navigation = useNavigation();
-  const { sellerData } = useContext(UserType);
+  const { sellerData } = useContext(UserContext);
   const [shopID, setShopID] = useState(sellerData.existingUser._id);
-  const [products, setProductList] = useState([]);
+  const { defaultImage } = useContext(UserContext);
+  const [myProducts, setMyProducts] = useState([]);
   const deleteThisProduct = async (productId) => {
     try {
-      const response = await axios.delete(`http://10.0.2.2:3000/shop/${shopID}/products/delete/${productId}`)
+      const response = await axios.delete(`http://10.0.2.2:3000/shop/${shopID}/products/${productId}`);
       if (response.status == 200) {
         console.log("delete successfully");
       } else console.error("Error");
     } catch (error) {
       console.log(error);
-    } 
-  } 
+    }
+  };
   const handleDeleteProduct = (productId) => {
-    Alert.alert('Confirm message', 'Do you really want to delete this product?', [
+    Alert.alert("Confirm message", "Do you really want to delete this product?", [
       {
-          text: 'Cancel',
-          onPress: () => console.log('Cancel request'),
+        text: "Cancel",
+        onPress: () => console.log("Cancel request"),
       },
       {
-          text: 'Ok',
-          onPress: () => deleteThisProduct(productId),
-      }
-  ]);
-  }
-  const isFocused = useIsFocused();
-  useEffect(() => {
-    const fetchShopProduct = async () => {
-      console.log("Shop ID: ", shopID);
-      try {
-          const response = await axios.get(`http://10.0.2.2:3000/shop/${shopID}/products/index`);
-          if (response.status === 200) {
-            const productsData = response.data.products;
-            console.log(productsData);
-            setProductList(productsData);
-          } 
+        text: "Ok",
+        onPress: () => deleteThisProduct(productId),
+      },
+    ]);
+  };
+
+  useFocusEffect(
+    React.useCallback(() => {
+      const fetchProducts = async () => {
+        try {
+          setMyProducts(products);
         } catch (error) {
-          console.log("error", error);
+          console.error("Error fetching products:", error);
         }
-      }
-      fetchShopProduct(); 
-  }, [navigation, isFocused]);
-  // 
-  console.log(products);
+      };
+
+      fetchProducts();
+    }, [])
+  );
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "#fff" }}>
       <View
@@ -74,9 +66,11 @@ const MyProducts = () => {
       </View>
       <GoBack currentTitle="My Products"></GoBack>
       <ScrollView style={{ backgroundColor: COLORS.gray }}>
-      {products.map((product, index) => (
-          <View style={styles.section} key={index}>
-            <Text style={{ marginBottom: 15, fontSize: 18, fontWeight: "bold" }}>{product.name}</Text>
+        {products.map((product, index) => {
+          console.log("@@ product: ", product);
+          return (
+            <View style={styles.section} key={index}>
+              <Text style={{ marginBottom: 15, fontSize: 18, fontWeight: "bold" }}>{product.name}</Text>
               <View
                 style={{
                   flexDirection: "row",
@@ -85,39 +79,43 @@ const MyProducts = () => {
                   paddingBottom: 15,
                 }}
               >
-              <View style={styles.imageContainer}>
-                <Image source={{ uri: product.image[0]?.url }} style={styles.image}></Image>
+                <View style={styles.imageContainer}>
+                  <Image
+                    source={{
+                      uri: product.image.length > 0 ? product.image[0].url : defaultImage,
+                    }}
+                    style={styles.image}
+                  ></Image>
+                </View>
+                <View>
+                  {/* <Text>{product.name}</Text> */}
+                  <Text>Category: {product.category.name}</Text>
+                  <Text style={{ marginTop: 5 }}>{product.price} x 1</Text>
+                  <Text style={{ marginTop: 5 }}>Stock: {product.quantity}</Text>
+                </View>
               </View>
-              <View>
-                {/* <Text>{product.name}</Text> */}
-                <Text>Category: {product.category}</Text>
-                <Text style={{ marginTop: 5 }}>Price: {product.price}/1</Text>
-                <Text style={{ marginTop: 5 }}>Stock: {product.quantity}</Text>
+              <View
+                style={{
+                  flexDirection: "row",
+                  alignItems: "center",
+                  justifyContent: "flex-end",
+                  marginTop: 10,
+                }}
+              >
+                <TouchableOpacity style={styles.button} onPress={() => navigation.navigate("Edit product", { product })}>
+                  <Text style={{ color: COLORS.white }}>Edit</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.button} onPress={() => handleDeleteProduct(product._id)}>
+                  <Text style={{ color: COLORS.white }}>Delete</Text>
+                </TouchableOpacity>
               </View>
             </View>
-            <View
-              style={{
-                flexDirection: "row",
-                alignItems: "center",
-                justifyContent: "flex-end",
-                marginTop: 10,
-              }}
-            >
-              <TouchableOpacity style={styles.button} onPress={() => navigation.navigate("Edit product", {productID: product._id, shopID})}>
-                <Text style={{ color: COLORS.white }}>Edit</Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.button} onPress={() => handleDeleteProduct(product._id)}> 
-                <Text style={{ color: COLORS.white }}>Delete</Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-          )
-        )
-      }
+          );
+        })}
       </ScrollView>
     </SafeAreaView>
   );
-}
+};
 export default MyProducts;
 const styles = StyleSheet.create({
   section: {
@@ -126,7 +124,6 @@ const styles = StyleSheet.create({
     padding: 15,
   },
   image: {
-    resizeMode: "contain",
     flex: 1,
     width: undefined,
     height: undefined,
@@ -138,6 +135,8 @@ const styles = StyleSheet.create({
     borderStyle: "solid",
     width: 100,
     height: 100,
+    // flex: 1,
+    // resizeMode: "contain",
   },
   button: {
     backgroundColor: COLORS.blue,

@@ -7,7 +7,8 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import GoBack from "../../components/goBackPanel";
 import { Axios } from "../../api/axios";
 import { useNavigation } from "@react-navigation/native";
-import { UserType } from "../../../../ShopDee-front-end/context/UserContext";
+import { UserContext } from "../../../context/UserContext";
+import mongoose from "mongoose";
 
 export default function AddProduct({ productId }) {
   const navigation = useNavigation();
@@ -18,10 +19,10 @@ export default function AddProduct({ productId }) {
   const [stock, setStock] = useState(""); // New state for stock
   const [selectedCategory, setSelectedCategory] = useState("");
   const [productPhotos, setProductPhotos] = useState([]);
-  const [productPhotoUpload, setProductPhotoUpload] = useState([]);
-  const {sellerData} = useContext(UserType);
-  const [shopID, setShopID] = useState(sellerData.existingUser._id);
+  const { userID, setUserID } = useContext(UserContext);
   const [categories, setCategories] = useState([]);
+  const { shop } = useContext(UserContext);
+  const shopID = shop._id;
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -36,32 +37,9 @@ export default function AddProduct({ productId }) {
         console.error("Error fetching categories:", error);
         setCategories([]); // Set an empty array in case of an error
       }
-    } 
+    };
     fetchCategories();
   }, []);
-
-  const pickImage = async () => {
-    // No permissions request is necessary for launching the image library
-    let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.All,
-      aspect: [4, 3],
-      quality: 1,
-      canceled: true,
-      allowsMultipleSelection: true,
-      selectionLimit: 5,
-    });
-    if (!result.canceled) {
-      setProductPhotos(result.assets.map((item) => ({ uri: item.uri })));
-      result.assets.map((item) => {
-        let image = {
-          uri: item.uri,
-          type: `test/${item.uri.split(".")[1]}`,
-          name: `test.${item.uri.split(".")[1]}`,
-        }
-        handleUpload(image);
-      })
-    }
-  };
 
   const handleUpload = async (image) => {
     const data = new FormData();
@@ -79,7 +57,7 @@ export default function AddProduct({ productId }) {
         console.log(result);
         const public_id = result.public_id;
         const url = result.url;
-        setProductPhotoUpload(productPhotoUpload => [...productPhotoUpload, {public_id, url}]);
+        setProductPhotoUpload((productPhotoUpload) => [...productPhotoUpload, { public_id, url }]);
       } else {
         console.error("API request failed:", response.status, response.statusText);
       }
@@ -95,22 +73,74 @@ export default function AddProduct({ productId }) {
       Alert.alert("Missing Information", "Please fill in all required fields.");
       return;
     }
-    const product= {
+
+    // Upload images to Cloudinary
+    const imageUrls = await Promise.all(
+      productPhotos.map(async (photo) => {
+        const formData = new FormData();
+        const imageName = `image_${Date.now()}.jpg`;
+        const fileExtension = photo.uri.split(".").pop();
+
+        formData.append("file", {
+          uri: photo.uri,
+          type: `image/${fileExtension}`,
+          name: imageName,
+        });
+        formData.append("upload_preset", "ShopDeeImageStock");
+
+        try {
+          const response = await Axios.post("https://api.cloudinary.com/v1_1/dqxtf297o/image/upload", formData, {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          });
+
+          console.log("@@@ response: ", response.data);
+
+          return {
+            public_id: response.data.public_id,
+            url: response.data.secure_url,
+          };
+        } catch (error) {
+          console.error("Error uploading image to Cloudinary:", error);
+          if (error.response && error.response.data) {
+            const cloudinaryError = error.response.data;
+            console.error("Cloudinary error:", cloudinaryError);
+          }
+          return null;
+        }
+      })
+    );
+
+    // Filter out any failed uploads
+    const successfulUploads = imageUrls.filter((url) => url !== null);
+    console.log("@@@ imageURLs: ", successfulUploads);
+
+    try {
+      const response = await Axios.post(`/shop/${shopID}/products/create-product`, {
         name: productNameText,
         description: productDescText,
-        image: productPhotoUpload,
+        image: successfulUploads,
         price,
         quantity: stock,
         category: selectedCategory,
-    }
-    try {
-      const response = await Axios.post(`http://10.0.2.2:3000/shop/${shopID}/products/create-product`, { product });
-      if (response.status === 200) {
-        console.log("Product added successfully");
-        navigation.navigate("My Product");
-      } 
+        shop: new mongoose.Types.ObjectId(shopID),
+      });
+
+      console.log("@@ Product added successfully", response.data);
+      navigation.navigate("My Product");
     } catch (error) {
-      console.error("Error during product addition:", error);
+      console.error("@@ Error creating new product:", error);
+
+      // Check if the error has a response and data properties
+      if (error.response && error.response.data) {
+        const { message } = error.response.data;
+        console.error("@@ Backend error message:", message);
+        throw new Error(message); // Rethrow the error with the backend message
+      }
+
+      // If there's no specific backend error message, rethrow the original error
+      throw error;
     }
   };
 
@@ -138,6 +168,22 @@ export default function AddProduct({ productId }) {
 
   const handleCategoryChange = (itemValue) => {
     setSelectedCategory(itemValue);
+  };
+
+  const pickImage = async () => {
+    // No permissions request is necessary for launching the image library
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      aspect: [4, 3],
+      quality: 1,
+      canceled: true,
+      allowsMultipleSelection: true,
+      selectionLimit: 5,
+    });
+
+    if (!result.canceled) {
+      setProductPhotos(result.assets.map((item) => ({ uri: item.uri })));
+    }
   };
 
   // Check form changes
