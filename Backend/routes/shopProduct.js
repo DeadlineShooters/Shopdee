@@ -1,8 +1,7 @@
 import express from "express";
 
 import * as shop from "../controllers/shopProduct.js";
-
-const router = express.Router({ mergeParams: true });
+const router = express.Router({ mergeParams: true }); // to use req.params from App.js
 
 // /shop/:shopId/products
 router.get("", shop.index);
