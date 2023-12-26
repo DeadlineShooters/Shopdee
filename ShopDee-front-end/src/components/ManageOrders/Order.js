@@ -7,7 +7,7 @@ import { UserContext } from "../../../context/UserContext";
 
 export default function Order({ order, buttonVisible, buttonText, item }) {
   const navigation = useNavigation();
-  const { shop } = useContext(UserContext);
+  const { shop, defaultImage } = useContext(UserContext);
 
   function handleOrder() {
     if (buttonText == "Confirm") {
@@ -43,7 +43,7 @@ export default function Order({ order, buttonVisible, buttonText, item }) {
         productName={order.product.name}
         productPrice={order.product.price}
         productQuantity={order.product.quantity}
-        imagePath={order.product?.image[0].url}
+        imagePath={order.product.image.length > 0 ? order.product.image[0].url : "defaultImage"}
       />
       {/* ))} */}
 
