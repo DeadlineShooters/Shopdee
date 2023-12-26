@@ -1,5 +1,18 @@
-import React, { useState, useRef, useContext } from "react";
-import { View, Text, TouchableOpacity, ToastAndroid, Image, TextInput, SafeAreaView, Animated, StyleSheet, Dimensions, useIsFocused } from "react-native";
+import React, { useState, useRef, useEffect, useContext } from "react";
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  ToastAndroid,
+  Image,
+  TextInput,
+  SafeAreaView,
+  Animated,
+  StyleSheet,
+  Dimensions,
+  useIsFocused,
+  useFocusEffect,
+} from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import { AntDesign, Entypo } from "@expo/vector-icons";
 import axios from "axios";
@@ -8,8 +21,16 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { jwtDecode } from "jwt-decode";
 import "core-js/stable/atob";
 import { COLORS } from "../../../../assets/Themes";
+const shop = {
+  image: "",
+  name: "Loc Shop",
+  email: "loc123@gmail.com",
+  phone: "0123456789",
+  address: "227 Nguyen Van Cu",
+  description: "abc",
+};
 
-export default function EditShopProfile({ navigation }) {
+export default function EditShopProfile({ navigation, route }) {
   const [shopName, setShopName] = useState("");
   const [setSelectedImage] = useState("");
   const [bio, setBio] = useState("");
@@ -24,6 +45,27 @@ export default function EditShopProfile({ navigation }) {
   const failColor = "#bf6060";
   const failHeader = "Failed!";
   const failMessage = "Your information was still unsaved";
+  const { userID, setUserID } = useContext(UserContext);
+  const [user, setUser] = useState("");
+
+  useEffect(() => {
+    const fetchUserProfile = async () => {
+      try {
+        const token = await AsyncStorage.getItem("authToken");
+        const decodedToken = jwtDecode(token);
+        const userID = decodedToken.userID;
+        setUserID(userID);
+        const response = await axios.get(`http://10.0.2.2:3000/user/profile/${userID}`);
+        const user = response.data;
+        console.log(user);
+        setUser(user);
+        // setUserName(user?.User?.username);
+      } catch (error) {
+        console.log("error", error);
+      }
+    };
+    fetchUserProfile();
+  }, []);
   const popIn = () => {
     Animated.timing(popAnim, {
       toValue: windowHeight * -0.35 * 0.95,
@@ -79,27 +121,7 @@ export default function EditShopProfile({ navigation }) {
       setSelectedImage(result.assets[0].url);
     }
   };
-  const { userID, setUserID } = useContext(UserContext);
-  const [user, setUser] = useState("");
-  const [username, setUserName] = useState("");
-  const isFocused = useIsFocused();
-  useEffect(() => {
-    const fetchUserProfile = async () => {
-      try {
-        const token = await AsyncStorage.getItem("authToken");
-        const decodedToken = jwtDecode(token);
-        const userID = decodedToken.userID;
-        setUserID(userID);
-        const response = await axios.get(`http://10.0.2.2:3000/shop/shopProfile/${userID}`);
-        const user = response.data;
-        setUser(user);
-        setUserName(user?.User?.username);
-      } catch (error) {
-        console.log("error", error);
-      }
-    };
-    fetchUserProfile();
-  }, [navigation, isFocused]);
+
   return (
     <SafeAreaView
       style={{
@@ -162,16 +184,13 @@ export default function EditShopProfile({ navigation }) {
             borderColor: "#CDCDCD",
             marginHorizontal: 10,
             flex: 1,
+            color: COLORS.lightBlue,
           }}
-          value={shopName}
+          value={shop.name}
           onChangeText={handleShopNameChange}
           maxLength={maxCharactersName}
           editable={false}
         />
-        <Text style={{ color: COLORS.limitGray }}>
-          {" "}
-          {shopName.length}/{maxCharactersName}
-        </Text>
       </View>
       <View
         style={{
@@ -183,10 +202,6 @@ export default function EditShopProfile({ navigation }) {
         }}
       >
         <Text style={{ fontSize: 16 }}>Bio</Text>
-
-        <Text style={{ color: COLORS.limitGray }}>
-          {bio.length}/{maxCharactersBio}
-        </Text>
       </View>
       <View
         style={{
@@ -202,8 +217,9 @@ export default function EditShopProfile({ navigation }) {
             borderColor: "#CDCDCD",
             marginHorizontal: 10,
             flex: 1,
+            color: COLORS.lightBlue,
           }}
-          value={bio}
+          value={shop.description}
           onChangeText={handleBioChange}
           maxLength={maxCharactersBio}
           numberOfLines={5} // Số dòng hiển thị
@@ -229,7 +245,9 @@ export default function EditShopProfile({ navigation }) {
             borderColor: "#CDCDCD",
             marginHorizontal: 10,
             flex: 1,
+            color: COLORS.lightBlue,
           }}
+          value={shop.address}
           editable={false}
         />
       </View>
@@ -250,7 +268,9 @@ export default function EditShopProfile({ navigation }) {
             borderColor: "#CDCDCD",
             marginHorizontal: 10,
             flex: 1,
+            color: COLORS.lightBlue,
           }}
+          value={shop.email}
           editable={false}
         />
       </View>
@@ -270,7 +290,9 @@ export default function EditShopProfile({ navigation }) {
             borderColor: "#CDCDCD",
             marginHorizontal: 10,
             flex: 1,
+            color: COLORS.lightBlue,
           }}
+          value={shop.phone}
           editable={false}
         />
       </View>
