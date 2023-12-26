@@ -27,7 +27,7 @@ export const fetchShopInfo = async () => {
 
 export const fetchOrders = async (status, shopID) => {
   // return orders based on status
-  console.log("@@ status: " + status);
+  console.log("@@ shopID: " + shopID);
   try {
     const response = await Axios.get(`/shop/${shopID}/orders?status=${status}`);
 

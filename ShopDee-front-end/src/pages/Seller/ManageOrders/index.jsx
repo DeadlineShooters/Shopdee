@@ -34,13 +34,14 @@ export default function ManageOrders({ orders, buttonVisible }) {
 export function useShopOrders(orderStatus, buttonVisible) {
   // const [shopInfoData, setShopInfoData] = useState(null);
   const [shopOrders, setShopOrders] = useState(null);
-  const { shop } = useContext(UserContext);
+  const { sellerData } = useContext(UserContext);
 
   console.log("@@@ order status: " + orderStatus);
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const orders = await fetchOrders(orderStatus, shop?._id);
+        console.log("@@@ seller data: ", sellerData);
+        const orders = await fetchOrders(orderStatus, sellerData?._id);
 
         console.log("@@@ Orders after fetchOrders:", orders);
         setShopOrders(orders);
@@ -59,13 +60,12 @@ export function ConfirmOrders() {
   const [shopOrders, setShopOrders] = useState(null);
   const { sellerData } = useContext(UserContext);
 
-  console.log("@@@ order status: toConfirm");
-
   useFocusEffect(
     React.useCallback(() => {
       const fetchData = async () => {
         try {
-          const orders = await fetchOrders("toConfirm", sellerData?._id);
+          console.log("@@ seller data id:  ", sellerData.existingUser._id);
+          const orders = await fetchOrders("toConfirm", sellerData.existingUser._id);
 
           console.log("@@@ Orders after fetchOrders:", orders);
           setShopOrders(orders);
@@ -92,7 +92,7 @@ export function ToDeliverOrders() {
     React.useCallback(() => {
       const fetchData = async () => {
         try {
-          const orders = await fetchOrders("toDeliver", sellerData?._id);
+          const orders = await fetchOrders("toDeliver", sellerData.existingUser._id);
 
           console.log("@@@ Orders after fetchOrders:", orders);
           setShopOrders(orders);
@@ -119,7 +119,7 @@ export function CompletedOrders() {
     React.useCallback(() => {
       const fetchData = async () => {
         try {
-          const orders = await fetchOrders("completed", sellerData?._id);
+          const orders = await fetchOrders("completed", sellerData.existingUser._id);
 
           console.log("@@@ Orders after fetchOrders:", orders);
           setShopOrders(orders);

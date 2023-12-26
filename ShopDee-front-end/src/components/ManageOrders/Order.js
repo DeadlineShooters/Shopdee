@@ -15,7 +15,7 @@ export default function Order({ order, buttonVisible, buttonText, item }) {
       order.status = "toDeliver";
 
       console.log("@@ seller data id: " + sellerData._id);
-      updateOrderStatus(sellerData._id, order, "toDeliver")
+      updateOrderStatus(sellerData._id, order)
         .then(() => {
           navigation.navigate("To Deliver");
         })
@@ -25,7 +25,7 @@ export default function Order({ order, buttonVisible, buttonText, item }) {
     } else if (buttonText == "Complete") {
       order.status = "completed";
 
-      updateOrderStatus(sellerData._id, order, "completed")
+      updateOrderStatus(sellerData._id, order)
         .then(() => {
           navigation.navigate("Completed");
         })

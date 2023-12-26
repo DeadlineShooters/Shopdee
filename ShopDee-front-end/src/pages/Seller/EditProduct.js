@@ -12,9 +12,9 @@ import mongoose from "mongoose";
 
 export default function EditProduct({ route }) {
   const navigation = useNavigation();
-  const { product } = route.params;
+  const { productID } = route.params;
 
-  console.log("@@ Product to edit: ", product);
+  console.log("@@ Product to edit: ", productID);
 
   const [productNameText, setProductNameText] = useState(product.name);
   const [productDescText, setProductDescText] = useState(product.description);
@@ -44,7 +44,7 @@ export default function EditProduct({ route }) {
     fetchCategories();
     const fetchProductData = async () => {
       try {
-        const response = await Axios.get(`http://10.0.2.2:3000/shop/${shopID}/products/${productID}/get-detail`);
+        const response = await Axios.get(`/shop/${shopID}/products/${productID}/`);
         const productData = response.data;
         console.log(productData);
         setProductNameText(productData.name);
