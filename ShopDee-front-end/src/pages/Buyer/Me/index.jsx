@@ -5,7 +5,7 @@ import React from "react";
 import { COLORS } from "./Themes.js";
 import { MaterialIcons, AntDesign } from "@expo/vector-icons";
 import axios from "axios";
-import { UserType } from "../../../../UserContext";
+import { UserContext } from "../../../../context/UserContext.js";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { jwtDecode } from "jwt-decode";
 import "core-js/stable/atob";
@@ -15,9 +15,9 @@ const Me = ({ navigation }) => {
     navigation.navigate("EditProfile", { props: user });
   };
   const navigateToShopOwner = async () => {
+    const findUser = { userID };
     try {
-      console.log(userID);
-      await axios.get("http://10.0.2.2:3000/user/profile/checkShopOwner", userID);
+      await axios.post("http://10.0.2.2:3000/user/profile/checkShopOwner", findUser);
       navigation.navigate("SellerBottomNav", { screen: "My Products" });
     } catch (error) {
       Alert.alert("Shop registration needed", "Do you want to create shop?", [
@@ -30,7 +30,7 @@ const Me = ({ navigation }) => {
           onPress: () => navigation.navigate("CreateShop"),
         },
       ]);
-      console.log("registration failed", error);
+      console.log("error retrieving user data", error);
     }
   };
   const navigateToSettings = () => {
@@ -81,6 +81,14 @@ const Me = ({ navigation }) => {
       </View>
     </TouchableOpacity>
   );
+  const clearTokenAndLogout = async () => {
+    try {
+      await AsyncStorage.removeItem("authToken");
+      navigation.navigate("SignIn");
+    } catch (e) {
+      console.log(e);
+    }
+  };
   const handleOnPressLogout = () => {
     Alert.alert("Confirm message", "Do you really want to log out?", [
       {
@@ -89,11 +97,11 @@ const Me = ({ navigation }) => {
       },
       {
         text: "Ok",
-        onPress: () => console.log("Exit the program"),
+        onPress: () => clearTokenAndLogout(),
       },
     ]);
   };
-  const { userID, setUserID } = useContext(UserType);
+  const { userID, setUserID } = useContext(UserContext);
   const [user, setUser] = useState("");
   const [username, setUserName] = useState("");
   const isFocused = useIsFocused();
@@ -106,6 +114,7 @@ const Me = ({ navigation }) => {
         setUserID(userID);
         const response = await axios.get(`http://10.0.2.2:3000/user/profile/${userID}`);
         const user = response.data;
+        console.log(user);
         setUser(user);
         setUserName(user?.User?.username);
       } catch (error) {
@@ -132,7 +141,7 @@ const Me = ({ navigation }) => {
           }}
         >
           <Image
-            source={require("../../../../assets/avatar.jpg")}
+            source={{ uri: user?.User?.profilePic.url }}
             style={{
               height: 100,
               width: 100,
