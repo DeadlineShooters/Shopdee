@@ -11,19 +11,14 @@ import { jwtDecode } from "jwt-decode";
 import "core-js/stable/atob";
 
 const Me = ({ navigation }) => {
-  const { userID, setUserID, setSellerData } = useContext(UserContext);
+  const { userID, setUserID, shop } = useContext(UserContext);
   const navigateToEditProfile = () => {
     navigation.navigate("EditProfile", { props: user });
   };
   const navigateToShopOwner = async () => {
-    const findUser = { userID };
-    try {
-      const response = await axios.post("http://10.0.2.2:3000/user/profile/checkShopOwner", findUser);
-      const shopData = response.data;
-      console.log(shopData);
-      setSellerData(shopData);
-      navigation.navigate("SellerBottomNav", { screen: "My Products", props: shopData });
-    } catch (error) {
+    if (shop.existingUser._id != null){
+      navigation.navigate("SellerBottomNav", { screen: "My Products", props: shop });
+    } else {
       Alert.alert("Shop registration needed", "Do you want to create shop?", [
         {
           text: "Cancel",

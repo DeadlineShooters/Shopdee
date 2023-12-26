@@ -11,9 +11,10 @@ import mongoose from "mongoose";
 export const checkShopOwner = async (req, res) => {
   try {
     const user = req.body.userID;
+    console.log(req.body.userID);
     const existingUser = await Shop.findOne({ user: user });
     if (!existingUser) {
-      return res.status(500).json({ messages: "Email has been already registered!" });
+      return res.status(400).json({ messages: "Email has been already registered!" });
     }
     res.status(200).json({ existingUser });
   } catch (error) {

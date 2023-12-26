@@ -10,8 +10,8 @@ import React, { useContext, useEffect, useState } from "react";
 
 const MyProducts = () => {
   const navigation = useNavigation();
-  const { sellerData } = useContext(UserContext);
-  const [shopID, setShopID] = useState(sellerData.existingUser._id);
+  const { shop } = useContext(UserContext);
+  const [shopID, setShopID] = useState(shop.existingUser._id);
   const [products, setProductList] = useState([]);
   const deleteThisProduct = async (productId) => {
     try {

@@ -67,9 +67,6 @@ const SetAddress = ({ navigation, route }) => {
     } else {
       navigation.goBack();
     }
-    else {
-      navigation.goBack()
-    }
   }
   const save = async () => {
     setChangeAddress(address);
@@ -198,7 +195,7 @@ const SetAddress = ({ navigation, route }) => {
                 value={address}
                 onChangeText={value => { SetAddress(value)}}
                 editable={true}
-              /> */}
+              />
               <TouchableOpacity
                 onPress={handlePickAddress}
                 style={{
@@ -264,8 +261,7 @@ const SetAddress = ({ navigation, route }) => {
           }}>
             <Text style={{ fontSize: 16, fontWeight: 600, marginVertical: 10, color: COLORS_v2.white }}>Save</Text>
           </View>
-        </View>
-      ) : (
+        </View> :
         <TouchableOpacity onPress={save}>
           <View style={{
             marginBottom: 20,
@@ -283,6 +279,7 @@ const SetAddress = ({ navigation, route }) => {
     </SafeAreaView>
   );
 }
+export default SetAddress;
 
 const styles = StyleSheet.create({
   toastContainer: {

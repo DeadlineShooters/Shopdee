@@ -111,11 +111,9 @@ export default function AddProduct({ productId }) {
         }
       })
     );
-
     // Filter out any failed uploads
     const successfulUploads = imageUrls.filter((url) => url !== null);
     console.log("@@@ imageURLs: ", successfulUploads);
-
     try {
       const response = await Axios.post(`/shop/${shopID}/products/create-product`, {
         name: productNameText,

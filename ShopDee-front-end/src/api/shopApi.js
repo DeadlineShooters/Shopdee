@@ -1,15 +1,15 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { jwtDecode } from "jwt-decode";
 import { Axios } from "./axios";
+import { UserContext } from "../../context/UserContext";
+import { useContext } from "react";
 
-export const fetchShopInfo = async () => {
+export const fetchShopInfo = async (userID) => {
+  const findUser = {userID};
   try {
-    const token = await AsyncStorage.getItem("authToken");
-    const userID = jwtDecode(token).userID;
-    const shop = await Axios.get(`/user/${userID}/shop`);
-
-    console.log("@@ Shop: ", shop.data.shop);
-    return shop.data.shop;
+    const shop = await Axios.post("http://10.0.2.2:3000/user/profile/checkShopOwner", findUser);
+    console.log("@@ Shop: ", shop.data);
+    return shop.data;
   } catch (error) {
     console.error("@@ Error fetching shop info:", error);
 

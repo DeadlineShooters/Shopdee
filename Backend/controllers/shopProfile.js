@@ -34,7 +34,7 @@ const secretKey = generateSecretKey();
 
 export const getprofile = async (req, res) => {
     try {
-        const findUserID = req.params.shopID;
+        const findUserID = req.params;
         console.log("Finding ShopID profile:", findUserID);
         const shop = await Shop.findById(findUserID);
         if (!shop) {

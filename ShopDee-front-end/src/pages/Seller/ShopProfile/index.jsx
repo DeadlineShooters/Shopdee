@@ -17,7 +17,7 @@ export default function EditShopProfile({ navigation, route }) {
   const [address, setAddress] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
-  const [shop, setShop] = useState("");
+  const [shopProfileData, setShopProfileData] = useState("");
   const [selectedImage, setSelectedImage] = useState("");
   const [maxCharactersName] = useState(30); // Số ký tự tối đa cho phép
   const [maxCharactersBio] = useState(200);
@@ -30,27 +30,7 @@ export default function EditShopProfile({ navigation, route }) {
   const failColor = "#bf6060";
   const failHeader = "Failed!";
   const failMessage = "Your information was still unsaved";
-  const { userID, setUserID } = useContext(UserContext);
-  const [user, setUser] = useState("");
 
-  useEffect(() => {
-    const fetchUserProfile = async () => {
-      try {
-        const token = await AsyncStorage.getItem("authToken");
-        const decodedToken = jwtDecode(token);
-        const userID = decodedToken.userID;
-        setUserID(userID);
-        const response = await axios.get(`http://10.0.2.2:3000/user/profile/${userID}`);
-        const user = response.data;
-        console.log(user);
-        setUser(user);
-        // setUserName(user?.User?.username);
-      } catch (error) {
-        console.log("error", error);
-      }
-    };
-    fetchUserProfile();
-  }, []);
   const popIn = () => {
     Animated.timing(popAnim, {
       toValue: windowHeight * -0.35 * 0.95,
@@ -104,12 +84,13 @@ export default function EditShopProfile({ navigation, route }) {
     }
   };
 
-  const { sellerData, setSellerData } = useContext(UserContext);
+  const { shop, setShop } = useContext(UserContext);
+  console.log("Hoa shop ID:", shop.existingUser._id);
   const isFocused = useIsFocused();
   useEffect(() => {
     const fetchUserProfile = async () => {
       try {
-        const shopID = sellerData.existingUser._id;
+        const shopID = shop.existingUser._id;
         console.log("Finding Shop ID: ", shopID);
         const response = await axios.get(`http://10.0.2.2:3000/shop/shopProfile/${shopID}`);
         const user = response.data;
@@ -278,7 +259,6 @@ export default function EditShopProfile({ navigation, route }) {
           }}
           value={shop.email}
           editable={false}
-          value={email}
           onChangeText={(value) => setEmail(value)}
         />
       </View>
