@@ -109,7 +109,7 @@ export default function EditShopProfile({ navigation, route }) {
   useEffect(() => {
     const fetchUserProfile = async () => {
       try {
-        const shopID = sellerData.existingUser._id;
+        const shopID = sellerData._id;
         console.log("Finding Shop ID: ", shopID);
         const response = await axios.get(`http://10.0.2.2:3000/shop/shopProfile/${shopID}`);
         const user = response.data;

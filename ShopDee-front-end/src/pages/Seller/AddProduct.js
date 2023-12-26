@@ -27,45 +27,20 @@ export default function AddProduct({ productId }) {
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const response = await Axios.get("http://10.0.2.2:3000/categories", {
+        const response = await Axios.get("/categories", {
           timeout: 5000, // Set timeout to 5 seconds (adjust as needed)
         });
         const fetchedCategories = response.data;
-        console.log("{GET http://10.0.2.2:3000/categories}", fetchedCategories);
+        console.log("{GET http://localhost:3000/categories}", fetchedCategories);
         setCategories(fetchedCategories); // Update the state
       } catch (error) {
         console.error("Error fetching categories:", error);
         setCategories([]); // Set an empty array in case of an error
       }
     };
+
     fetchCategories();
   }, []);
-
-  const handleUpload = async (image) => {
-    const data = new FormData();
-    data.append("file", image);
-    data.append("upload_preset", "ShopDeeImageStock");
-    data.append("cloud_name", "dqxtf297o");
-
-    try {
-      const response = await fetch("https://api.cloudinary.com/v1_1/dqxtf297o/image/upload", {
-        method: "post",
-        body: data,
-      });
-      if (response.ok) {
-        const result = await response.json();
-        console.log(result);
-        const public_id = result.public_id;
-        const url = result.url;
-        setProductPhotoUpload((productPhotoUpload) => [...productPhotoUpload, { public_id, url }]);
-      } else {
-        console.error("API request failed:", response.status, response.statusText);
-      }
-    } catch (error) {
-      console.error("Error during API request:", error);
-    }
-  };
-  console.log(productPhotoUpload);
 
   const handleAdd = async () => {
     // Validate that all required fields are filled

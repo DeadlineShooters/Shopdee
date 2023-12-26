@@ -22,6 +22,7 @@ export default function SellerBottomNavigator() {
       <Tab.Screen
         name="My Product"
         component={MyProduct}
+        lazy={true}
         options={{
           tabBarIcon: ({ focused, color }) => {
             return <Feather name="box" size={24} color={color} />;
@@ -44,12 +45,8 @@ export default function SellerBottomNavigator() {
         component={EditProfile}
         options={{
           tabBarIcon: ({ focused, color }) => {
-            if (focused)
-              return <Ionicons name="ios-person" size={24} color={color} />;
-            else
-              return (
-                <Ionicons name="ios-person-outline" size={24} color={color} />
-              );
+            if (focused) return <Ionicons name="ios-person" size={24} color={color} />;
+            else return <Ionicons name="ios-person-outline" size={24} color={color} />;
           },
           headerShown: false,
         }}

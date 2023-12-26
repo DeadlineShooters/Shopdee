@@ -13,11 +13,11 @@ const MyProducts = () => {
   const navigation = useNavigation();
   const { sellerData } = useContext(UserContext);
   const { defaultImage } = useContext(UserContext);
-  const [shopID, setShopID] = useState(sellerData.existingUser._id);
+  const [shopID, setShopID] = useState(sellerData._id);
   const [products, setProductList] = useState([]);
   const deleteThisProduct = async (productId) => {
     try {
-      const response = await axios.delete(`http://10.0.2.2:3000/shop/${shopID}/products/${productId}`);
+      const response = await Axios.delete(`/shop/${shopID}/products/${productId}`);
       if (response.status == 200) {
         console.log("delete successfully");
       } else console.error("Error");
@@ -110,7 +110,7 @@ const MyProducts = () => {
                 <View>
                   {/* <Text>{product.name}</Text> */}
                   <Text>Category: {product.category.name}</Text>
-                  <Text style={{ marginTop: 5 }}>Price: {product.price}/1</Text>
+                  <Text style={{ marginTop: 5 }}>Price: {product.price} đ</Text>
                   <Text style={{ marginTop: 5 }}>Stock: {product.quantity}</Text>
                 </View>
               </View>
@@ -122,7 +122,7 @@ const MyProducts = () => {
                   marginTop: 10,
                 }}
               >
-                <TouchableOpacity style={styles.button} onPress={() => navigation.navigate("Edit product", { productID: product._id, shopID })}>
+                <TouchableOpacity style={styles.button} onPress={() => navigation.navigate("Edit product", { product })}>
                   <Text style={{ color: COLORS.white }}>Edit</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.button} onPress={() => handleDeleteProduct(product._id)}>
