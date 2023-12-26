@@ -3,10 +3,17 @@ import { View, Text, TouchableOpacity, ToastAndroid, Image, TextInput, SafeAreaV
 import * as ImagePicker from 'expo-image-picker';
 import { AntDesign, Entypo } from '@expo/vector-icons';
 import { COLORS } from '../../../../assets/Themes';
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { jwtDecode } from "jwt-decode";
 import axios from "axios"
+import { useNavigation } from "@react-navigation/native";
+const shopDefault = {
+  url: "https://res.cloudinary.com/dqxtf297o/image/upload/v1703319888/rgbptr0a7ebx5njabzkl.png",
+  public_id: 'rgbptr0a7ebx5njabzkl',
+}
 
-export default function CreateShop({navigation}) {
- 
+export default function CreateShop() {
+  const navigation = useNavigation();
   const windowHeight = Dimensions.get("window").height;
   const [status, setStatus] = useState(null);
   const popAnim = useRef(new Animated.Value(windowHeight *-1)).current;
@@ -17,116 +24,64 @@ export default function CreateShop({navigation}) {
   const failHeader = "Failed!";
   const failMessage = "Your information was still unsaved";
 
-
   const [shopName, setShopName] = useState('');
   const [bio, setBio] = useState('');
   const [email, setEmail] = useState("");
   const [address, setAddress] = useState("");
   const [phone, setPhone] = useState("");
-  const [selectedImage, setSelectedImage] = useState();
-  const [maxCharactersName] = useState(30); // Số ký tự tối đa cho phép
-  const [maxCharactersBio] = useState(200);
+  const [selectedImage, setSelectedImage] = useState(null);
+  const [publicId, setPublicId] = useState("");
+  const [secureUrl, setSecureUrl] = useState("");
+  const maxCharactersName = 30; // Số ký tự tối đa cho phép
+  const maxCharactersBio = 200;
+  // const image = null;
 
-  const [badShopName, setBadShopName] = useState(false);
-  const [badBio, setBadBio] = useState(false);
-  const [badEmail, setBadEmail] = useState(false);
-  const [badAddress, setBadAddress] = useState(false);
-  const [badPhone, setBadPhone] = useState(false);
-
-const [changeShopName, setChangeShopName] = useState("");
-const [changeBio, setChangeBio] = useState("");
-const [changeEmail, setChangeEmail] = useState("");
-const [changeAddress, setChangeAddress] = useState("");
-const [changePhone, setChangePhone] = useState("");
-const [changeSelectedImage, setChangeSelectedImage] = useState();
-const handleOnPressGoBack = ({navigation}) => {
-  if (changeShopName != shopName || changeEmail != email || changePhone != phone || changeBio != bio || changeSelectedImage != selectedImage || changeAddress != address)
-  {
-    Alert.alert('Confirm message', 'Your shop information is not saved. Exit now?', [
-      {
-        text: 'Cancel',
-        onPress: () => console.log('Cancel request'),
-      },
-      {
-        text: 'Ok',
-        onPress: () => navigation.goBack(),
-      }
-    ]);
-  }
-  else {
-    navigation.goBack()
-  }
-}
-  let isValid = true;
-  const validate = () => {
-    if (email == '') {
-      setBadEmail(true);
-      isValid = false;
+  const handleOnPressGoBack = () => {
+    if (shopName != '' || email != '' || phone != '' || bio != '' || address != '') {
+      Alert.alert('Confirm message', 'Your shop information is not saved. Exit now?', [
+        {
+          text: 'Cancel',
+          onPress: () => console.log('Cancel request'),
+        },
+        {
+          text: 'Ok',
+          onPress: () => navigation.goBack(),
+        }
+      ]);
     }
     else {
-      setBadEmail(false);
+      navigation.goBack()
     }
-    if (shopName == '') {
-      setBadShopName(true);
-      isValid = false;
-    }
-    else {
-      setBadShopName(false);
-    }
-    if (Bio == '') {
-      setBadBio(true);
-      isValid = false;
-    }
-    else {
-      setBadBio(false);
-    }
-    if (address == '') {
-      setBadAddress(true);
-      isValid = false;
-    }
-    else {
-      setBadAddress(false);
-    }
-    if (phone == '') {
-      setBadPhone(true);
-      isValid = false;
-    }
-    else {
-      setBadPhone(false);
-    }
-
-    setTimeout(() => {
-      if (isValid == true) {
-        handleSignUp();
-        navigation.goBack();
-      }
-      else
-      {
-        setShopName("");
-        setBio("");   
-        setAddress("");
-        setEmail("");        
-        setPhone("");
-      }
-    }, 1000);
   }
 
-  const handleSignUp = async () => {
+  const handleCreate = async () => {
     // Xử lý logic đăng ký ở đây
+    const token = await AsyncStorage.getItem("authToken");
+    const userID = jwtDecode(token).userID;
     const shop = {
-      image: 'null',
+      image: null,
       shopName: shopName,
       bio: bio,
       address: address,
       email: email,
       phone: phone,
-      userId: '65644251e1f8127c781b831c'
+      userId: userID
     }
     try {
+      if (selectedImage) {
+        const { url, public_id } = handleImageUpload(selectedImage);
+        shop.image = { url, public_id };
+      } else {
+        shop.image = shopDefault;
+      }
       await axios.post("http://10.0.2.2:3000/shop/createShop", shop)
-      setStatus("success");
-      popIn();
-      navigation.navigate('SellerBottomNav', { screen: 'My Products' });
+      console.log(shopName);
+      await handleImageUpload(shopDefault);
+      setTimeout(() => {
+        setStatus("success");
+        popIn();
+        navigation.navigate('SellerBottomNav', { screen: 'My Products' });
+      }, 3000);
     } catch (error) {
       Alert.alert(
         "Create shop error", 
@@ -135,47 +90,30 @@ const handleOnPressGoBack = ({navigation}) => {
       console.log("registration failed", error);
     }
   };
-  const popIn = () => {
-        Animated.timing(popAnim, {
-            toValue: windowHeight * -0.7*0.95,
-            duration: 300,
-            useNativeDriver: true,
-        }).start(popOut());
-    };
 
-    const popOut = () => {
-        setTimeout(() => {
-            Animated.timing(popAnim, {
-                toValue: windowHeight * -1,
-                duration: 300,
-                useNativeDriver: true,
-            }).start();
-        }, 2000);
-    };
+  const handleImageUpload = async (image) => {
+    const data = new FormData();
+    data.append("file", image);
+    data.append("upload_preset", "ShopDeeImageStock");
+    data.append("cloud_name", "dqxtf297o");
 
-    const instantPopOut = () => {
-        Animated.timing(popAnim, {
-            toValue: windowHeight * -1,
-            duration: 150,
-            useNativeDriver: true,
-        }).start();
-    };
-    const showToast = () => {
-        ToastAndroid.show('Toast message displayed!', ToastAndroid.SHORT);
-    };
-
-  const handleShopNameChange = (text) => {
-    if (text.length <= maxCharactersName) {
-      setShopName(text);
+    try {
+        const response = await fetch("https://api.cloudinary.com/v1_1/dqxtf297o/image/upload", {
+          method: "post",
+          body: data,
+        });
+        if (response.ok) {
+          const result = await response.json();
+          console.log(result);
+          return result;
+        } else {
+            console.error("API request failed:", response.status, response.statusText);
+        }
+    } catch (error) {
+        console.error("Error during API request:", error);
     }
   };
 
-
-  const handleBioChange = (text) => {
-    if (text.length <= maxCharactersBio) {
-      setBio(text);
-    }
-  };
   const handleImageSelection = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
@@ -184,48 +122,79 @@ const handleOnPressGoBack = ({navigation}) => {
       quality: 1,
     })
     if (!result.canceled) {
-      setSelectedImage(result.assets[0].uri);
+      let image = {
+        uri: result.assets[0].uri,
+        type: `test/${result.assets[0].uri.split(".")[1]}`,
+        name: `test.${result.assets[0].uri.split(".")[1]}`,
+      }
+      setSelectedImage(image);
     }
   }
-  
+  const popIn = () => {
+    Animated.timing(popAnim, {
+        toValue: windowHeight * -0.7*0.95,
+        duration: 300,
+        useNativeDriver: true,
+    }).start(popOut());
+  };
+
+  const popOut = () => {
+    setTimeout(() => {
+        Animated.timing(popAnim, {
+            toValue: windowHeight * -1,
+            duration: 300,
+            useNativeDriver: true,
+        }).start();
+    }, 5000);
+  };
+
+  const instantPopOut = () => {
+    Animated.timing(popAnim, {
+        toValue: windowHeight * -1,
+        duration: 150,
+        useNativeDriver: true,
+    }).start();
+  };
+  // const showToast = () => {
+  //     ToastAndroid.show('Toast message displayed!', ToastAndroid.SHORT);
+  // };
+
   return (
     <SafeAreaView
-      style={{
-        // width: '100%',
-        // height: '100%',
-        backgroundColor: '#E3E3E3',
-        flex: 1,
-
-      }}>
+      style={{backgroundColor: '#E3E3E3',flex: 1,}}>
       <View
-  style={{
-    display: "flex",
-    backgroundColor: 'white',
-    alignItems: 'center',
-    padding: 10,
-    flexDirection: "row",
-    justifyContent: "center"
-  }}
->
-  <TouchableOpacity onPress={() => navigation.goBack()} style={{ position: "absolute", left: 4 }}>
-    <AntDesign name="arrowleft" style={{ fontSize: 24 }} />
-  </TouchableOpacity>
-  <Text style={{ fontSize: 16, fontWeight: 'bold' }}> Create Shop </Text>
-</View>
+        style={{
+          display: "flex",
+          backgroundColor: 'white',
+          alignItems: 'center',
+          padding: 10,
+          flexDirection: "row",
+          justifyContent: "center"
+        }}
+      >
+        <TouchableOpacity onPress={handleOnPressGoBack} style={{ position: "absolute", left: 4 }}>
+          <AntDesign name="arrowleft" style={{ fontSize: 24 }} />
+        </TouchableOpacity>
+        <Text style={{ fontSize: 16, fontWeight: 'bold' }}> Create Shop </Text>
+      </View>
 
 
       <View style={{ padding: 20, alignItems: 'center', backgroundColor: '#00a7e1' }}>
-        <Image
-          source={{uri: selectedImage}}
-          style={{ width: 80, height: 80, borderRadius: 100 }}
-        />
+        <View style={{ width: 80, height: 80, borderRadius: 40, backgroundColor: 'white', overflow: 'hidden' }}>
+          <Image
+            style={{
+              resizeMode: "contain",
+              flex: 1,
+              width: undefined,
+              height: undefined,
+            }}
+            source={{uri: selectedImage? selectedImage.uri:shopDefault.url}}
+          />
+        </View>
         <View>
           <TouchableOpacity onPress={handleImageSelection}>
-            <Text
-              style={{
-                color: 'white',
-              }}>
-              Change profile photo
+            <Text style={{color: 'white',}}>
+              Choose profile photo
             </Text>
           </TouchableOpacity>
         </View>
@@ -250,7 +219,7 @@ const handleOnPressGoBack = ({navigation}) => {
             flex: 1
           }}
           value={shopName}
-          onChangeText={handleShopNameChange}
+          onChangeText={text => setShopName(text)}
           maxLength={maxCharactersName}
         />
         <Text style={{ color: COLORS.limitGray }}> {shopName.length}/{maxCharactersName}</Text>
@@ -263,9 +232,7 @@ const handleOnPressGoBack = ({navigation}) => {
         justifyContent: "space-between",
       }}>
         <Text style={{ fontSize: 16 }}>Bio</Text>
-
         <Text style={{ color: COLORS.limitGray }}>{bio.length}/{maxCharactersBio}</Text>
-
       </View>
       <View style={{
         backgroundColor: 'white',
@@ -282,7 +249,7 @@ const handleOnPressGoBack = ({navigation}) => {
             flex: 1
           }}
           value={bio}
-          onChangeText={handleBioChange}
+          onChangeText={text => setBio(text)}
           maxLength={maxCharactersBio}
           numberOfLines={5} // Số dòng hiển thị
           textAlignVertical="top" // Căn văn bản từ phía trên xuống
@@ -297,10 +264,7 @@ const handleOnPressGoBack = ({navigation}) => {
         marginTop: 10,
         marginBottom: 2
       }}>
-        <Text
-          style={{ fontSize: 16 }}>
-          Pickup address
-        </Text>
+        <Text style={{ fontSize: 16 }}>Pickup address</Text>
         <TextInput
           value ={address}
           onChangeText={value => setAddress(value)}
@@ -320,13 +284,10 @@ const handleOnPressGoBack = ({navigation}) => {
         justifyContent: 'space-between',
         marginBottom: 2
       }}>
-        <Text
-          style={{ fontSize: 16 }}>
-          Email
-        </Text>
+        <Text style={{ fontSize: 16 }}>Email</Text>
         <TextInput
-           value ={email}
-           onChangeText={value => setEmail(value)}
+          value ={email}
+          onChangeText={value => setEmail(value)}
           placeholder="setup"
           style={{
             fontSize: 16,
@@ -348,9 +309,9 @@ const handleOnPressGoBack = ({navigation}) => {
           Phone number
         </Text>
         <TextInput
-           value ={phone}
-           onChangeText={value => setPhone(value)}
-           keyboardType = {'number-pad'}
+          value ={phone}
+          onChangeText={value => setPhone(value)}
+          keyboardType = {'number-pad'}
           placeholder="setup"
           style={{
             fontSize: 16,
@@ -388,33 +349,20 @@ const handleOnPressGoBack = ({navigation}) => {
         </Animated.View>
       </View>
   
-      {shopName != '' && email != '' && phone != '' && bio != '' && selectedImage != null && address != '' ?
-            <TouchableOpacity onPress={handleSignUp}>
-                <View style={{
-                    marginBottom: 20,
-                    padding: 10,
-                }}>                        
-                    <View style={{
-                        borderRadius: 12,
-                            backgroundColor: COLORS.blue,
-                            alignItems: "center",
-                        }}>                        
-                        <Text style={{fontSize:16, fontWeight:600, marginVertical: 10, color: COLORS.white}}>Create</Text>
-                    </View>
-                </View>
-            </TouchableOpacity> :
-            <View style={{
-                marginBottom: 20,
-            }}>                        
-                <View style={{
-                    borderRadius: 12,
-                        backgroundColor: COLORS.secondaryGray,
-                        alignItems: "center",
-                    }}>                        
+      {shopName != '' && email != '' && phone != '' && bio != '' && address != '' ?
+        <TouchableOpacity onPress={handleCreate}>
+            <View style={{margin: 20, padding: 10,}}>                        
+                <View style={{borderRadius: 12, backgroundColor: COLORS.blue, alignItems: "center", }}>                        
                     <Text style={{fontSize:16, fontWeight:600, marginVertical: 10, color: COLORS.white}}>Create</Text>
                 </View>
             </View>
-        }
+        </TouchableOpacity> :
+        <View style={{margin: 20, padding:10}}>                        
+            <View style={{borderRadius: 12, backgroundColor: COLORS.secondaryGray, alignItems: "center", }}>                        
+                <Text style={{fontSize:16, fontWeight:600, marginVertical: 10, color: COLORS.white}}>Create</Text>
+            </View>
+        </View>
+      }
     </SafeAreaView>
 
   );
@@ -451,6 +399,5 @@ const styles = StyleSheet.create({
       width: "70%",
       padding: 2,
   },
-  
 }
 );

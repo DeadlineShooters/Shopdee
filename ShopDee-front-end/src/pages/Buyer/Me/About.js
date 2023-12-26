@@ -1,7 +1,7 @@
 import { View, Text, SafeAreaView, TouchableOpacity, ScrollView, Image, TextInput, Modal } from "react-native";
 import * as ImagePicker from 'expo-image-picker'
 import React, { useState } from "react";
-import { COLORS } from "./Themes.js";
+import {COLORS_v2} from "../../../../constants/theme.js"
 import { MaterialIcons, AntDesign } from '@expo/vector-icons';
 import DatePicker, { getFormatedDate } from "react-native-modern-datepicker";
 import { Dropdown } from "react-native-element-dropdown";
@@ -10,7 +10,7 @@ const AboutShopDee = ({ navigation }) => {
   return (
     <SafeAreaView style={{
       flex: 1,
-      backgroundColor: COLORS.white,
+      backgroundColor: COLORS_v2.white,
       paddingHorizontal: 22,
     }}>
       <View style={{
@@ -29,9 +29,9 @@ const AboutShopDee = ({ navigation }) => {
           <MaterialIcons
             name="keyboard-arrow-left"
             size={24}
-            color={COLORS.lightBlue}
+            color={COLORS_v2.lightBlue}
           />
-          <Text style={{ color: COLORS.lightBlue }}>Profile</Text>
+          <Text style={{ color: COLORS_v2.lightBlue }}>Profile</Text>
         </TouchableOpacity>
         <Text style={{ fontSize: 20, fontWeight: 600 }}>About ShopDee</Text>
       </View>
@@ -46,7 +46,7 @@ const AboutShopDee = ({ navigation }) => {
           <View style={{
             height: 260,
             width: "100%",
-            borderColor: COLORS.secondaryGray,
+            borderColor: COLORS_v2.secondaryGray,
             borderWidth: 1,
             borderRadius: 4,
             marginVertical: 6,
@@ -74,7 +74,7 @@ const AboutShopDee = ({ navigation }) => {
           <View style={{
             height: 300,
             width: "100%",
-            borderColor: COLORS.secondaryGray,
+            borderColor: COLORS_v2.secondaryGray,
             borderWidth: 1,
             borderRadius: 4,
             marginVertical: 6,

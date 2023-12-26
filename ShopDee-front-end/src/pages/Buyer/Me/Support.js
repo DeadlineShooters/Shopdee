@@ -1,13 +1,13 @@
 import { View, Text, SafeAreaView, TouchableOpacity, ScrollView } from "react-native";
 import React from "react";
-import { COLORS } from "./Themes";
+import { COLORS_v2 } from "../../../../constants/theme.js";
 import { MaterialIcons, AntDesign } from '@expo/vector-icons';
 
 const HelpSupport = ({ navigation }) => {
     return (
         <SafeAreaView style={{
             flex: 1,
-            backgroundColor: COLORS.white,
+            backgroundColor: COLORS_v2.white,
             paddingHorizontal: 22,
         }}>
             <View style={{
@@ -26,9 +26,9 @@ const HelpSupport = ({ navigation }) => {
                     <MaterialIcons
                         name="keyboard-arrow-left"
                         size={24}
-                        color={COLORS.lightBlue}
+                        color={COLORS_v2.lightBlue}
                     />
-                    <Text style={{ color: COLORS.lightBlue }}>Profile</Text>
+                    <Text style={{ color: COLORS_v2.lightBlue }}>Profile</Text>
                 </TouchableOpacity>
                 <Text style={{ fontSize: 20, fontWeight: 600 }}>Help & Support</Text>
             </View>
@@ -42,8 +42,8 @@ const HelpSupport = ({ navigation }) => {
                     }}>The application usage </Text>
                     <View style={{
                         width: "100%",
-                        borderColor: COLORS.secondaryGray,
-                        backgroundColor: COLORS.secondaryGray,
+                        borderColor: COLORS_v2.secondaryGray,
+                        backgroundColor: COLORS_v2.secondaryGray,
                         borderWidth: 1,
                         borderRadius: 10,
                         marginVertical: 6,
@@ -79,8 +79,8 @@ const HelpSupport = ({ navigation }) => {
                     </View>
                     <View style={{
                         width: "100%",
-                        borderColor: COLORS.secondaryGray,
-                        backgroundColor: COLORS.secondaryGray,
+                        borderColor: COLORS_v2.secondaryGray,
+                        backgroundColor: COLORS_v2.secondaryGray,
                         borderWidth: 1,
                         borderRadius: 10,
                         marginVertical: 6,
@@ -115,8 +115,8 @@ const HelpSupport = ({ navigation }) => {
                     </View>
                     <View style={{
                         width: "100%",
-                        borderColor: COLORS.secondaryGray,
-                        backgroundColor: COLORS.secondaryGray,
+                        borderColor: COLORS_v2.secondaryGray,
+                        backgroundColor: COLORS_v2.secondaryGray,
                         borderWidth: 1,
                         borderRadius: 10,
                         marginVertical: 6,
@@ -155,8 +155,8 @@ const HelpSupport = ({ navigation }) => {
                     }}>The profile management </Text>
                     <View style={{
                         width: "100%",
-                        borderColor: COLORS.secondaryGray,
-                        backgroundColor: COLORS.secondaryGray,
+                        borderColor: COLORS_v2.secondaryGray,
+                        backgroundColor: COLORS_v2.secondaryGray,
                         borderWidth: 1,
                         borderRadius: 10,
                         marginVertical: 6,
@@ -190,8 +190,8 @@ const HelpSupport = ({ navigation }) => {
                     </View>
                     <View style={{
                         width: "100%",
-                        borderColor: COLORS.secondaryGray,
-                        backgroundColor: COLORS.secondaryGray,
+                        borderColor: COLORS_v2.secondaryGray,
+                        backgroundColor: COLORS_v2.secondaryGray,
                         borderWidth: 1,
                         borderRadius: 10,
                         marginVertical: 6,

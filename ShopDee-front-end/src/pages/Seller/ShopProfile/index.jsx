@@ -1,18 +1,24 @@
-import React, { useState, useRef } from 'react';
-import { View, Text, TouchableOpacity, ToastAndroid, Image, TextInput, SafeAreaView, Animated, StyleSheet, Dimensions, useIsFocused  } from "react-native";
+import React, { useState, useRef, useContext, useEffect } from 'react';
+import { useFocusEffect, useIsFocused } from '@react-navigation/native';
+import { View, Text, TouchableOpacity, ToastAndroid, Image, TextInput, SafeAreaView, Animated, StyleSheet, Dimensions } from "react-native";
 import * as ImagePicker from 'expo-image-picker';
 import { AntDesign, Entypo } from '@expo/vector-icons';
 import axios from "axios";
-import { UserType } from "../../../../UserContext";
+import { UserType } from "../../../../context/UserContext.js";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { jwtDecode } from "jwt-decode";
 import "core-js/stable/atob";
 import { COLORS } from '../../../../assets/Themes';
+import {COLORS_v2} from '../../../../constants/theme.js';
 
-export default function EditShopProfile({navigation}) {
+export default function EditShopProfile({navigation, route}) {
   const [shopName, setShopName] = useState('');
-  const [setSelectedImage] = useState('');
   const [bio, setBio] = useState('');
+  const [address, setAddress] = useState('');
+  const [email, setEmail] = useState('');
+  const [phone, setPhone] = useState('');
+  const [shop, setShop] = useState('');
+  const [selectedImage, setSelectedImage] = useState('');
   const [maxCharactersName] = useState(30); // Số ký tự tối đa cho phép
   const [maxCharactersBio] = useState(200);
   const windowHeight = Dimensions.get("window").height;
@@ -24,43 +30,61 @@ export default function EditShopProfile({navigation}) {
   const failColor = "#bf6060";
   const failHeader = "Failed!";
   const failMessage = "Your information was still unsaved";
+  const {userID, setUserID} = useContext (UserType)
+  const [user, setUser] = useState("");
+
+  useEffect(() => {
+    const fetchUserProfile = async () => {
+        try {
+            const token = await AsyncStorage.getItem("authToken");
+            const decodedToken = jwtDecode(token);
+            const userID = decodedToken.userID;
+            setUserID(userID);
+            const response = await axios.get(`http://10.0.2.2:3000/user/profile/${userID}`);
+            const user = response.data;
+            console.log(user);
+            setUser(user);
+            // setUserName(user?.User?.username);
+        } catch (error) {
+            console.log("error", error);
+        }
+    }
+    fetchUserProfile();
+}, []);
   const popIn = () => {
-        Animated.timing(popAnim, {
-            toValue: windowHeight * -0.35*0.95,
-            duration: 300,
-            useNativeDriver: true,
-        }).start(popOut());
-    };
+    Animated.timing(popAnim, {
+      toValue: windowHeight * -0.35*0.95,
+      duration: 300,
+      useNativeDriver: true,
+    }).start(popOut());
+  };
 
-    const popOut = () => {
-        setTimeout(() => {
-            Animated.timing(popAnim, {
-                toValue: windowHeight * -1,
-                duration: 300,
-                useNativeDriver: true,
-            }).start();
-        }, 2000);
-    };
+  const popOut = () => {
+    setTimeout(() => {
+      Animated.timing(popAnim, {
+        toValue: windowHeight * -1,
+        duration: 300,
+        useNativeDriver: true,
+      }).start();
+    }, 2000);
+  };
 
-    const instantPopOut = () => {
-        Animated.timing(popAnim, {
-            toValue: windowHeight * -1,
-            duration: 150,
-            useNativeDriver: true,
-        }).start();
-    };
-    const showToast = () => {
-        ToastAndroid.show('Toast message displayed!', ToastAndroid.SHORT);
-    };
+  const instantPopOut = () => {
+    Animated.timing(popAnim, {
+      toValue: windowHeight * -1,
+      duration: 150,
+      useNativeDriver: true,
+    }).start();
+  };
+
+  const showToast = () => {
+    ToastAndroid.show('Toast message displayed!', ToastAndroid.SHORT);
+  };
 
   const handleShopNameChange = (text) => {
     if (text.length <= maxCharactersName) {
       setShopName(text);
     }
-  };
-  const save = () => {
-    setStatus("success");
-    popIn();
   };
 
   const handleBioChange = (text) => {
@@ -68,43 +92,32 @@ export default function EditShopProfile({navigation}) {
       setBio(text);
     }
   };
-  const handleImageSelection = async () => {
-    let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.All,
-      allowsEditing: true,
-      aspect: [4, 4],
-      quality: 1,
-    })
-    if (!result.canceled) {
-      setSelectedImage(result.assets[0].url);
+
+  const { sellerData, setSellerData } = useContext(UserType);
+  const isFocused = useIsFocused();
+  useEffect(() => {
+    const fetchUserProfile = async () => {
+    try {
+      const shopID = sellerData.existingUser._id;
+      console.log("Finding Shop ID: ", shopID);
+      const response = await axios.get(`http://10.0.2.2:3000/shop/shopProfile/${shopID}`);
+      const user = response.data;
+      setShop(user);
+      setShopName(user.shop.name);
+      setBio(user.shop.description);
+      setAddress(user.shop.address);
+      setEmail(user.shop.email);
+      setPhone(user.shop.phone);
+      setSelectedImage(user.shop.image.url);
+      } catch (error) {
+        console.log("error", error);
+      }
     }
-  }
-  const { userID, setUserID } = useContext(UserType);
-    const [user, setUser] = useState("");
-    const [username, setUserName] = useState("");
-    const isFocused = useIsFocused();
-    useEffect(() => {
-        const fetchUserProfile = async () => {
-            try {
-                const token = await AsyncStorage.getItem("authToken");
-                const decodedToken = jwtDecode(token);
-                const userID = decodedToken.userID;
-                setUserID(userID);
-                const response = await axios.get(`http://10.0.2.2:3000/shop/shopProfile/${userID}`);
-                const user = response.data;
-                setUser(user);
-                setUserName(user?.User?.username);
-            } catch (error) {
-                console.log("error", error);
-            }
-        }
-        fetchUserProfile();
-    }, [navigation, isFocused]);
+    fetchUserProfile();
+  }, [navigation, isFocused]);
   return (
     <SafeAreaView
       style={{
-        // width: '100%',
-        // height: '100%',
         backgroundColor: '#E3E3E3',
         flex: 1
       }}>
@@ -123,28 +136,17 @@ export default function EditShopProfile({navigation}) {
           <AntDesign name="arrowleft" style={{ fontSize: 24 }} />
         </TouchableOpacity>
         <Text style={{ fontSize: 16, fontWeight: 'bold', textAlign: 'center', alignSelf: "center"}}> Shop Profile </Text>
-        <TouchableOpacity onPress={() => navigation.navigate('Edit Profile')}>
+        <TouchableOpacity onPress={() => navigation.navigate('Edit Profile', {shop: shop})}>
           <AntDesign name="edit" size={24} color="black" />
         </TouchableOpacity>
       </View>
 
       <View style={{ padding: 20, alignItems: 'center', backgroundColor: '#00a7e1' }}>
         <Image
-          source={require('./avatar.jpg')}
+          source={{uri: selectedImage}}
           style={{ width: 80, height: 80, borderRadius: 100 }}
         />
-        <View>
-          <TouchableOpacity onPress={handleImageSelection}>
-            <Text
-              style={{
-                color: 'white',
-              }}>
-              Change profile photo
-            </Text>
-          </TouchableOpacity>
-        </View>
       </View>
-
       <View style={{
         backgroundColor: 'white',
         flexDirection: 'row',
@@ -152,23 +154,22 @@ export default function EditShopProfile({navigation}) {
         alignItems: 'center',
         marginTop: 10,
         marginBottom: 2
-  
       }}>
-        <Text style={{ fontSize: 16 }}>Shop name</Text>
+        <Text style={{ fontSize: 16, }}>Shop name: </Text>
         <TextInput
-      
           style={{
             fontSize: 16,
             borderColor: '#CDCDCD',
             marginHorizontal: 10,
-            flex: 1
+            flex: 1,
+            color: COLORS_v2.darkBlue,
           }}
-          value={shopName}
+          value={shop.name}
           onChangeText={handleShopNameChange}
           maxLength={maxCharactersName}
           editable={false}
         />
-        <Text style={{ color: COLORS.limitGray }}> {shopName.length}/{maxCharactersName}</Text>
+
       </View>
       <View style={{
         backgroundColor: 'white',
@@ -192,15 +193,15 @@ export default function EditShopProfile({navigation}) {
           style={{
             fontSize: 16,
             borderColor: '#CDCDCD',
-            marginHorizontal: 10,
-            flex: 1
+            flex: 1,
+            color: COLORS_v2.darkBlue,
           }}
-          value={bio}
+          value={shop.description}
           onChangeText={handleBioChange}
           maxLength={maxCharactersBio}
           numberOfLines={5} // Số dòng hiển thị
-          textAlignVertical="top" // Căn văn bản từ phía trên xuống
           editable={false}
+          textAlignVertical='top'
         />
       </View>
       <View style={{
@@ -222,9 +223,12 @@ export default function EditShopProfile({navigation}) {
             borderColor: '#CDCDCD',
             marginHorizontal: 10,
             flex: 1,
+            color: COLORS_v2.darkBlue,
           }} 
-          editable={false}/>
-          
+          editable={false}
+          value={address}
+          onChangeText={value => setAddress(value)}
+        />
       </View>
       <View style={{
         padding: 10,
@@ -245,9 +249,13 @@ export default function EditShopProfile({navigation}) {
             borderColor: '#CDCDCD',
             marginHorizontal: 10,
             flex: 1,
+            color: COLORS_v2.darkBlue,
           }} 
+          value={shop.email}
           editable={false}
-          />
+          value={email}
+          onChangeText={value => setEmail(value)}
+        />
       </View>
       <View style={{
         padding: 10,
@@ -267,8 +275,12 @@ export default function EditShopProfile({navigation}) {
             borderColor: '#CDCDCD',
             marginHorizontal: 10,
             flex: 1,
+            color: COLORS_v2.darkBlue,
           }}
-          editable={false} />
+          editable={false}
+          value={phone}
+          onChangeText={value => setPhone(value)}
+        />
       </View>
       <View>
         <Animated.View
@@ -298,25 +310,8 @@ export default function EditShopProfile({navigation}) {
           </View>
         </Animated.View>
       </View>
-      {/* <TouchableOpacity onPress={save}>
-        <View style={{
-          padding: 10,
-          marginBottom: 20,
-        }}>
-          <View style={{
-            borderRadius: 12,
-            backgroundColor: "#007EA7",
-            alignItems: "center",
-          }}>
-            <Text style={{ fontSize: 16, fontWeight: 600, marginVertical: 10, color: '#FFFFFF' }}>Create</Text>
-          </View>
-        </View>
-      </TouchableOpacity> */}
     </SafeAreaView>
-
   );
-
-  
 }
 
 const styles = StyleSheet.create({
@@ -348,6 +343,5 @@ const styles = StyleSheet.create({
       width: "70%",
       padding: 2,
   },
-  
 }
 );

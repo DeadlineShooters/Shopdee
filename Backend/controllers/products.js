@@ -12,7 +12,6 @@ const products = [
         name: 'Bitis Hunter X',
         description: 'plapla'
     },
-
 ]
 
 export const index = (req, res) => {

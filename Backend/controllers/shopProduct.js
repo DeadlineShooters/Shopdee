@@ -1,15 +1,16 @@
 import { response } from "express"
 import Product from '../models/product.js';
 import Shop from '../models/shop.js';
+
 export const index = async (req, res) => {
     try {
-        const {shopId} = req.params;
-        console.log(shopId)
-        const products = await Product.find({shop: shopId});
+        const {shopID} = req.params;
+        console.log("ID shop get product: ",shopID);;
+        const products = await Product.find({shop: shopID});
         if (!products) {
             res.status(404).json({ message: "Products not found" });
         }
-        res.status(200).json(products);
+        res.status(200).json({products});
     } catch (error) {
         res.status(500).json({ message: "Error retrieving the shop products" });
     }
@@ -28,10 +29,11 @@ export const getOne = async (req, res) => {
 }
 export const createProduct = async (req, res) => {    
     try {
-        const {shopId} = req.params;
-        console.log(req.body.product)
+        const {shopID} = req.params;
+        console.log("ID shop create product", shopID);
+        console.log("Data product: ", req.body.product.image);
         const product = new Product(req.body.product);
-        product.shop = shopId;
+        product.shop = shopID;
         await product.save();
         res.json({
             message: "Product created successfully",
@@ -46,18 +48,14 @@ export const createProduct = async (req, res) => {
 export const updateProduct = async (req, res) => {
     try {
         const { idProduct } = req.params; 
-        const updatedFields = req.body.product; 
-
+        const updatedFields = req.body;
+        console.log(req.body);
         let product = await Product.findById(idProduct);
-
         if (!product) {
             return res.status(404).json({ message: 'Product not found' });
         }
-
         product = Object.assign(product, updatedFields);
-
         await product.save();
-
         res.json({
             message: 'Product updated successfully',
             product,
@@ -68,21 +66,15 @@ export const updateProduct = async (req, res) => {
         res.status(500).send('Error updating product');
     }
 };
-
-
-
 export const deleteProduct = async (req, res) => {
     try {
         const { idProduct } = req.params; 
-
+        console.log(idProduct);
         let product = await Product.findById(idProduct);
-
         if (!product) {
             return res.status(404).json({ message: 'Product not found' });
         }
-
         await Product.findByIdAndDelete(idProduct);
-
         res.json({
             message: 'Product deleted successfully',
         });

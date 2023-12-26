@@ -5,6 +5,7 @@ import { useNavigation } from "@react-navigation/native";
 import { AntDesign, Entypo, FontAwesome } from '@expo/vector-icons';
 import AsyncStorage from "@react-native-async-storage/async-storage"
 import axios from "axios";
+import { COLORS_v2 } from "../../../constants/theme";
 
 export default function SignIn() {
   const [email, getEmail] = useState('');
@@ -25,6 +26,9 @@ export default function SignIn() {
   }, []);
   const handleSignUpPress = () => {
     navigation.navigate("SignUp");
+  };
+  const handleForgetPasswordPress = () => {
+    navigation.navigate("SendMail");
   };
   const [hidePassword, setHidePassword] =useState(false);
   const handlePassword = () => {
@@ -90,7 +94,17 @@ export default function SignIn() {
       </TouchableOpacity>
 
       <TouchableOpacity style = {{alignItems: 'center', marginTop: 10}} onPress={handleSignUpPress}>
-        <Text>Do not have an account? Register </Text>
+        <Text style={{
+          color: COLORS_v2.darkBlue,
+          fontSize: 16,
+        }}>Sign up</Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity style = {{alignItems: 'center', marginTop: 10}} onPress={handleForgetPasswordPress}>
+      <Text style={{
+          color: COLORS_v2.darkBlue,
+          fontSize: 16,
+        }}>Forgot password</Text>
       </TouchableOpacity> 
 
     </View>

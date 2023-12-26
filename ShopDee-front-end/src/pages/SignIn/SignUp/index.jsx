@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { View, Text, Image, TextInput, TouchableOpacity, StyleSheet, Alert, KeyboardAvoidingView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { FontAwesome, Entypo, Ionicons } from '@expo/vector-icons';
+import { FontAwesome, Entypo, Ionicons, MaterialIcons } from '@expo/vector-icons';
 import axios from "axios"
-
+import { COLORS_v2 } from '../../../../constants/theme';
 export default function SignUp() {
   const navigation = useNavigation();
   const [email, setEmail] = useState("");
@@ -101,12 +101,34 @@ export default function SignUp() {
   };
   return (
     <View style={styles.container}>
+      <View style={{
+            height: 100,
+            flexDirection: "row",
+            justifyContent: "center",
+            alignItems: "center",
+            backgroundColor: COLORS_v2.white,
+        }}>
+        <TouchableOpacity
+          onPress={() => navigation.navigate("SignIn")}
+          style={{
+            position: "absolute",
+            left: 10,
+            flexDirection: "row",
+            alignItems: "center"
+          }}>
+          <MaterialIcons
+            name="keyboard-arrow-left"
+            size={24}
+            color={COLORS_v2.lightBlue}
+          />
+          <Text style={{color: COLORS_v2.lightBlue}}>Sign In</Text>
+        </TouchableOpacity>
+        <Text style={{ fontSize: 20, fontWeight: 600 }}>Register Account</Text>
+      </View>
       <Image
         style={styles.logo}
-        source={require('./shopdee_icon.png')}
+        source={require('./register.jpg')}
       />
-      <Text style={styles.title}>SHOPDEE</Text>
-
       <KeyboardAvoidingView>
         <View style={{ flexDirection: "column", marginVertical: 6, alignSelf: 'center', display: 'flex', }}>
           <View style={styles.inputContainer}>
@@ -186,10 +208,6 @@ export default function SignUp() {
         <TouchableOpacity style={styles.button} onPress={() => {validate()}}>
           <Text style={styles.buttonText}>Register</Text>
         </TouchableOpacity>
-
-        <TouchableOpacity style={styles.backButton} onPress={() => navigation.navigate("SignIn")}>
-          <Text>Already have an account? Back to login</Text>
-        </TouchableOpacity>
       </KeyboardAvoidingView>
     </View>
   );
@@ -198,16 +216,14 @@ export default function SignUp() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingHorizontal: 10,
-    backgroundColor: "#FFFFFF",
-    justifyContent: "center"
+    backgroundColor: COLORS_v2.white
   },
   logo: {
-    width: 150,
-    height: 150,
+    width: 240,
+    height: 240,
     alignSelf: 'center',
     marginTop: 0,
-    marginBottom: 10,
+    marginBottom: 0,
   },
   input: {
     height: 40,

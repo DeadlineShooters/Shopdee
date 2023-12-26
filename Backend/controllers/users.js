@@ -25,6 +25,7 @@ export const checkShopOwner = async (req, res) => {
 export const register = async (req, res) => {
     try {
         const { username, email, password, name, phone, birthDay, gender, address} = req.body;
+        console.log(req.body);
         const existingUser = await user.findOne({email});
         if (existingUser)
         {
@@ -88,8 +89,7 @@ export const updateprofile = async (req, res) => {
     try {
         const userID = req.params.userID;
         const { username, email, phone, gender, birthday, profilePic} = req.body;
-        await cloudinary.v2.uploader.destroy(EditUser.profilePic.public_id);
-        //const cdb = await cloudinary.v2.uploader.upload(profileimage.uri, {resource_type: "image"});
+        console.log(req.body);
         await user.findByIdAndUpdate(userID, {
             username: username,
             email: email,
@@ -100,6 +100,25 @@ export const updateprofile = async (req, res) => {
                 public_id: profilePic.publicId,
                 url: profilePic.secureUrl
             }
+        })
+        res.status(200).send({
+            success: true,
+            message: "profile updated successfully",
+        })
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({message: "Error updating the user profile"});
+    }
+}
+
+export const updateaddress = async (req, res) => {
+    console.log(req.body);
+    try {
+        const userID = req.params.userID;
+        const { address } = req.body;
+        console.log(address);
+        await user.findByIdAndUpdate(userID, {
+            address: address,
         })
         res.status(200).send({
             success: true,

@@ -7,7 +7,7 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import GoBack from "../../components/goBackPanel";
 import { Axios } from "../../api/axios";
 import { useNavigation } from "@react-navigation/native";
-import { UserType } from "../../../UserContext";
+import { UserType } from "../../../../ShopDee-front-end/context/UserContext";
 
 export default function AddProduct({ productId }) {
   const navigation = useNavigation();
@@ -18,26 +18,76 @@ export default function AddProduct({ productId }) {
   const [stock, setStock] = useState(""); // New state for stock
   const [selectedCategory, setSelectedCategory] = useState("");
   const [productPhotos, setProductPhotos] = useState([]);
-  const { userID, setUserID } = useContext(UserType);
+  const [productPhotoUpload, setProductPhotoUpload] = useState([]);
+  const {sellerData} = useContext(UserType);
+  const [shopID, setShopID] = useState(sellerData.existingUser._id);
   const [categories, setCategories] = useState([]);
 
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const response = await Axios.get("http://localhost:3000/categories", {
+        const response = await Axios.get("http://10.0.2.2:3000/categories", {
           timeout: 5000, // Set timeout to 5 seconds (adjust as needed)
         });
         const fetchedCategories = response.data;
-        console.log("{GET http://localhost:3000/categories}", fetchedCategories);
+        console.log("{GET http://10.0.2.2:3000/categories}", fetchedCategories);
         setCategories(fetchedCategories); // Update the state
       } catch (error) {
         console.error("Error fetching categories:", error);
         setCategories([]); // Set an empty array in case of an error
       }
-    };
-
+    } 
     fetchCategories();
   }, []);
+
+  const pickImage = async () => {
+    // No permissions request is necessary for launching the image library
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      aspect: [4, 3],
+      quality: 1,
+      canceled: true,
+      allowsMultipleSelection: true,
+      selectionLimit: 5,
+    });
+    if (!result.canceled) {
+      setProductPhotos(result.assets.map((item) => ({ uri: item.uri })));
+      result.assets.map((item) => {
+        let image = {
+          uri: item.uri,
+          type: `test/${item.uri.split(".")[1]}`,
+          name: `test.${item.uri.split(".")[1]}`,
+        }
+        handleUpload(image);
+      })
+    }
+  };
+
+  const handleUpload = async (image) => {
+    const data = new FormData();
+    data.append("file", image);
+    data.append("upload_preset", "ShopDeeImageStock");
+    data.append("cloud_name", "dqxtf297o");
+
+    try {
+      const response = await fetch("https://api.cloudinary.com/v1_1/dqxtf297o/image/upload", {
+        method: "post",
+        body: data,
+      });
+      if (response.ok) {
+        const result = await response.json();
+        console.log(result);
+        const public_id = result.public_id;
+        const url = result.url;
+        setProductPhotoUpload(productPhotoUpload => [...productPhotoUpload, {public_id, url}]);
+      } else {
+        console.error("API request failed:", response.status, response.statusText);
+      }
+    } catch (error) {
+      console.error("Error during API request:", error);
+    }
+  };
+  console.log(productPhotoUpload);
 
   const handleAdd = async () => {
     // Validate that all required fields are filled
@@ -45,27 +95,21 @@ export default function AddProduct({ productId }) {
       Alert.alert("Missing Information", "Please fill in all required fields.");
       return;
     }
-
-    try {
-      const response = await Axios.post(`/products/${productId}`, {
+    const product= {
         name: productNameText,
         description: productDescText,
-        images: [],
+        image: productPhotoUpload,
         price,
         quantity: stock,
         category: selectedCategory,
-      });
-
-      // 201 for resource created)
-      if (response.status === 201) {
-        // Addition was successful, handle the response accordingly
+    }
+    try {
+      const response = await Axios.post(`http://10.0.2.2:3000/shop/${shopID}/products/create-product`, { product });
+      if (response.status === 200) {
         console.log("Product added successfully");
-      } else {
-        // Addition failed, handle the error
-        console.error("Product addition failed");
-      }
+        navigation.navigate("My Product");
+      } 
     } catch (error) {
-      // Handle Axios or network errors
       console.error("Error during product addition:", error);
     }
   };
@@ -94,24 +138,6 @@ export default function AddProduct({ productId }) {
 
   const handleCategoryChange = (itemValue) => {
     setSelectedCategory(itemValue);
-  };
-
-  const pickImage = async () => {
-    // No permissions request is necessary for launching the image library
-    let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.All,
-      aspect: [4, 3],
-      quality: 1,
-      canceled: true,
-      allowsMultipleSelection: true,
-      selectionLimit: 5,
-    });
-
-    console.log(result);
-
-    if (!result.canceled) {
-      setProductPhotos(result.assets.map((item) => ({ uri: item.uri })));
-    }
   };
 
   // Check form changes

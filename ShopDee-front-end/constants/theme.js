@@ -7,7 +7,19 @@ export const COLORS = {
     gray: "#E3E3E3",
     white: "#FFFFFF",
     red: "#EE4B2B",
-    blue: "#007EA7"
+    blue: "#007EA7",
+}
+
+export const COLORS_v2 = {
+    primary: '#242760',
+    secondary: '#544C4C',
+    white: '#FFFFFF',
+    black: '#000000',
+    gray: 'rgba(36, 39, 96, 0.05)',
+    secondaryGray: '#f4f4f4',
+    blue: '#007EA7',
+    lightBlue: '#469AB6',
+    darkBlue: '#294ba0',
 }
 
 export const SIZES = {
@@ -52,6 +64,6 @@ export const FONTS = {
     body4: { fontWeight: 'regular', fontSize: SIZES.body4, lineHeight: 20 },
 }
 
-const appTheme = { COLORS, SIZES, FONTS }
+const appTheme = { COLORS, COLORS_v2, SIZES, FONTS }
 
-export default appTheme
+export default appTheme;
