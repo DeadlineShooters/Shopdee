@@ -1,6 +1,6 @@
 import { View, Text, SafeAreaView, TouchableOpacity, Image, Alert } from "react-native";
 import { useState, useContext, useEffect } from "react";
-import { useFocusEffect, useIsFocused } from '@react-navigation/native';
+import { useFocusEffect, useIsFocused } from "@react-navigation/native";
 import React from "react";
 import { COLORS_v2 } from "../../../../constants/theme.js";
 import { MaterialIcons, AntDesign } from '@expo/vector-icons';

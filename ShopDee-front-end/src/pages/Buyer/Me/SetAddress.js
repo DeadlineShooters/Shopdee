@@ -56,14 +56,16 @@ const SetAddress = ({ navigation, route }) => {
     {
       Alert.alert('Confirm message', 'Your address is not saved. Exit now?', [
         {
-          text: 'Cancel',
-          onPress: () => console.log('Cancel request'),
+          text: "Cancel",
+          onPress: () => console.log("Cancel request"),
         },
         {
-          text: 'Ok',
+          text: "Ok",
           onPress: () => navigation.goBack(),
-        }
+        },
       ]);
+    } else {
+      navigation.goBack();
     }
     else {
       navigation.goBack()
@@ -97,7 +99,7 @@ const SetAddress = ({ navigation, route }) => {
         alignItems: "center"
       }}>
         <TouchableOpacity
-          onPress={() => handleOnPressGoBack({navigation})}
+          onPress={() => handleOnPressGoBack({ navigation })}
           style={{
             position: "absolute",
             left: -10,
@@ -135,7 +137,7 @@ const SetAddress = ({ navigation, route }) => {
             }}>
               <TextInput
                 value={name}
-                onChangeText={value => setName(value)}
+                onChangeText={(value) => setName(value)}
                 editable={false}
                 style={{
                   color: COLORS_v2.black
@@ -165,7 +167,7 @@ const SetAddress = ({ navigation, route }) => {
             }}>
               <TextInput
                 value={phone}
-                onChangeText={value => setPhone(value)}
+                onChangeText={(value) => setPhone(value)}
                 editable={false}
                 style={{
                   color: COLORS_v2.black
@@ -196,7 +198,29 @@ const SetAddress = ({ navigation, route }) => {
                 value={address}
                 onChangeText={value => { SetAddress(value)}}
                 editable={true}
-              />
+              /> */}
+              <TouchableOpacity
+                onPress={handlePickAddress}
+                style={{
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                  paddingVertical: 8,
+                  paddingLeft: 5,
+                  borderWidth: 1,
+                  borderColor: COLORS.gray,
+                  alignItems: "center",
+                }}
+              >
+                <View style={{ width: "90%" }}>
+                  <Text style={{ fontSize: 16, fontWeight: "600" }} numberOfLines={1} ellipsizeMode="tail">
+                    {address}
+                  </Text>
+                </View>
+
+                <View style={{ marginRight: 10 }}>
+                  <AntDesign name="right" size={16} color="black" />
+                </View>
+              </TouchableOpacity>
             </View>
           </View>
         </View>
@@ -240,7 +264,8 @@ const SetAddress = ({ navigation, route }) => {
           }}>
             <Text style={{ fontSize: 16, fontWeight: 600, marginVertical: 10, color: COLORS_v2.white }}>Save</Text>
           </View>
-        </View> : 
+        </View>
+      ) : (
         <TouchableOpacity onPress={save}>
           <View style={{
             marginBottom: 20,
@@ -289,5 +314,3 @@ const styles = StyleSheet.create({
       padding: 2,
   },
 });
-
-export default SetAddress

@@ -11,7 +11,7 @@ import "core-js/stable/atob";
 import { COLORS } from '../../../../assets/Themes';
 import {COLORS_v2} from '../../../../constants/theme.js';
 
-export default function EditShopProfile({navigation}) {
+export default function EditShopProfile({navigation, route}) {
   const [shopName, setShopName] = useState('');
   const [bio, setBio] = useState('');
   const [address, setAddress] = useState('');
@@ -30,6 +30,27 @@ export default function EditShopProfile({navigation}) {
   const failColor = "#bf6060";
   const failHeader = "Failed!";
   const failMessage = "Your information was still unsaved";
+  const {userID, setUserID} = useContext (UserType)
+  const [user, setUser] = useState("");
+
+  useEffect(() => {
+    const fetchUserProfile = async () => {
+        try {
+            const token = await AsyncStorage.getItem("authToken");
+            const decodedToken = jwtDecode(token);
+            const userID = decodedToken.userID;
+            setUserID(userID);
+            const response = await axios.get(`http://10.0.2.2:3000/user/profile/${userID}`);
+            const user = response.data;
+            console.log(user);
+            setUser(user);
+            // setUserName(user?.User?.username);
+        } catch (error) {
+            console.log("error", error);
+        }
+    }
+    fetchUserProfile();
+}, []);
   const popIn = () => {
     Animated.timing(popAnim, {
       toValue: windowHeight * -0.35*0.95,
@@ -143,12 +164,12 @@ export default function EditShopProfile({navigation}) {
             flex: 1,
             color: COLORS_v2.darkBlue,
           }}
-          value={shopName}
+          value={shop.name}
           onChangeText={handleShopNameChange}
           maxLength={maxCharactersName}
           editable={false}
         />
-        <Text style={{ color: COLORS.limitGray }}> {shopName.length}/{maxCharactersName}</Text>
+
       </View>
       <View style={{
         backgroundColor: 'white',
@@ -157,7 +178,7 @@ export default function EditShopProfile({navigation}) {
         alignItems: 'center',
         justifyContent: "space-between",
       }}>
-        <Text style={{ fontSize: 16 }}>Bio: </Text>
+        <Text style={{ fontSize: 16 }}>Bio</Text>
 
         <Text style={{ color: COLORS.limitGray }}>{bio.length}/{maxCharactersBio}</Text>
 
@@ -175,7 +196,7 @@ export default function EditShopProfile({navigation}) {
             flex: 1,
             color: COLORS_v2.darkBlue,
           }}
-          value={bio}
+          value={shop.description}
           onChangeText={handleBioChange}
           maxLength={maxCharactersBio}
           numberOfLines={5} // Số dòng hiển thị
@@ -230,6 +251,7 @@ export default function EditShopProfile({navigation}) {
             flex: 1,
             color: COLORS_v2.darkBlue,
           }} 
+          value={shop.email}
           editable={false}
           value={email}
           onChangeText={value => setEmail(value)}
