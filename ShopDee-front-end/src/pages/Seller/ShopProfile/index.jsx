@@ -45,7 +45,7 @@ export default function EditShopProfile({ navigation, route }) {
   const failColor = "#bf6060";
   const failHeader = "Failed!";
   const failMessage = "Your information was still unsaved";
-  const { userID, setUserID } = useContext(UserType);
+  const { userID, setUserID } = useContext(UserContext);
   const [user, setUser] = useState("");
 
   useEffect(() => {
