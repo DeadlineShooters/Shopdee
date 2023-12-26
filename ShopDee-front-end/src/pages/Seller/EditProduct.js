@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, TextInput, Image, FlatList, TouchableOpacity, Alert } from "react-native";
+import { View, Text, StyleSheet, TextInput, Image, FlatList, TouchableOpacity, Alert, Pressable } from "react-native";
 import { COLORS } from "../../../assets/Themes";
 import { useState, useRef, useEffect, useContext } from "react";
 import { Picker } from "@react-native-picker/picker";
@@ -7,20 +7,25 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import GoBack from "../../components/goBackPanel";
 import { Axios } from "../../api/axios";
 import { useNavigation } from "@react-navigation/native";
-import { UserType } from "../../../../ShopDee-front-end/context/UserContext";
+import { UserContext } from "../../../context/UserContext";
+import mongoose, { mongo } from "mongoose";
 
 export default function EditProduct({ route }) {
   const navigation = useNavigation();
-  const productID = route.params.productID;
-  const shopID = route.params.shopID;
-  const [productNameText, setProductNameText] = useState("");
-  const [productDescText, setProductDescText] = useState("");
-  const [price, setPrice] = useState(""); // New state for price
-  const [stock, setStock] = useState(""); // New state for stock
-  const [selectedCategory, setSelectedCategory] = useState("");
-  const [productPhotos, setProductPhotos] = useState([]);
-  const { userID, setUserID } = useContext(UserType);
+  const { product } = route.params;
+
+  console.log("@@ Product to edit: ", product);
+
+  const [productNameText, setProductNameText] = useState(product.name);
+  const [productDescText, setProductDescText] = useState(product.description);
+  const [price, setPrice] = useState(product.price.toString()); // Convert to string to set the initial value or else it wont appear
+  const [stock, setStock] = useState(product.quantity.toString()); // Convert to string to set the initial value
+  const [selectedCategory, setSelectedCategory] = useState(product.category._id);
+  const [productPhotos, setProductPhotos] = useState(product.image.map((item) => ({ uri: item.url })));
+  const { shop } = useContext(UserContext);
+  const shopID = shop._id;
   const [categories, setCategories] = useState([]);
+  const [isFormEdited, setIsFormEdited] = useState(false);
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -44,42 +49,87 @@ export default function EditProduct({ route }) {
         console.log(productData);
         setProductNameText(productData.name);
         setProductDescText(productData.description);
-        setPrice((productData.price).toString());
-        setStock((productData.quantity).toString());
+        setPrice(productData.price.toString());
+        setStock(productData.quantity.toString());
         setSelectedCategory(productData.category);
       } catch (error) {
         console.error("Error fetching product data: ", error);
       }
-    }
+    };
     fetchProductData();
   }, []);
 
   const handleEdit = async () => {
-    // Validate that all required fields are filled
-    if (!productNameText || !productDescText || !price || !stock || !selectedCategory || productPhotos.length === 0) {
-      Alert.alert("Missing Information", "Please fill in all required fields.");
-      return;
-    }
+    // Upload images to Cloudinary
+    const imageUrls = await Promise.all(
+      productPhotos.map(async (photo) => {
+        const formData = new FormData();
+        const imageName = `image_${Date.now()}.jpg`;
+        const fileExtension = photo.uri.split(".").pop();
+
+        formData.append("file", {
+          uri: photo.uri,
+          type: `image/${fileExtension}`,
+          name: imageName,
+        });
+        formData.append("upload_preset", "ShopDeeImageStock");
+
+        try {
+          const response = await Axios.post("https://api.cloudinary.com/v1_1/dqxtf297o/image/upload", formData, {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          });
+
+          console.log("@@@ response: ", response.data);
+
+          return {
+            public_id: response.data.public_id,
+            url: response.data.secure_url,
+          };
+        } catch (error) {
+          console.error("Error uploading image to Cloudinary:", error);
+          if (error.response && error.response.data) {
+            const cloudinaryError = error.response.data;
+            console.error("Cloudinary error:", cloudinaryError);
+          }
+          return null;
+        }
+      })
+    );
+
+    // Filter out any failed uploads
+    const successfulUploads = imageUrls.filter((url) => url !== null);
+    console.log("@@@ imageURLs: ", successfulUploads);
+
     try {
-      const response = await Axios.put(`http://10.0.2.2:3000/shop/${shopID}/products/${productID}/update-product`, {
+      console.log("@@ product id ", product._id);
+      const response = await Axios.put(`/shop/${shopID}/products/${product._id}`, {
+        _id: product._id,
         name: productNameText,
         description: productDescText,
-        images: [],
+        image: successfulUploads,
+
         price,
         quantity: stock,
         category: selectedCategory,
+        shop: new mongoose.Types.ObjectId(shopID),
       });
-      // Assuming your API returns a success status code (e.g., 200 for OK)
-      if (response.status === 200) {
-        // Edit was successful, handle the response accordingly
-        console.log("Product edited successfully");
-      } else {
-        // Edit failed, handle the error
-        console.error("Product editing failed");
-      }
+
+      console.log("@@ Product edited successfully", response.data);
+      navigation.navigate("My Product");
     } catch (error) {
-      // Handle Axios or network errors
-      console.error("Error during product editing:", error);
+      console.error("@@ Error updating product:", error);
+
+      // Check if the error has a response and data properties
+      if (error.response && error.response.data) {
+        const { message } = error.response.data;
+        console.error("@@ Backend error message:", message);
+        throw new Error(message); // Rethrow the error with the backend message
+      }
+
+      // If there's no specific backend error message, rethrow the original error
+      throw error;
     }
   };
 
@@ -134,27 +184,23 @@ export default function EditProduct({ route }) {
     productPhotos,
   });
 
-  const isFormEdited = useRef(false);
+  console.log("@@@ Before edited? " + isFormEdited);
 
   useEffect(() => {
-    // Compare the current form state with the initial state
     const isEdited =
       productNameText !== initialFormState.current.productNameText ||
       productDescText !== initialFormState.current.productDescText ||
       price !== initialFormState.current.price ||
       stock !== initialFormState.current.stock ||
-      selectedCategory !== initialFormState.current.selectedCategory ||
+      selectedCategory.toString() !== initialFormState.current.selectedCategory.toString() ||
       JSON.stringify(productPhotos) !== JSON.stringify(initialFormState.current.productPhotos);
-    // Set the flag accordingly
-    isFormEdited.current = isEdited;
-    // Cleanup function to reset the flag when the component unmounts
-    return () => {
-      isFormEdited.current = false;
-    };
+
+    console.log("@@@ edited? " + isEdited);
+    setIsFormEdited(isEdited);
   }, [productNameText, productDescText, price, stock, selectedCategory, productPhotos]);
 
   const handleGoBack = () => {
-    if (isFormEdited.current) {
+    if (isFormEdited) {
       // If there are unsaved changes, show a confirmation prompt
       Alert.alert(
         "Unsaved Changes",
@@ -168,7 +214,7 @@ export default function EditProduct({ route }) {
             text: "Discard",
             onPress: () => {
               // Reset the flag and navigate back
-              isFormEdited.current = false;
+              setIsFormEdited(false);
               navigation.goBack();
             },
           },
@@ -190,7 +236,6 @@ export default function EditProduct({ route }) {
         <View style={styles.fieldContainer}>
           <View style={{ flexDirection: "row" }}>
             <Text style={{ fontSize: 15 }}>Product name: </Text>
-            <Text style={{ color: COLORS.lightBlue, fontSize: 15 }}>*</Text>
           </View>
           <View style={styles.inputContainer}>
             <TextInput style={styles.textInput} onChangeText={onChangeProductName} value={productNameText} maxLength={30} />
@@ -203,7 +248,6 @@ export default function EditProduct({ route }) {
           <View style={styles.productDescHeader}>
             <View style={{ flexDirection: "row" }}>
               <Text style={{ fontSize: 15 }}>Product description:</Text>
-              <Text style={{ color: COLORS.lightBlue, fontSize: 15 }}>*</Text>
             </View>
             <View style={{ flexDirection: "row" }}>
               <Text style={{ color: COLORS.limitGray, fontSize: 15 }}>{productDescText.length}</Text>
@@ -225,7 +269,6 @@ export default function EditProduct({ route }) {
         <View style={styles.fieldContainer}>
           <View style={{ flexDirection: "row" }}>
             <Text style={{ fontSize: 15 }}>Price: </Text>
-            <Text style={{ color: COLORS.lightBlue, fontSize: 15 }}>*</Text>
           </View>
           <View style={styles.inputContainer}>
             <TextInput
@@ -241,7 +284,6 @@ export default function EditProduct({ route }) {
         <View style={styles.fieldContainer}>
           <View style={{ flexDirection: "row" }}>
             <Text style={{ fontSize: 15 }}>Stock: </Text>
-            <Text style={{ color: COLORS.lightBlue, fontSize: 15 }}>*</Text>
           </View>
           <View style={styles.inputContainer}>
             <TextInput style={styles.textInput} onChangeText={onChangeStock} value={stock} keyboardType="numeric" maxLength={10} />
@@ -251,13 +293,11 @@ export default function EditProduct({ route }) {
         <View style={[styles.fieldContainer, { alignItems: "flex-start" }]}>
           <View style={{ flexDirection: "row", alignSelf: "center" }}>
             <Text style={{ fontSize: 15 }}>Category: </Text>
-            <Text style={{ color: COLORS.lightBlue, fontSize: 15 }}>*</Text>
           </View>
           <View style={{ flex: 1, flexGrow: 1 }}>
-            <Picker selectedValue={selectedCategory} style={styles.pickerStyle} onValueChange={handleCategoryChange}>
-              <Picker.Item label="Select Category" value="" style={styles.categoryLabel} />
+            <Picker selectedValue={selectedCategory.toString()} style={styles.pickerStyle} onValueChange={handleCategoryChange}>
               {categories.map((category, index) => {
-                return <Picker.Item label={category.name} value={category._id} key={index} style={styles.categoryLabel} />;
+                return <Picker.Item label={category.name} value={category._id.toString()} key={index} style={styles.categoryLabel} />;
               })}
             </Picker>
           </View>
@@ -279,9 +319,19 @@ export default function EditProduct({ route }) {
         </View>
       </View>
 
-      <TouchableOpacity onPress={handleEdit} style={styles.addButton}>
+      <Pressable
+        onPress={handleEdit}
+        style={({ pressed }) => [
+          styles.addButton,
+          { opacity: pressed || !isFormEdited ? 0.5 : 1 }, // full opacity if form not edited
+        ]}
+        disabled={!isFormEdited}
+      >
         <Text style={styles.addText}>Edit</Text>
-      </TouchableOpacity>
+      </Pressable>
+      {/* <TouchableOpacity onPress={handleEdit} style={styles.addButton}>
+        <Text style={styles.addText}>Edit</Text>
+      </TouchableOpacity> */}
     </View>
   );
 }
