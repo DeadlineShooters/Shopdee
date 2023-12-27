@@ -43,7 +43,6 @@ const Me = ({ navigation }) => {
   };
   const navigateToSetAddress = () => {
     navigation.navigate("SetAddress", { props: user });
-    navigation.navigate("SetAddress", { props: user });
   };
   const navigateToTermsAndPolicies = () => {
     navigation.navigate("UserPrivacy");

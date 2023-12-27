@@ -9,6 +9,9 @@ const SetAddress = ({ navigation, route }) => {
   const { selectedAddress } = route.params;
 
   console.log("@@ user map: ", user);
+  const { selectedAddress } = route.params;
+
+  console.log("@@ user map: ", user);
   const [name, setName] = useState(user.username);
   const [phone, setPhone] = useState(user.phone);
   const [address, setAddress] = useState(user.address);
@@ -280,16 +283,20 @@ const SetAddress = ({ navigation, route }) => {
           </View>
         </Animated.View>
       </View>
-      {changeAddress == address ?
-        <View style={{
-          marginBottom: 20,
-        }}>
-          <View style={{
-            borderRadius: 12,
-            backgroundColor: COLORS_v2.secondaryGray,
-            alignItems: "center",
-          }}>
-            <Text style={{ fontSize: 16, fontWeight: 600, marginVertical: 10, color: COLORS_v2.white }}>Save</Text>
+      {changeAddress == address ? (
+        <View
+          style={{
+            marginBottom: 20,
+          }}
+        >
+          <View
+            style={{
+              borderRadius: 12,
+              backgroundColor: COLORS.secondaryGray,
+              alignItems: "center",
+            }}
+          >
+            <Text style={{ fontSize: 16, fontWeight: 600, marginVertical: 10, color: COLORS.white }}>Save</Text>
           </View>
         </View> :
         <TouchableOpacity onPress={save}>
@@ -308,6 +315,8 @@ const SetAddress = ({ navigation, route }) => {
       }
     </SafeAreaView>
   );
+};
+export default SetAddress;
 };
 export default SetAddress;
 
