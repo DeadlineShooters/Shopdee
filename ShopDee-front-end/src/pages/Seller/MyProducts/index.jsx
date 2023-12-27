@@ -4,21 +4,20 @@ import GoBack from "../../../components/goBackPanel";
 // import { products } from "../../../../data/product";
 import { Colors } from "react-native/Libraries/NewAppScreen";
 import { MaterialIcons } from "@expo/vector-icons";
-import { useNavigation, useFocusEffect, useIsFocused } from "@react-navigation/native";
+import { useNavigation, useFocusEffect } from "@react-navigation/native";
 import { UserContext } from "../../../../context/UserContext";
 import React, { useContext, useEffect, useState } from "react";
-import axios from "axios";
+import { Axios } from "../../../api/axios";
 
 const MyProducts = () => {
   const navigation = useNavigation();
-  const [shopID, setShopID] = useState("");
-  const { shop } = useContext(UserContext);
-  console.log("@@", shop);
+  const { sellerData } = useContext(UserContext);
+  const { defaultImage } = useContext(UserContext);
+  const [shopID, setShopID] = useState(sellerData._id);
   const [products, setProductList] = useState([]);
   const deleteThisProduct = async (productId) => {
     try {
-      const shopID = shop.shop._id;
-      const response = await axios.delete(`http://10.0.2.2:3000/shop/${shopID}/products/${productId}`);
+      const response = await Axios.delete(`/shop/${shopID}/products/${productId}`);
       if (response.status == 200) {
         console.log("delete successfully");
       } else console.error("Error");
@@ -38,26 +37,43 @@ const MyProducts = () => {
       },
     ]);
   };
-  const isFocused = useIsFocused();
-  useEffect(() => {
-    const fetchShopProduct = async () => {
-      try {
-        const shopID = shop.shop._id;
-        console.log("Shop ID: ", shopID);
-        const response = await axios.get(`http://10.0.2.2:3000/shop/${shopID}/products/index`);
-        if (response.status === 200) {
-          const productsData = response.data.products;
-          console.log(productsData);
-          setProductList(productsData);
-        }
-      } catch (error) {
-        console.log("error", error);
-      }
-    };
-    fetchShopProduct();
-  }, [navigation, isFocused]);
+  // const isFocused = useIsFocused();
+  // useEffect(() => {
+  //   const fetchShopProduct = async () => {
+  //     console.log("Shop ID: ", shopID);
+  //     try {
+  //         const response = await axios.get(`http://10.0.2.2:3000/shop/${shopID}/products/`);
+  //         if (response.status === 200) {
+  //           const productsData = response.data.products;
+  //           console.log(productsData);
+  //           setProductList(productsData);
+  //         }
+  //       } catch (error) {
+  //         console.log("error", error);
+  //       }
+  //     }
+  //     fetchShopProduct();
+  // }, [navigation, isFocused]);
   //
-  console.log(products);
+  // console.log(products);
+
+  useFocusEffect(
+    React.useCallback(() => {
+      const fetchShopProduct = async () => {
+        console.log("Shop ID: ", shopID);
+        try {
+          const response = await Axios.get(`/shop/${shopID}/products/`);
+          if (response.status === 200) {
+            const productsData = response.data;
+            setProductList(productsData);
+          }
+        } catch (error) {
+          console.log("error", error);
+        }
+      };
+      fetchShopProduct();
+    }, [])
+  );
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "#fff" }}>
       <View
@@ -75,9 +91,9 @@ const MyProducts = () => {
       <GoBack currentTitle="My Products"></GoBack>
       <ScrollView style={{ backgroundColor: COLORS.gray }}>
         {products.map((product, index) => {
-          console.log("@@ product: ", product);
+          console.log("@@@ Product ", product);
           return (
-            <View style={styles.section} key={index}>
+            <View style={styles.section} key={product._id}>
               <Text style={{ marginBottom: 15, fontSize: 18, fontWeight: "bold" }}>{product.name}</Text>
               <View
                 style={{
@@ -88,17 +104,12 @@ const MyProducts = () => {
                 }}
               >
                 <View style={styles.imageContainer}>
-                  <Image
-                    source={{
-                      uri: product.image.length > 0 ? product.image[0].url : defaultImage,
-                    }}
-                    style={styles.image}
-                  ></Image>
+                  <Image source={{ uri: product.image[0]?.url }} style={styles.image}></Image>
                 </View>
                 <View>
                   {/* <Text>{product.name}</Text> */}
                   <Text>Category: {product.category.name}</Text>
-                  <Text style={{ marginTop: 5 }}>{product.price} x 1</Text>
+                  <Text style={{ marginTop: 5 }}>Price: {product.price} đ</Text>
                   <Text style={{ marginTop: 5 }}>Stock: {product.quantity}</Text>
                 </View>
               </View>

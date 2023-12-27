@@ -20,13 +20,13 @@ export default function AddProduct({ productId }) {
   const [productPhotos, setProductPhotos] = useState([]);
   const { userID, setUserID } = useContext(UserContext);
   const [categories, setCategories] = useState([]);
-  const { shop } = useContext(UserContext);
-  const shopID = shop._id;
+  const { sellerData } = useContext(UserContext);
+  const shopID = sellerData._id;
 
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const response = await Axios.get("http://localhost:3000/categories", {
+        const response = await Axios.get("/categories", {
           timeout: 5000, // Set timeout to 5 seconds (adjust as needed)
         });
         const fetchedCategories = response.data;
@@ -89,7 +89,6 @@ export default function AddProduct({ productId }) {
     // Filter out any failed uploads
     const successfulUploads = imageUrls.filter((url) => url !== null);
     console.log("@@@ imageURLs: ", successfulUploads);
-
 
     try {
       const response = await Axios.post(`/shop/${shopID}/products/create-product`, {

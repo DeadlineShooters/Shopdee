@@ -17,7 +17,8 @@ export default function EditShopProfile({ navigation, route }) {
   const [address, setAddress] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
-  const [selectedImage, setSelectedImage] = useState();
+  const [shop, setShop] = useState("");
+  const [selectedImage, setSelectedImage] = useState("");
   const [maxCharactersName] = useState(30); // Số ký tự tối đa cho phép
   const [maxCharactersBio] = useState(200);
   const windowHeight = Dimensions.get("window").height;
@@ -56,6 +57,7 @@ export default function EditShopProfile({ navigation, route }) {
     }).start();
   };
 
+
   const showToast = () => {
     ToastAndroid.show("Toast message displayed!", ToastAndroid.SHORT);
   };
@@ -71,16 +73,27 @@ export default function EditShopProfile({ navigation, route }) {
       setBio(text);
     }
   };
-  const { shop, setShop } = useContext(UserContext);
+  const handleImageSelection = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [4, 4],
+      quality: 1,
+    });
+    if (!result.canceled) {
+      setSelectedImage(result.assets[0].url);
+    }
+  };
+
+  const { sellerData, setSellerData } = useContext(UserContext);
   const isFocused = useIsFocused();
   useEffect(() => {
     const fetchUserProfile = async () => {
       try {
-        const shopID = shop.shop._id;
+        const shopID = sellerData._id;
         console.log("Finding Shop ID: ", shopID);
         const response = await axios.get(`http://10.0.2.2:3000/shop/shopProfile/${shopID}`);
         const user = response.data;
-        console.log("Hoa tim dc ttin shop: ", user);
         setShop(user);
         setShopName(user.shop.name);
         setBio(user.shop.description);
@@ -109,7 +122,6 @@ export default function EditShopProfile({ navigation, route }) {
           alignItems: "center",
           justifyContent: "space-between",
           padding: 10,
-          marginTop: 22,
           position: "relative",
         }}
       >
@@ -117,7 +129,7 @@ export default function EditShopProfile({ navigation, route }) {
           <AntDesign name="arrowleft" style={{ fontSize: 24 }} />
         </TouchableOpacity>
         <Text style={{ fontSize: 16, fontWeight: "bold", textAlign: "center", alignSelf: "center" }}> Shop Profile </Text>
-        <TouchableOpacity onPress={() => navigation.navigate("Edit Profile", { shop: shop })}>
+        <TouchableOpacity onPress={() => navigation.navigate("Edit Profile", { shop })}>
           <AntDesign name="edit" size={24} color="black" />
         </TouchableOpacity>
       </View>
@@ -160,6 +172,7 @@ export default function EditShopProfile({ navigation, route }) {
         }}
       >
         <Text style={{ fontSize: 16 }}>Bio</Text>
+
         <Text style={{ color: COLORS.limitGray }}>
           {bio.length}/{maxCharactersBio}
         </Text>
@@ -231,8 +244,9 @@ export default function EditShopProfile({ navigation, route }) {
             flex: 1,
             color: COLORS_v2.darkBlue,
           }}
-          value={email}
+          value={shop.email}
           editable={false}
+          value={email}
           onChangeText={(value) => setEmail(value)}
         />
       </View>

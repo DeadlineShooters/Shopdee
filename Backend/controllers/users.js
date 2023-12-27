@@ -11,12 +11,14 @@ import mongoose from "mongoose";
 export const checkShopOwner = async (req, res) => {
   try {
     const user = req.body.userID;
-    console.log(req.body.userID);
-    const shop = await Shop.findOne({ user: user });
-    if (!shop) {
-      return res.status(400).json({ messages: "Email has been already registered!" });
+    // console.log("@@ user: ", user);
+    const existingUser = await Shop.findOne({ user: user }).populate("user");
+
+    // console.log("@@ existingUser: ", existingUser);
+    if (!existingUser) {
+      return res.status(500).json({ messages: "Email has been already registered!" });
     }
-    res.status(200).json({shop});
+    res.status(200).json(existingUser);
   } catch (error) {
     console.log("error retrieving user data", error);
     res.status(500).json({ messages: "Not found user" });

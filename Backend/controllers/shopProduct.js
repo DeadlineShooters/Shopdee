@@ -5,12 +5,14 @@ import Shop from "../models/shop.js";
 export const index = async (req, res) => {
   try {
     const { shopId } = req.params;
-    console.log("Thong tim shopID:", shopId);
+    console.log("@@ shop ID: " + shopId);
     const products = await Product.find({ shop: shopId }).populate(["category", "shop"]);
+
+    console.log("@@ products: ", products);
     if (!products) {
       res.status(404).json({ message: "Products not found" });
     }
-    res.status(200).json({products});
+    res.status(200).json(products);
   } catch (error) {
     res.status(500).json({ message: "Error retrieving the shop products" });
   }
@@ -88,4 +90,11 @@ export const deleteProduct = async (req, res) => {
     console.log(err);
     res.status(500).send("Error deleting product");
   }
+
+  await Product.findByIdAndDelete(idProduct);
+
+  res.json({
+    message: "Product deleted successfully",
+  });
+  console.log("Product deleted");
 };

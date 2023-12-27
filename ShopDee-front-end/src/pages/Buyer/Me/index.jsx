@@ -9,17 +9,22 @@ import { UserContext } from "../../../../context/UserContext.js";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { jwtDecode } from "jwt-decode";
 import "core-js/stable/atob";
+import { Axios } from "../../../api/axios.js";
 
 const Me = ({ navigation }) => {
-  const { userID, setUserID, shop } = useContext(UserContext);
-  const [shopData, setShopData] = useState(shop);
+  const { userID, setUserID, setSellerData } = useContext(UserContext);
   const navigateToEditProfile = () => {
     navigation.navigate("EditProfile", { props: user });
   };
   const navigateToShopOwner = async () => {
-    if (shop != null){
-      navigation.navigate("SellerBottomNav", { screen: "My Products" });
-    } else {
+    const findUser = { userID };
+    try {
+      const response = await Axios.post("/user/profile/checkShopOwner", findUser);
+      const shopData = response.data;
+      console.log("@@ Shop data: ", shopData);
+      setSellerData(shopData);
+      navigation.navigate("SellerBottomNav", { screen: "My Products", props: shopData });
+    } catch (error) {
       Alert.alert("Shop registration needed", "Do you want to create shop?", [
         {
           text: "Cancel",
@@ -30,12 +35,14 @@ const Me = ({ navigation }) => {
           onPress: () => navigation.navigate("CreateShop"),
         },
       ]);
+      console.log("@@@ error retrieving user data", error);
     }
   };
   const navigateToSettings = () => {
     navigation.navigate("Settings", { props: user });
   };
   const navigateToSetAddress = () => {
+    navigation.navigate("SetAddress", { props: user });
     navigation.navigate("SetAddress", { props: user });
   };
   const navigateToTermsAndPolicies = () => {

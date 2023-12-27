@@ -14,7 +14,7 @@ export default function EditProduct({ route }) {
   const navigation = useNavigation();
   const { product } = route.params;
 
-  console.log("@@ Product to edit: ", product);
+  // console.log("@@ Product to edit: ", product);
 
   const [productNameText, setProductNameText] = useState(product.name);
   const [productDescText, setProductDescText] = useState(product.description);
@@ -22,8 +22,8 @@ export default function EditProduct({ route }) {
   const [stock, setStock] = useState(product.quantity.toString()); // Convert to string to set the initial value
   const [selectedCategory, setSelectedCategory] = useState(product.category._id);
   const [productPhotos, setProductPhotos] = useState(product.image.map((item) => ({ uri: item.url })));
-  const { shop } = useContext(UserContext);
-  const shopID = shop._id;
+  const { sellerData } = useContext(UserContext);
+  const shopID = sellerData._id;
   const [categories, setCategories] = useState([]);
   const [isFormEdited, setIsFormEdited] = useState(false);
 
@@ -173,8 +173,6 @@ export default function EditProduct({ route }) {
     productPhotos,
   });
 
-  console.log("@@@ Before edited? " + isFormEdited);
-
   useEffect(() => {
     const isEdited =
       productNameText !== initialFormState.current.productNameText ||
@@ -184,7 +182,6 @@ export default function EditProduct({ route }) {
       selectedCategory.toString() !== initialFormState.current.selectedCategory.toString() ||
       JSON.stringify(productPhotos) !== JSON.stringify(initialFormState.current.productPhotos);
 
-    console.log("@@@ edited? " + isEdited);
     setIsFormEdited(isEdited);
   }, [productNameText, productDescText, price, stock, selectedCategory, productPhotos]);
 

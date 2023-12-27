@@ -7,14 +7,15 @@ import { UserContext } from "../../../context/UserContext";
 
 export default function Order({ order, buttonVisible, buttonText, item }) {
   const navigation = useNavigation();
-  const { shop, defaultImage } = useContext(UserContext);
+  const { sellerData, defaultImage } = useContext(UserContext);
 
   function handleOrder() {
     if (buttonText == "Confirm") {
       // change order status to toDeliver
       order.status = "toDeliver";
 
-      updateOrderStatus(shop._id, order, "toDeliver")
+      console.log("@@ seller data id: " + sellerData._id);
+      updateOrderStatus(sellerData._id, order)
         .then(() => {
           navigation.navigate("To Deliver");
         })
@@ -24,7 +25,7 @@ export default function Order({ order, buttonVisible, buttonText, item }) {
     } else if (buttonText == "Complete") {
       order.status = "completed";
 
-      updateOrderStatus(shop._id, order, "completed")
+      updateOrderStatus(sellerData._id, order)
         .then(() => {
           navigation.navigate("Completed");
         })
@@ -43,7 +44,7 @@ export default function Order({ order, buttonVisible, buttonText, item }) {
         productName={order.product.name}
         productPrice={order.product.price}
         productQuantity={order.product.quantity}
-        imagePath={order.product.image.length > 0 ? order.product.image[0].url : "defaultImage"}
+        imagePath={order.product.image.length > 0 ? order.product.image[0].url : defaultImage}
       />
       {/* ))} */}
 

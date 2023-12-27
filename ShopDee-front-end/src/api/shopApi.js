@@ -1,32 +1,33 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { jwtDecode } from "jwt-decode";
 import { Axios } from "./axios";
-import { UserContext } from "../../context/UserContext";
-import { useContext } from "react";
 
-export const fetchShopInfo = async (userID) => {
-  const findUser = {userID};
-  try {
-    const shop = await Axios.post("http://10.0.2.2:3000/user/profile/checkShopOwner", findUser);
-    console.log("@@ Shop: ", shop.data);
-    return shop.data;
-  } catch (error) {
-    console.error("@@ Error fetching shop info:", error);
+// export const fetchShopInfo = async () => {
+//   try {
+//     const token = await AsyncStorage.getItem("authToken");
+//     const userID = jwtDecode(token).userID;
+//     const shop = await Axios.get(`/user/${userID}/shop`);
 
-    // Check if the error has a response and data properties
-    if (error.response && error.response.data) {
-      const { message } = error.response.data;
-      console.error("@@ Backend error message:", message);
-      throw new Error(message); // Rethrow the error with the backend message
-    }
+//     console.log("@@ Shop: ", shop.data.shop);
+//     return shop.data.shop;
+//   } catch (error) {
+//     console.error("@@ Error fetching shop info:", error);
 
-    // If there's no specific backend error message, rethrow the original error
-    throw error;
-  }
-};
+//     // Check if the error has a response and data properties
+//     if (error.response && error.response.data) {
+//       const { message } = error.response.data;
+//       console.error("@@ Backend error message:", message);
+//       throw new Error(message); // Rethrow the error with the backend message
+//     }
+
+//     // If there's no specific backend error message, rethrow the original error
+//     throw error;
+//   }
+// };
 
 export const fetchOrders = async (status, shopID) => {
   // return orders based on status
+  console.log("@@ shopID: " + shopID);
   try {
     const response = await Axios.get(`/shop/${shopID}/orders?status=${status}`);
 

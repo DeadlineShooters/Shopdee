@@ -1,15 +1,14 @@
-import { View, Text, SafeAreaView, TouchableOpacity, ScrollView, TextInput, StyleSheet, Animated, Dimensions } from "react-native";
 import React, { useState, useRef, useContext, useEffect } from "react";
+import { View, Text, SafeAreaView, TouchableOpacity, ScrollView, TextInput, StyleSheet, Animated, Dimensions } from "react-native";
 import { COLORS_v2 } from "../../../../constants/theme.js";
 import { MaterialIcons, Ionicons, AntDesign, Entypo } from "@expo/vector-icons";
 import axios from "axios";
-import { UserType } from "../../../../context/UserContext";
+import { UserContext } from "../../../../context/UserContext";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { jwtDecode } from "jwt-decode";
+import jwtDecode from "jwt-decode";
 import "core-js/stable/atob";
 
 const ChangePassword = ({ navigation }) => {
-  //Pop in animation
   const windowHeight = Dimensions.get("window").height;
   const [status, setStatus] = useState(null);
   const popAnim = useRef(new Animated.Value(windowHeight * -1)).current;
@@ -58,12 +57,10 @@ const ChangePassword = ({ navigation }) => {
   };
 
   const checkChangePassword = () => {
-    //Check for the Name TextInput
     if (!password.trim()) {
       alert("Please input your new password");
       return;
     }
-    //Check for the Email TextInput
     if (!confirmPassword.trim()) {
       alert("Please confirm your new password");
       return;
@@ -77,6 +74,7 @@ const ChangePassword = ({ navigation }) => {
 
   const { userID, setUserID } = useContext(UserType);
   const [user, setUser] = useState("");
+
   useEffect(() => {
     const fetchUserProfile = async () => {
       try {
@@ -91,8 +89,10 @@ const ChangePassword = ({ navigation }) => {
         console.log("error", error);
       }
     };
+
     fetchUserProfile();
-  }, []);
+  }, [setUserID]);
+
   return (
     <SafeAreaView
       style={{
