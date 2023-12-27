@@ -2,28 +2,28 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { jwtDecode } from "jwt-decode";
 import { Axios } from "./axios";
 
-export const fetchShopInfo = async () => {
-  try {
-    const token = await AsyncStorage.getItem("authToken");
-    const userID = jwtDecode(token).userID;
-    const shop = await Axios.get(`/user/${userID}/shop`);
+// export const fetchShopInfo = async () => {
+//   try {
+//     const token = await AsyncStorage.getItem("authToken");
+//     const userID = jwtDecode(token).userID;
+//     const shop = await Axios.get(`/user/${userID}/shop`);
 
-    console.log("@@ Shop: ", shop.data.shop);
-    return shop.data.shop;
-  } catch (error) {
-    console.error("@@ Error fetching shop info:", error);
+//     console.log("@@ Shop: ", shop.data.shop);
+//     return shop.data.shop;
+//   } catch (error) {
+//     console.error("@@ Error fetching shop info:", error);
 
-    // Check if the error has a response and data properties
-    if (error.response && error.response.data) {
-      const { message } = error.response.data;
-      console.error("@@ Backend error message:", message);
-      throw new Error(message); // Rethrow the error with the backend message
-    }
+//     // Check if the error has a response and data properties
+//     if (error.response && error.response.data) {
+//       const { message } = error.response.data;
+//       console.error("@@ Backend error message:", message);
+//       throw new Error(message); // Rethrow the error with the backend message
+//     }
 
-    // If there's no specific backend error message, rethrow the original error
-    throw error;
-  }
-};
+//     // If there's no specific backend error message, rethrow the original error
+//     throw error;
+//   }
+// };
 
 export const fetchOrders = async (status, shopID) => {
   // return orders based on status

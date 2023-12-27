@@ -1,17 +1,17 @@
 import { View, Text, SafeAreaView, TouchableOpacity, ScrollView, Image, TextInput, Modal, Alert, Dimensions, Animated, StyleSheet } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import React, { useState, useRef } from "react";
-import { COLORS_v2 } from "../../../../constants/theme";
+import { COLORS } from "../../../../assets/Themes";
 import { MaterialIcons, AntDesign, Entypo } from "@expo/vector-icons";
-import DatePicker, { getFormatedDate } from "react-native-modern-datepicker";
-import { Dropdown } from "react-native-element-dropdown";
-import axios from "axios";
 
-export default SetAddress = ({ navigation, route }) => {
+const SetAddress = ({ navigation, route }) => {
   const user = route.params.props.User;
+  const { selectedAddress } = route.params;
+
+  console.log("@@ user map: ", user);
   const [name, setName] = useState(user.username);
   const [phone, setPhone] = useState(user.phone);
-  const [address, setUserAddress] = useState(user.address);
+  const [address, setAddress] = useState(user.address);
   const [changeAddress, setChangeAddress] = useState(user.address);
 
   //Pop in animation
@@ -25,6 +25,9 @@ export default SetAddress = ({ navigation, route }) => {
   const failHeader = "Failed!";
   const failMessage = "Your information was still unsaved";
 
+  if (selectedAddress) {
+    setAddress(selectedAddress);
+  }
   const popIn = () => {
     Animated.timing(popAnim, {
       toValue: windowHeight * -0.82 * 0.95,
@@ -81,11 +84,19 @@ export default SetAddress = ({ navigation, route }) => {
       console.log("error message", error);
     }
   };
+
+  const setNewAddress = (addr) => {
+    setNewAddress(addr);
+  };
+
+  const handlePickAddress = () => {
+    navigation.navigate("AddressPicker", { previousScreen: "SetAddress" });
+  };
   return (
     <SafeAreaView
       style={{
         flex: 1,
-        backgroundColor: COLORS_v2.white,
+        backgroundColor: COLORS.white,
         paddingHorizontal: 22,
       }}
     >
@@ -106,8 +117,8 @@ export default SetAddress = ({ navigation, route }) => {
             alignItems: "center",
           }}
         >
-          <MaterialIcons name="keyboard-arrow-left" size={24} color={COLORS_v2.lightBlue} />
-          <Text style={{ color: COLORS_v2.lightBlue }}>Profile</Text>
+          <MaterialIcons name="keyboard-arrow-left" size={24} color={COLORS.lightBlue} />
+          <Text style={{ color: COLORS.lightBlue }}>Profile</Text>
         </TouchableOpacity>
         <Text style={{ fontSize: 20, fontWeight: 600 }}>Delivery Address</Text>
       </View>
@@ -131,8 +142,8 @@ export default SetAddress = ({ navigation, route }) => {
               style={{
                 height: 44,
                 width: "100%",
-                backgroundColor: COLORS_v2.secondaryGray,
-                borderColor: COLORS_v2.secondaryGray,
+                backgroundColor: COLORS.secondaryGray,
+                borderColor: COLORS.secondaryGray,
                 borderWidth: 1,
                 borderRadius: 4,
                 marginVertical: 6,
@@ -145,7 +156,7 @@ export default SetAddress = ({ navigation, route }) => {
                 onChangeText={(value) => setName(value)}
                 editable={false}
                 style={{
-                  color: COLORS_v2.black,
+                  color: COLORS.black,
                 }}
               />
             </View>
@@ -170,8 +181,8 @@ export default SetAddress = ({ navigation, route }) => {
               style={{
                 height: 44,
                 width: "100%",
-                backgroundColor: COLORS_v2.secondaryGray,
-                borderColor: COLORS_v2.secondaryGray,
+                backgroundColor: COLORS.secondaryGray,
+                borderColor: COLORS.secondaryGray,
                 borderWidth: 1,
                 borderRadius: 4,
                 marginVertical: 6,
@@ -184,7 +195,7 @@ export default SetAddress = ({ navigation, route }) => {
                 onChangeText={(value) => setPhone(value)}
                 editable={false}
                 style={{
-                  color: COLORS_v2.black,
+                  color: COLORS.black,
                 }}
               />
             </View>
@@ -209,7 +220,7 @@ export default SetAddress = ({ navigation, route }) => {
               style={{
                 height: 44,
                 width: "100%",
-                borderColor: COLORS_v2.secondaryGray,
+                borderColor: COLORS.secondaryGray,
                 borderWidth: 1,
                 borderRadius: 4,
                 marginVertical: 6,
@@ -217,13 +228,11 @@ export default SetAddress = ({ navigation, route }) => {
                 paddingLeft: 8,
               }}
             >
-              <TextInput
+              {/* <TextInput
                 value={address}
-                onChangeText={(value) => {
-                  setUserAddress(value);
-                }}
+                onChangeText={value => { SetAddress(value)}}
                 editable={true}
-              />{" "}
+              /> */}
               <TouchableOpacity
                 onPress={handlePickAddress}
                 style={{
@@ -250,27 +259,6 @@ export default SetAddress = ({ navigation, route }) => {
           </View>
         </View>
       </ScrollView>
-      <View>
-        <Animated.View
-          style={[
-            styles.toastContainer,
-            {
-              transform: [{ translateY: popAnim }],
-            },
-          ]}
-        >
-          <View style={styles.toastRow}>
-            <AntDesign name={status === "success" ? "checkcircleo" : "closecircleo"} size={24} color={status === "success" ? successColor : failColor} />
-            <View style={styles.toastText}>
-              <Text style={{ fontWeight: "bold", fontSize: 15 }}>{status === "success" ? successHeader : failHeader}</Text>
-              <Text style={{ fontSize: 12 }}>{status === "success" ? successMessage : failMessage}</Text>
-            </View>
-            <TouchableOpacity onPress={instantPopOut}>
-              <Entypo name="cross" size={24} color="black" />
-            </TouchableOpacity>
-          </View>
-        </Animated.View>
-      </View>
       {changeAddress == address ? (
         <View
           style={{
@@ -280,11 +268,11 @@ export default SetAddress = ({ navigation, route }) => {
           <View
             style={{
               borderRadius: 12,
-              backgroundColor: COLORS_v2.secondaryGray,
+              backgroundColor: COLORS.secondaryGray,
               alignItems: "center",
             }}
           >
-            <Text style={{ fontSize: 16, fontWeight: 600, marginVertical: 10, color: COLORS_v2.white }}>Save</Text>
+            <Text style={{ fontSize: 16, fontWeight: 600, marginVertical: 10, color: COLORS.white }}>Save</Text>
           </View>
         </View>
       ) : (
@@ -297,11 +285,11 @@ export default SetAddress = ({ navigation, route }) => {
             <View
               style={{
                 borderRadius: 12,
-                backgroundColor: COLORS_v2.blue,
+                backgroundColor: COLORS.blue,
                 alignItems: "center",
               }}
             >
-              <Text style={{ fontSize: 16, fontWeight: 600, marginVertical: 10, color: COLORS_v2.white }}>Save</Text>
+              <Text style={{ fontSize: 16, fontWeight: 600, marginVertical: 10, color: COLORS.white }}>Save</Text>
             </View>
           </View>
         </TouchableOpacity>
@@ -310,33 +298,4 @@ export default SetAddress = ({ navigation, route }) => {
   );
 };
 
-const styles = StyleSheet.create({
-  toastContainer: {
-    height: 60,
-    width: 350,
-    backgroundColor: "#f5f5f5",
-    justifyContent: "center",
-    alignItems: "center",
-    borderRadius: 10,
-
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-
-    elevation: 5,
-  },
-  toastRow: {
-    width: "90%",
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-evenly",
-  },
-  toastText: {
-    width: "70%",
-    padding: 2,
-  },
-});
+export default SetAddress;

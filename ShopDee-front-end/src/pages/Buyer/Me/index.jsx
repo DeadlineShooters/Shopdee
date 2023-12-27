@@ -9,6 +9,7 @@ import { UserContext } from "../../../../context/UserContext.js";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { jwtDecode } from "jwt-decode";
 import "core-js/stable/atob";
+import { Axios } from "../../../api/axios.js";
 
 const Me = ({ navigation }) => {
   const { userID, setUserID, setSellerData } = useContext(UserContext);
@@ -18,9 +19,9 @@ const Me = ({ navigation }) => {
   const navigateToShopOwner = async () => {
     const findUser = { userID };
     try {
-      const response = await axios.post("http://10.0.2.2:3000/user/profile/checkShopOwner", findUser);
+      const response = await Axios.post("/user/profile/checkShopOwner", findUser);
       const shopData = response.data;
-      console.log(shopData);
+      console.log("@@ Shop data: ", shopData);
       setSellerData(shopData);
       navigation.navigate("SellerBottomNav", { screen: "My Products", props: shopData });
     } catch (error) {
@@ -34,7 +35,7 @@ const Me = ({ navigation }) => {
           onPress: () => navigation.navigate("CreateShop"),
         },
       ]);
-      console.log("error retrieving user data", error);
+      console.log("@@@ error retrieving user data", error);
     }
   };
   const navigateToSettings = () => {

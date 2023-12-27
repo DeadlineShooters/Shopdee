@@ -1,5 +1,4 @@
 import { createContainer, createContext, useState, useEffect } from "react";
-import { fetchShopInfo } from "../src/api/shopApi";
 
 const UserContext = createContext();
 
