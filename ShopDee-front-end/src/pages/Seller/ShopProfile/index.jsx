@@ -141,7 +141,6 @@ export default function EditShopProfile({ navigation, route }) {
           alignItems: "center",
           justifyContent: "space-between",
           padding: 10,
-          marginTop: 22,
           position: "relative",
         }}
       >

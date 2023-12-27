@@ -6,11 +6,12 @@ import { Feather } from "@expo/vector-icons";
 import MyProduct from "../../pages/Seller/MyProducts";
 import EditProfile from "../../pages/Seller/ShopProfile";
 import SellerMyOrderTopTabs from "../SellerMyOrderTopTabs";
-import EditProduct from "../../pages/Seller/EditProduct";
+import { COLORS } from "../../../assets/Themes";
+import GoBack from "../goBackPanel";
 
 const Tab = createBottomTabNavigator();
 
-export default function SellerBottomNavigator() {
+export default function SellerBottomNavigator({ navigation }) {
   return (
     <Tab.Navigator
       screenOptions={{
@@ -27,7 +28,24 @@ export default function SellerBottomNavigator() {
           tabBarIcon: ({ focused, color }) => {
             return <Feather name="box" size={24} color={color} />;
           },
-          headerShown: false,
+          header: () => (
+            <GoBack
+              currentTitle=""
+              prevTitle="Me"
+              func={() => {
+                navigation.goBack();
+              }}
+              containerStyle={{
+                flexDirection: "row",
+                justifyContent: "flex-start",
+                backgroundColor: COLORS.white,
+                height: 30,
+                // marginBottom: 5,
+                elevation: 10,
+              }}
+              backStyle={{ flexDirection: "row", alignItems: "center" }}
+            />
+          ),
         }}
       />
       <Tab.Screen
@@ -37,7 +55,24 @@ export default function SellerBottomNavigator() {
           tabBarIcon: ({ focused, color }) => {
             return <FontAwesome5 name="list-alt" size={24} color={color} />;
           },
-          headerShown: false,
+          header: () => (
+            <GoBack
+              currentTitle=""
+              prevTitle="Me"
+              func={() => {
+                navigation.goBack();
+              }}
+              containerStyle={{
+                flexDirection: "row",
+                justifyContent: "flex-start",
+                backgroundColor: COLORS.white,
+                height: 30,
+                // marginBottom: 5,
+                elevation: 10,
+              }}
+              backStyle={{ flexDirection: "row", alignItems: "center" }}
+            />
+          ),
         }}
       />
       <Tab.Screen
@@ -48,7 +83,24 @@ export default function SellerBottomNavigator() {
             if (focused) return <Ionicons name="ios-person" size={24} color={color} />;
             else return <Ionicons name="ios-person-outline" size={24} color={color} />;
           },
-          headerShown: false,
+          header: () => (
+            <GoBack
+              currentTitle=""
+              prevTitle="Me"
+              func={() => {
+                navigation.goBack();
+              }}
+              containerStyle={{
+                flexDirection: "row",
+                justifyContent: "flex-start",
+                backgroundColor: COLORS.white,
+                height: 30,
+                // marginBottom: 5,
+                elevation: 10,
+              }}
+              backStyle={{ flexDirection: "row", alignItems: "center" }}
+            />
+          ),
         }}
       />
     </Tab.Navigator>
