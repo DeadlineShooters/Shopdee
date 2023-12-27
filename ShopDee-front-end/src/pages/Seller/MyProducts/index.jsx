@@ -65,7 +65,6 @@ const MyProducts = () => {
           const response = await Axios.get(`/shop/${shopID}/products/`);
           if (response.status === 200) {
             const productsData = response.data;
-            console.log("@@@ Products: ", productsData);
             setProductList(productsData);
           }
         } catch (error) {
@@ -73,7 +72,7 @@ const MyProducts = () => {
         }
       };
       fetchShopProduct();
-    }, [navigation])
+    }, [])
   );
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "#fff" }}>

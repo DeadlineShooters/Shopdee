@@ -14,7 +14,7 @@ export default function EditProduct({ route }) {
   const navigation = useNavigation();
   const { product } = route.params;
 
-  console.log("@@ Product to edit: ", product);
+  // console.log("@@ Product to edit: ", product);
 
   const [productNameText, setProductNameText] = useState(product.name);
   const [productDescText, setProductDescText] = useState(product.description);
