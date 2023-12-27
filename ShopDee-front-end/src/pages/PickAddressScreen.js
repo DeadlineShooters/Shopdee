@@ -5,9 +5,8 @@ import * as Location from "expo-location";
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
 import { GOOGLE_MAPS_API_KEY } from "@env";
 
-const PickAddressScreen = ({ navigation, route }) => {
+const PickAddressScreen = ({ navigation, route, previousScreen }) => {
   console.log("Key", GOOGLE_MAPS_API_KEY);
-  const { setNewAddress } = route.params;
   const [region, setRegion] = useState(null);
 
   useEffect(() => {
@@ -49,7 +48,7 @@ const PickAddressScreen = ({ navigation, route }) => {
       throw new Error("HTTP error " + response.status);
     }
     const json = await response.json();
-    console.log("json", json);
+    console.log("@@ json", json);
     const location = json.result.geometry.location;
 
     // update marker
@@ -61,8 +60,7 @@ const PickAddressScreen = ({ navigation, route }) => {
     });
 
     console.log(selectedAddress);
-    setNewAddress(selectedAddress);
-    navigation.goBack();
+    navigation.navigate(previousScreen, { selectedAddress });
   };
 
   return (

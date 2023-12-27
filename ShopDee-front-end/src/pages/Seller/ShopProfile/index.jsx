@@ -1,39 +1,24 @@
-import React, { useState, useRef, useEffect, useContext } from "react";
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  ToastAndroid,
-  Image,
-  TextInput,
-  SafeAreaView,
-  Animated,
-  StyleSheet,
-  Dimensions,
-  useIsFocused,
-  useFocusEffect,
-} from "react-native";
+import React, { useState, useRef, useContext, useEffect } from "react";
+import { useFocusEffect, useIsFocused } from "@react-navigation/native";
+import { View, Text, TouchableOpacity, ToastAndroid, Image, TextInput, SafeAreaView, Animated, StyleSheet, Dimensions } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import { AntDesign, Entypo } from "@expo/vector-icons";
 import axios from "axios";
-import { UserContext } from "../../../../context/UserContext";
+import { UserContext } from "../../../../context/UserContext.js";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { jwtDecode } from "jwt-decode";
 import "core-js/stable/atob";
 import { COLORS } from "../../../../assets/Themes";
-const shop = {
-  image: "",
-  name: "Loc Shop",
-  email: "loc123@gmail.com",
-  phone: "0123456789",
-  address: "227 Nguyen Van Cu",
-  description: "abc",
-};
+import { COLORS_v2 } from "../../../../constants/theme.js";
 
 export default function EditShopProfile({ navigation, route }) {
   const [shopName, setShopName] = useState("");
-  const [setSelectedImage] = useState("");
   const [bio, setBio] = useState("");
+  const [address, setAddress] = useState("");
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
+  const [shop, setShop] = useState("");
+  const [selectedImage, setSelectedImage] = useState("");
   const [maxCharactersName] = useState(30); // Số ký tự tối đa cho phép
   const [maxCharactersBio] = useState(200);
   const windowHeight = Dimensions.get("window").height;
@@ -91,6 +76,7 @@ export default function EditShopProfile({ navigation, route }) {
       useNativeDriver: true,
     }).start();
   };
+
   const showToast = () => {
     ToastAndroid.show("Toast message displayed!", ToastAndroid.SHORT);
   };
@@ -99,10 +85,6 @@ export default function EditShopProfile({ navigation, route }) {
     if (text.length <= maxCharactersName) {
       setShopName(text);
     }
-  };
-  const save = () => {
-    setStatus("success");
-    popIn();
   };
 
   const handleBioChange = (text) => {
@@ -122,11 +104,31 @@ export default function EditShopProfile({ navigation, route }) {
     }
   };
 
+  const { sellerData, setSellerData } = useContext(UserContext);
+  const isFocused = useIsFocused();
+  useEffect(() => {
+    const fetchUserProfile = async () => {
+      try {
+        const shopID = sellerData._id;
+        console.log("Finding Shop ID: ", shopID);
+        const response = await axios.get(`http://10.0.2.2:3000/shop/shopProfile/${shopID}`);
+        const user = response.data;
+        setShop(user);
+        setShopName(user.shop.name);
+        setBio(user.shop.description);
+        setAddress(user.shop.address);
+        setEmail(user.shop.email);
+        setPhone(user.shop.phone);
+        setSelectedImage(user.shop.image.url);
+      } catch (error) {
+        console.log("error", error);
+      }
+    };
+    fetchUserProfile();
+  }, [navigation, isFocused]);
   return (
     <SafeAreaView
       style={{
-        // width: '100%',
-        // height: '100%',
         backgroundColor: "#E3E3E3",
         flex: 1,
       }}
@@ -139,7 +141,6 @@ export default function EditShopProfile({ navigation, route }) {
           alignItems: "center",
           justifyContent: "space-between",
           padding: 10,
-          marginTop: 22,
           position: "relative",
         }}
       >
@@ -147,7 +148,7 @@ export default function EditShopProfile({ navigation, route }) {
           <AntDesign name="arrowleft" style={{ fontSize: 24 }} />
         </TouchableOpacity>
         <Text style={{ fontSize: 16, fontWeight: "bold", textAlign: "center", alignSelf: "center" }}> Shop Profile </Text>
-        <TouchableOpacity onPress={() => navigation.navigate("Edit Profile")}>
+        <TouchableOpacity onPress={() => navigation.navigate("Edit Profile", { shop })}>
           <AntDesign name="edit" size={24} color="black" />
         </TouchableOpacity>
       </View>
@@ -184,7 +185,7 @@ export default function EditShopProfile({ navigation, route }) {
             borderColor: "#CDCDCD",
             marginHorizontal: 10,
             flex: 1,
-            color: COLORS.lightBlue,
+            color: COLORS_v2.darkBlue,
           }}
           value={shop.name}
           onChangeText={handleShopNameChange}
@@ -202,6 +203,10 @@ export default function EditShopProfile({ navigation, route }) {
         }}
       >
         <Text style={{ fontSize: 16 }}>Bio</Text>
+
+        <Text style={{ color: COLORS.limitGray }}>
+          {bio.length}/{maxCharactersBio}
+        </Text>
       </View>
       <View
         style={{
@@ -215,16 +220,15 @@ export default function EditShopProfile({ navigation, route }) {
           style={{
             fontSize: 16,
             borderColor: "#CDCDCD",
-            marginHorizontal: 10,
             flex: 1,
-            color: COLORS.lightBlue,
+            color: COLORS_v2.darkBlue,
           }}
           value={shop.description}
           onChangeText={handleBioChange}
           maxLength={maxCharactersBio}
           numberOfLines={5} // Số dòng hiển thị
-          textAlignVertical="top" // Căn văn bản từ phía trên xuống
           editable={false}
+          textAlignVertical="top"
         />
       </View>
       <View
@@ -245,10 +249,11 @@ export default function EditShopProfile({ navigation, route }) {
             borderColor: "#CDCDCD",
             marginHorizontal: 10,
             flex: 1,
-            color: COLORS.lightBlue,
+            color: COLORS_v2.darkBlue,
           }}
-          value={shop.address}
           editable={false}
+          value={address}
+          onChangeText={(value) => setAddress(value)}
         />
       </View>
       <View
@@ -268,10 +273,12 @@ export default function EditShopProfile({ navigation, route }) {
             borderColor: "#CDCDCD",
             marginHorizontal: 10,
             flex: 1,
-            color: COLORS.lightBlue,
+            color: COLORS_v2.darkBlue,
           }}
           value={shop.email}
           editable={false}
+          value={email}
+          onChangeText={(value) => setEmail(value)}
         />
       </View>
       <View
@@ -290,10 +297,11 @@ export default function EditShopProfile({ navigation, route }) {
             borderColor: "#CDCDCD",
             marginHorizontal: 10,
             flex: 1,
-            color: COLORS.lightBlue,
+            color: COLORS_v2.darkBlue,
           }}
-          value={shop.phone}
           editable={false}
+          value={phone}
+          onChangeText={(value) => setPhone(value)}
         />
       </View>
       <View>
@@ -317,20 +325,6 @@ export default function EditShopProfile({ navigation, route }) {
           </View>
         </Animated.View>
       </View>
-      {/* <TouchableOpacity onPress={save}>
-        <View style={{
-          padding: 10,
-          marginBottom: 20,
-        }}>
-          <View style={{
-            borderRadius: 12,
-            backgroundColor: "#007EA7",
-            alignItems: "center",
-          }}>
-            <Text style={{ fontSize: 16, fontWeight: 600, marginVertical: 10, color: '#FFFFFF' }}>Create</Text>
-          </View>
-        </View>
-      </TouchableOpacity> */}
     </SafeAreaView>
   );
 }

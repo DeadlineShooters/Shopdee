@@ -11,11 +11,14 @@ import mongoose from "mongoose";
 export const checkShopOwner = async (req, res) => {
   try {
     const user = req.body.userID;
-    const existingUser = await Shop.findOne({ user: user });
+    // console.log("@@ user: ", user);
+    const existingUser = await Shop.findOne({ user: user }).populate("user");
+
+    // console.log("@@ existingUser: ", existingUser);
     if (!existingUser) {
       return res.status(500).json({ messages: "Email has been already registered!" });
     }
-    res.status(200).json({ existingUser });
+    res.status(200).json(existingUser);
   } catch (error) {
     console.log("error retrieving user data", error);
     res.status(500).json({ messages: "Not found user" });
@@ -24,6 +27,7 @@ export const checkShopOwner = async (req, res) => {
 export const register = async (req, res) => {
   try {
     const { username, email, password, name, phone, birthDay, gender, address } = req.body;
+    console.log(req.body);
     const existingUser = await user.findOne({ email });
     if (existingUser) {
       return res.status(400).json({ messages: "Email has been already registered!" });
@@ -83,8 +87,7 @@ export const updateprofile = async (req, res) => {
   try {
     const userID = req.params.userID;
     const { username, email, phone, gender, birthday, profilePic } = req.body;
-    await cloudinary.v2.uploader.destroy(EditUser.profilePic.public_id);
-    //const cdb = await cloudinary.v2.uploader.upload(profileimage.uri, {resource_type: "image"});
+    console.log(req.body);
     await user.findByIdAndUpdate(userID, {
       username: username,
       email: email,
@@ -106,18 +109,21 @@ export const updateprofile = async (req, res) => {
   }
 };
 
-export const getShop = async (req, res) => {
-  const { userID } = req.params;
-
-  console.log(userID);
+export const updateaddress = async (req, res) => {
+  console.log(req.body);
   try {
-    const shop = await Shop.findOne({ user: new mongoose.Types.ObjectId(userID) });
-    console.log(shop);
-    if (!shop) {
-      res.status(404).json({ message: "Shop not found" });
-    }
-    res.status(200).json({ shop });
+    const userID = req.params.userID;
+    const { address } = req.body;
+    console.log(address);
+    await user.findByIdAndUpdate(userID, {
+      address: address,
+    });
+    res.status(200).send({
+      success: true,
+      message: "profile updated successfully",
+    });
   } catch (error) {
-    res.status(500).json({ message: "Error retrieving shop" });
+    console.log(error);
+    res.status(500).json({ message: "Error updating the user profile" });
   }
 };

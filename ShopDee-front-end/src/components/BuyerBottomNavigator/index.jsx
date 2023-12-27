@@ -60,7 +60,7 @@ export default function BuyerBottomNavigator() {
 
       <Tab.Screen
         name="Notifications"
-        component={MyProducts}
+        component={Notifcations}
         options={{
           tabBarIcon: ({ focused, color }) => {
             if (focused) return <Ionicons name="notifications-sharp" size={24} color={color} />;

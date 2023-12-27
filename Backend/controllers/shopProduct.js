@@ -1,11 +1,14 @@
 import { response } from "express";
 import Product from "../models/product.js";
 import Shop from "../models/shop.js";
+
 export const index = async (req, res) => {
   try {
     const { shopId } = req.params;
-    console.log(shopId);
+    console.log("@@ shop ID: " + shopId);
     const products = await Product.find({ shop: shopId }).populate(["category", "shop"]);
+
+    console.log("@@ products: ", products);
     if (!products) {
       res.status(404).json({ message: "Products not found" });
     }
@@ -70,19 +73,15 @@ export const updateProduct = async (req, res) => {
     res.status(500).json({ message: "Error updating product" });
   }
 };
-
 export const deleteProduct = async (req, res) => {
   try {
     const { idProduct } = req.params;
-
+    console.log(idProduct);
     let product = await Product.findById(idProduct);
-
     if (!product) {
       return res.status(404).json({ message: "Product not found" });
     }
-
     await Product.findByIdAndDelete(idProduct);
-
     res.json({
       message: "Product deleted successfully",
     });
@@ -91,4 +90,11 @@ export const deleteProduct = async (req, res) => {
     console.log(err);
     res.status(500).send("Error deleting product");
   }
+
+  await Product.findByIdAndDelete(idProduct);
+
+  res.json({
+    message: "Product deleted successfully",
+  });
+  console.log("Product deleted");
 };

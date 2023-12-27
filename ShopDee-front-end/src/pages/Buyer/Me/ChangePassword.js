@@ -1,15 +1,14 @@
-import { View, Text, SafeAreaView, TouchableOpacity, ScrollView, TextInput, StyleSheet, Animated, Dimensions } from "react-native";
 import React, { useState, useRef, useContext, useEffect } from "react";
-import { COLORS } from "./Themes.js";
+import { View, Text, SafeAreaView, TouchableOpacity, ScrollView, TextInput, StyleSheet, Animated, Dimensions } from "react-native";
+import { COLORS_v2 } from "../../../../constants/theme.js";
 import { MaterialIcons, Ionicons, AntDesign, Entypo } from "@expo/vector-icons";
 import axios from "axios";
-import { UserContext } from "../../../../context/UserContext.js";
+import { UserContext } from "../../../../context/UserContext";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { jwtDecode } from "jwt-decode";
+import jwtDecode from "jwt-decode";
 import "core-js/stable/atob";
 
 const ChangePassword = ({ navigation }) => {
-  //Pop in animation
   const windowHeight = Dimensions.get("window").height;
   const [status, setStatus] = useState(null);
   const popAnim = useRef(new Animated.Value(windowHeight * -1)).current;
@@ -58,12 +57,10 @@ const ChangePassword = ({ navigation }) => {
   };
 
   const checkChangePassword = () => {
-    //Check for the Name TextInput
     if (!password.trim()) {
       alert("Please input your new password");
       return;
     }
-    //Check for the Email TextInput
     if (!confirmPassword.trim()) {
       alert("Please confirm your new password");
       return;
@@ -77,6 +74,7 @@ const ChangePassword = ({ navigation }) => {
 
   const { userID, setUserID } = useContext(UserContext);
   const [user, setUser] = useState("");
+
   useEffect(() => {
     const fetchUserProfile = async () => {
       try {
@@ -91,13 +89,15 @@ const ChangePassword = ({ navigation }) => {
         console.log("error", error);
       }
     };
+
     fetchUserProfile();
-  }, []);
+  }, [setUserID]);
+
   return (
     <SafeAreaView
       style={{
         flex: 1,
-        backgroundColor: COLORS.white,
+        backgroundColor: COLORS_v2.white,
         paddingHorizontal: 22,
       }}
     >
@@ -118,8 +118,8 @@ const ChangePassword = ({ navigation }) => {
             alignItems: "center",
           }}
         >
-          <MaterialIcons name="keyboard-arrow-left" size={24} color={COLORS.lightBlue} />
-          <Text style={{ color: COLORS.lightBlue }}>Settings</Text>
+          <MaterialIcons name="keyboard-arrow-left" size={24} color={COLORS_v2.lightBlue} />
+          <Text style={{ color: COLORS_v2.lightBlue }}>Settings</Text>
         </TouchableOpacity>
         <Text style={{ fontSize: 20, fontWeight: 600 }}>Change Password</Text>
       </View>
@@ -143,7 +143,7 @@ const ChangePassword = ({ navigation }) => {
               style={{
                 height: 44,
                 width: "100%",
-                borderColor: COLORS.secondaryGray,
+                borderColor: COLORS_v2.secondaryGray,
                 borderWidth: 1,
                 borderRadius: 4,
                 marginVertical: 6,
@@ -179,7 +179,7 @@ const ChangePassword = ({ navigation }) => {
               style={{
                 height: 44,
                 width: "100%",
-                borderColor: COLORS.secondaryGray,
+                borderColor: COLORS_v2.secondaryGray,
                 borderWidth: 1,
                 borderRadius: 4,
                 marginVertical: 6,
@@ -232,11 +232,11 @@ const ChangePassword = ({ navigation }) => {
           <View
             style={{
               borderRadius: 12,
-              backgroundColor: COLORS.blue,
+              backgroundColor: COLORS_v2.blue,
               alignItems: "center",
             }}
           >
-            <Text style={{ fontSize: 16, fontWeight: 600, marginVertical: 10, color: COLORS.white }}>Save</Text>
+            <Text style={{ fontSize: 16, fontWeight: 600, marginVertical: 10, color: COLORS_v2.white }}>Save</Text>
           </View>
         </View>
       </TouchableOpacity>
