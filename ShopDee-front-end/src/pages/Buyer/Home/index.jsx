@@ -8,36 +8,35 @@ import {
   Pressable,
   ScrollView,
 } from "react-native";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import React from "react";
 import { AntDesign } from "@expo/vector-icons";
 import { FontAwesome } from "@expo/vector-icons";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useIsFocused } from "@react-navigation/native";
+import axios from "axios";
 
 export default function Home() {
   const navigation = useNavigation();
   function onPressFunction() {
     navigation.navigate("Home");
   }
-    
-  const localImageUrls = [require("./sunglasses.png"), require("./hat.png")];
   const initialFavoriteStatus = {};
   const [favoriteProducts, setFavoriteProducts] = useState(initialFavoriteStatus);
-  const product1 = {
-    id: "1",
-    name: "Sunglasses",
-    price: "$ 48.9",
-    imageUrl: localImageUrls[0],
-  }
-  const product2 = {
-    id: "2",
-    name: "Hat",
-    price: "$ 47.7",
-    imageUrl: localImageUrls[1],
-  }
-  const products = [
-    product1, product2, product1, product2, product1, product2, product1, product2,
-  ];
+  const [productList, setProductList] = useState([]);
+  const isFocused = useIsFocused();
+  useEffect(() => {
+    const fetchBuyerProduct = async () => {
+      try {
+        const response = await axios.get("http://10.0.2.2:3000/products/home");
+        const productData = response.data;
+        console.log(productData);
+        setProductList(productData);
+      } catch (error) {
+        console.log("Error fetching buyer product: ", error);
+      }
+    }
+    fetchBuyerProduct();
+  }, [navigation, isFocused]);
   const handleFavourite = (productId) => {
     setFavoriteProducts({
       ...favoriteProducts,
@@ -110,31 +109,30 @@ export default function Home() {
 
       <ScrollView contentContainerStyle={styles.productList} showsVerticalScrollIndicator={false}>
         <View style={{ flexDirection: "row", flexWrap: "wrap" }}>
-          {products.map((product, index) => (
+          {productList.map((product, index) => (
             <View style={{ 
               width: "50%"
               }} key={index}>
               <TouchableOpacity 
                 style={styles.productItem}
                 onPress={() => {
-                  navigation.navigate("ProductDetails");
+                  navigation.navigate("ProductDetails", {product});
                 }}
               >
-                <Image source={product.imageUrl} style={styles.productImage} />
+                <Image source={{uri: product.image[0]?.url}} style={styles.productImage} />
                 <View style={styles.productDetails}>
                   <Text style={styles.productName}>{product.name}</Text>
                   <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
                     <Text>{product.price}</Text>
-                    {<TouchableOpacity onPress={() => handleFavourite(product.id)}>
+                    {<TouchableOpacity onPress={() => handleFavourite(product._id)}>
                       <AntDesign 
-                        name={favoriteProducts[product.id] ? 'heart' : 'hearto'}
+                        name={favoriteProducts[product._id] ? 'heart' : 'hearto'}
                         size={24}
-                        color={favoriteProducts[product.id] ? 'red' : 'black'} />
+                        color={favoriteProducts[product._id] ? 'red' : 'black'} />
                     </TouchableOpacity>}
                   </View>
                 </View>
               </TouchableOpacity>
-
             </View>
           ))}
         </View>

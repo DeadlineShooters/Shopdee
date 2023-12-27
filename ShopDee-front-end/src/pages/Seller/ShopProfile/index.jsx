@@ -18,7 +18,7 @@ export default function EditShopProfile({ navigation, route }) {
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
   const [shop, setShop] = useState("");
-  const [selectedImage, setSelectedImage] = useState("");
+  const [selectedImage, setSelectedImage] = useState();
   const [maxCharactersName] = useState(30); // Số ký tự tối đa cho phép
   const [maxCharactersBio] = useState(200);
   const windowHeight = Dimensions.get("window").height;
@@ -244,7 +244,6 @@ export default function EditShopProfile({ navigation, route }) {
             flex: 1,
             color: COLORS_v2.darkBlue,
           }}
-          value={shop.email}
           editable={false}
           value={email}
           onChangeText={(value) => setEmail(value)}

@@ -37,26 +37,7 @@ const MyProducts = () => {
       },
     ]);
   };
-  // const isFocused = useIsFocused();
-  // useEffect(() => {
-  //   const fetchShopProduct = async () => {
-  //     console.log("Shop ID: ", shopID);
-  //     try {
-  //         const response = await axios.get(`http://10.0.2.2:3000/shop/${shopID}/products/`);
-  //         if (response.status === 200) {
-  //           const productsData = response.data.products;
-  //           console.log(productsData);
-  //           setProductList(productsData);
-  //         }
-  //       } catch (error) {
-  //         console.log("error", error);
-  //       }
-  //     }
-  //     fetchShopProduct();
-  // }, [navigation, isFocused]);
-  //
-  // console.log(products);
-
+  
   useFocusEffect(
     React.useCallback(() => {
       const fetchShopProduct = async () => {
