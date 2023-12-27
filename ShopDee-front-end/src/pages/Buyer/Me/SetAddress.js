@@ -259,6 +259,27 @@ const SetAddress = ({ navigation, route }) => {
           </View>
         </View>
       </ScrollView>
+      <View>
+        <Animated.View
+          style={[
+            styles.toastContainer,
+            {
+              transform: [{ translateY: popAnim }],
+            },
+          ]}
+        >
+          <View style={styles.toastRow}>
+            <AntDesign name={status === "success" ? "checkcircleo" : "closecircleo"} size={24} color={status === "success" ? successColor : failColor} />
+            <View style={styles.toastText}>
+              <Text style={{ fontWeight: "bold", fontSize: 15 }}>{status === "success" ? successHeader : failHeader}</Text>
+              <Text style={{ fontSize: 12 }}>{status === "success" ? successMessage : failMessage}</Text>
+            </View>
+            <TouchableOpacity onPress={instantPopOut}>
+              <Entypo name="cross" size={24} color="black" />
+            </TouchableOpacity>
+          </View>
+        </Animated.View>
+      </View>
       {changeAddress == address ? (
         <View
           style={{
@@ -277,11 +298,7 @@ const SetAddress = ({ navigation, route }) => {
         </View>
       ) : (
         <TouchableOpacity onPress={save}>
-          <View
-            style={{
-              marginBottom: 20,
-            }}
-          >
+          <View style={{ marginBottom: 20 }}>
             <View
               style={{
                 borderRadius: 12,
@@ -297,5 +314,35 @@ const SetAddress = ({ navigation, route }) => {
     </SafeAreaView>
   );
 };
-
 export default SetAddress;
+
+const styles = StyleSheet.create({
+  toastContainer: {
+    height: 60,
+    width: 350,
+    backgroundColor: "#f5f5f5",
+    justifyContent: "center",
+    alignItems: "center",
+    borderRadius: 10,
+
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+
+    elevation: 5,
+  },
+  toastRow: {
+    width: "90%",
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-evenly",
+  },
+  toastText: {
+    width: "70%",
+    padding: 2,
+  },
+});

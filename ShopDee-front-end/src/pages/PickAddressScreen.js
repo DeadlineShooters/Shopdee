@@ -48,7 +48,7 @@ const PickAddressScreen = ({ navigation, route, previousScreen }) => {
       throw new Error("HTTP error " + response.status);
     }
     const json = await response.json();
-    console.log("json", json);
+    console.log("@@ json", json);
     const location = json.result.geometry.location;
 
     // update marker
