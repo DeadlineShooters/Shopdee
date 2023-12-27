@@ -7,14 +7,17 @@ import { MaterialIcons } from "@expo/vector-icons";
 import { useNavigation, useFocusEffect, useIsFocused } from "@react-navigation/native";
 import { UserContext } from "../../../../context/UserContext";
 import React, { useContext, useEffect, useState } from "react";
+import axios from "axios";
 
 const MyProducts = () => {
   const navigation = useNavigation();
+  const [shopID, setShopID] = useState("");
   const { shop } = useContext(UserContext);
-  const [shopID, setShopID] = useState(shop.existingUser._id);
+  console.log("@@", shop);
   const [products, setProductList] = useState([]);
   const deleteThisProduct = async (productId) => {
     try {
+      const shopID = shop.shop._id;
       const response = await axios.delete(`http://10.0.2.2:3000/shop/${shopID}/products/${productId}`);
       if (response.status == 200) {
         console.log("delete successfully");
@@ -38,8 +41,9 @@ const MyProducts = () => {
   const isFocused = useIsFocused();
   useEffect(() => {
     const fetchShopProduct = async () => {
-      console.log("Shop ID: ", shopID);
       try {
+        const shopID = shop.shop._id;
+        console.log("Shop ID: ", shopID);
         const response = await axios.get(`http://10.0.2.2:3000/shop/${shopID}/products/index`);
         if (response.status === 200) {
           const productsData = response.data.products;

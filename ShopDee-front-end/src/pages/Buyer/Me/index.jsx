@@ -12,12 +12,13 @@ import "core-js/stable/atob";
 
 const Me = ({ navigation }) => {
   const { userID, setUserID, shop } = useContext(UserContext);
+  const [shopData, setShopData] = useState(shop);
   const navigateToEditProfile = () => {
     navigation.navigate("EditProfile", { props: user });
   };
   const navigateToShopOwner = async () => {
-    if (shop.existingUser._id != null){
-      navigation.navigate("SellerBottomNav", { screen: "My Products", props: shop });
+    if (shop != null){
+      navigation.navigate("SellerBottomNav", { screen: "My Products" });
     } else {
       Alert.alert("Shop registration needed", "Do you want to create shop?", [
         {
@@ -29,7 +30,6 @@ const Me = ({ navigation }) => {
           onPress: () => navigation.navigate("CreateShop"),
         },
       ]);
-      console.log("error retrieving user data", error);
     }
   };
   const navigateToSettings = () => {

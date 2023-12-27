@@ -30,33 +30,19 @@ export default function EditProduct({ route }) {
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const response = await Axios.get("http://10.0.2.2:3000/categories", {
+        const response = await Axios.get("http://localhost:3000/categories", {
           timeout: 5000, // Set timeout to 5 seconds (adjust as needed)
         });
         const fetchedCategories = response.data;
-        console.log("{GET http://10.0.2.2:3000/categories}", fetchedCategories);
+        console.log("{GET http://localhost:3000/categories}", fetchedCategories);
         setCategories(fetchedCategories); // Update the state
       } catch (error) {
         console.error("Error fetching categories:", error);
         setCategories([]); // Set an empty array in case of an error
       }
     };
+
     fetchCategories();
-    const fetchProductData = async () => {
-      try {
-        const response = await Axios.get(`http://10.0.2.2:3000/shop/${shopID}/products/${productID}/get-detail`);
-        const productData = response.data;
-        console.log(productData);
-        setProductNameText(productData.name);
-        setProductDescText(productData.description);
-        setPrice(productData.price.toString());
-        setStock(productData.quantity.toString());
-        setSelectedCategory(productData.category);
-      } catch (error) {
-        console.error("Error fetching product data: ", error);
-      }
-    };
-    fetchProductData();
   }, []);
 
   const handleEdit = async () => {
@@ -169,6 +155,9 @@ export default function EditProduct({ route }) {
       allowsMultipleSelection: true,
       selectionLimit: 5,
     });
+
+    console.log(result);
+
     if (!result.canceled) {
       setProductPhotos(result.assets.map((item) => ({ uri: item.uri })));
     }

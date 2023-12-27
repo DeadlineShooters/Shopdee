@@ -3,9 +3,9 @@ import { fetchShopInfo } from "../src/api/shopApi";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { jwtDecode } from "jwt-decode";
 import "core-js/stable/atob";
+
 const UserContext = createContext();
-// import { Axios } from "./axios";
-import axios from "axios";
+
 const UserProvider = ({ children }) => {
   const [userID, setUserID] = useState("");
   const [shop, setShop] = useState(null);

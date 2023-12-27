@@ -12,11 +12,11 @@ export const checkShopOwner = async (req, res) => {
   try {
     const user = req.body.userID;
     console.log(req.body.userID);
-    const existingUser = await Shop.findOne({ user: user });
-    if (!existingUser) {
+    const shop = await Shop.findOne({ user: user });
+    if (!shop) {
       return res.status(400).json({ messages: "Email has been already registered!" });
     }
-    res.status(200).json({ existingUser });
+    res.status(200).json({shop});
   } catch (error) {
     console.log("error retrieving user data", error);
     res.status(500).json({ messages: "Not found user" });

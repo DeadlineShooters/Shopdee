@@ -17,8 +17,7 @@ export default function EditShopProfile({ navigation, route }) {
   const [address, setAddress] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
-  const [shopProfileData, setShopProfileData] = useState("");
-  const [selectedImage, setSelectedImage] = useState("");
+  const [selectedImage, setSelectedImage] = useState();
   const [maxCharactersName] = useState(30); // Số ký tự tối đa cho phép
   const [maxCharactersBio] = useState(200);
   const windowHeight = Dimensions.get("window").height;
@@ -72,28 +71,16 @@ export default function EditShopProfile({ navigation, route }) {
       setBio(text);
     }
   };
-  const handleImageSelection = async () => {
-    let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.All,
-      allowsEditing: true,
-      aspect: [4, 4],
-      quality: 1,
-    });
-    if (!result.canceled) {
-      setSelectedImage(result.assets[0].url);
-    }
-  };
-
   const { shop, setShop } = useContext(UserContext);
-  console.log("Hoa shop ID:", shop.existingUser._id);
   const isFocused = useIsFocused();
   useEffect(() => {
     const fetchUserProfile = async () => {
       try {
-        const shopID = shop.existingUser._id;
+        const shopID = shop.shop._id;
         console.log("Finding Shop ID: ", shopID);
         const response = await axios.get(`http://10.0.2.2:3000/shop/shopProfile/${shopID}`);
         const user = response.data;
+        console.log("Hoa tim dc ttin shop: ", user);
         setShop(user);
         setShopName(user.shop.name);
         setBio(user.shop.description);
@@ -136,18 +123,7 @@ export default function EditShopProfile({ navigation, route }) {
       </View>
 
       <View style={{ padding: 20, alignItems: "center", backgroundColor: "#00a7e1" }}>
-        <Image source={require("./avatar.jpg")} style={{ width: 80, height: 80, borderRadius: 100 }} />
-        <View>
-          <TouchableOpacity onPress={handleImageSelection}>
-            <Text
-              style={{
-                color: "white",
-              }}
-            >
-              Change profile photo
-            </Text>
-          </TouchableOpacity>
-        </View>
+        <Image source={{uri: selectedImage}} style={{ width: 80, height: 80, borderRadius: 100 }} />
       </View>
 
       <View
@@ -169,8 +145,7 @@ export default function EditShopProfile({ navigation, route }) {
             flex: 1,
             color: COLORS_v2.darkBlue,
           }}
-          value={shop.name}
-          onChangeText={handleShopNameChange}
+          value={shopName}
           maxLength={maxCharactersName}
           editable={false}
         />
@@ -185,7 +160,6 @@ export default function EditShopProfile({ navigation, route }) {
         }}
       >
         <Text style={{ fontSize: 16 }}>Bio</Text>
-
         <Text style={{ color: COLORS.limitGray }}>
           {bio.length}/{maxCharactersBio}
         </Text>
@@ -205,7 +179,7 @@ export default function EditShopProfile({ navigation, route }) {
             flex: 1,
             color: COLORS_v2.darkBlue,
           }}
-          value={shop.description}
+          value={bio}
           onChangeText={handleBioChange}
           maxLength={maxCharactersBio}
           numberOfLines={5} // Số dòng hiển thị
@@ -257,7 +231,7 @@ export default function EditShopProfile({ navigation, route }) {
             flex: 1,
             color: COLORS_v2.darkBlue,
           }}
-          value={shop.email}
+          value={email}
           editable={false}
           onChangeText={(value) => setEmail(value)}
         />

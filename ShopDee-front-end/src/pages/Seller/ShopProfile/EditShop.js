@@ -1,5 +1,5 @@
 import React, { useState, useRef,  useEffect, useContext } from 'react';
-import { View, Text, TouchableOpacity, ToastAndroid, Image, TextInput, SafeAreaView, Animated, StyleSheet, Dimensions } from "react-native";
+import { View, Text, TouchableOpacity, ToastAndroid, Image, TextInput, SafeAreaView, Animated, StyleSheet, Dimensions, Alert } from "react-native";
 import * as ImagePicker from 'expo-image-picker';
 import { AntDesign, Entypo } from '@expo/vector-icons';
 import { UserType } from '../../../../context/UserContext';
@@ -8,7 +8,6 @@ import axios from 'axios';
 
 export default function CreateShop({navigation, route}) {
   const shopProfile = route.params.shop;
-  console.log(shopProfile);
   const [shopID, setShopID] = useState('');
   const [shopName, setShopName] = useState('');
   const [bio, setBio] = useState('');
@@ -39,6 +38,8 @@ export default function CreateShop({navigation, route}) {
     setEmail(shopProfile.shop.email);
     setPhone(shopProfile.shop.phone);
     setSelectedImage(shopProfile.shop.image.url);
+    setPublicId(shopProfile.shop.image.public_id);
+    setSecureUrl(shopProfile.shop.image.url);
   }, []);
   // Check form changes
   const initialFormState = useRef({
@@ -168,7 +169,7 @@ export default function CreateShop({navigation, route}) {
         });
         if (response.ok) {
             const result = await response.json();
-            console.log(result);
+            console.log("Hinh da upload len: ", result);
             setPublicId(result.public_id);
             setSecureUrl(result.secure_url);
         } else {
@@ -183,7 +184,6 @@ export default function CreateShop({navigation, route}) {
     isFormEdited.current = false;
     try {
       const profilePic = {publicId, secureUrl};
-      console.log(profilePic);
       const shopProfile = {
         shopName,
         bio,
