@@ -21,6 +21,9 @@ const MyProducts = () => {
       if (response.status == 200) {
         console.log("delete successfully");
       } else console.error("Error");
+      const updatedProducts = products.filter(product => product._id !== productId);
+      // Update the state to re-render the component
+      setProductList(updatedProducts);
     } catch (error) {
       console.log(error);
     }

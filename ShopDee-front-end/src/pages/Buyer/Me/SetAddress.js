@@ -290,11 +290,11 @@ const SetAddress = ({ navigation, route }) => {
           <View
             style={{
               borderRadius: 12,
-              backgroundColor: COLORS.secondaryGray,
+              backgroundColor: COLORS_v2.secondaryGray,
               alignItems: "center",
             }}
           >
-            <Text style={{ fontSize: 16, fontWeight: 600, marginVertical: 10, color: COLORS.white }}>Save</Text>
+            <Text style={{ fontSize: 16, fontWeight: 600, marginVertical: 10, color: COLORS_v2.white }}>Save</Text>
           </View>
         </View> :
         <TouchableOpacity onPress={save}>
