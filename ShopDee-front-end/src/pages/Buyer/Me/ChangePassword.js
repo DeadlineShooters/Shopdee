@@ -72,7 +72,7 @@ const ChangePassword = ({ navigation }) => {
     save();
   };
 
-  const { userID, setUserID } = useContext(UserType);
+  const { userID, setUserID } = useContext(UserContext);
   const [user, setUser] = useState("");
 
   useEffect(() => {

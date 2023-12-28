@@ -6,8 +6,6 @@ import { MaterialIcons, AntDesign, Entypo } from "@expo/vector-icons";
 
 const SetAddress = ({ navigation, route }) => {
   const user = route.params.props.User;
-  const { selectedAddress } = route.params;
-
   console.log("@@ user map: ", user);
   const { selectedAddress } = route.params;
 
@@ -283,7 +281,7 @@ const SetAddress = ({ navigation, route }) => {
           </View>
         </Animated.View>
       </View>
-      {changeAddress == address ? (
+      {changeAddress == address ?
         <View
           style={{
             marginBottom: 20,
@@ -315,8 +313,6 @@ const SetAddress = ({ navigation, route }) => {
       }
     </SafeAreaView>
   );
-};
-export default SetAddress;
 };
 export default SetAddress;
 
