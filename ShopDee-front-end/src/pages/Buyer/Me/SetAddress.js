@@ -85,10 +85,6 @@ const SetAddress = ({ navigation, route }) => {
     }
   };
 
-  const setNewAddress = (addr) => {
-    setNewAddress(addr);
-  };
-
   const handlePickAddress = () => {
     navigation.navigate("AddressPicker", { previousScreen: "SetAddress" });
   };
