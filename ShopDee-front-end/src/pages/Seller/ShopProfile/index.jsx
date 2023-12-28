@@ -18,7 +18,7 @@ export default function EditShopProfile({ navigation, route }) {
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
   const [shop, setShop] = useState("");
-  const [selectedImage, setSelectedImage] = useState("");
+  const [selectedImage, setSelectedImage] = useState();
   const [maxCharactersName] = useState(30); // Số ký tự tối đa cho phép
   const [maxCharactersBio] = useState(200);
   const windowHeight = Dimensions.get("window").height;
@@ -30,27 +30,7 @@ export default function EditShopProfile({ navigation, route }) {
   const failColor = "#bf6060";
   const failHeader = "Failed!";
   const failMessage = "Your information was still unsaved";
-  const { userID, setUserID } = useContext(UserContext);
-  const [user, setUser] = useState("");
 
-  useEffect(() => {
-    const fetchUserProfile = async () => {
-      try {
-        const token = await AsyncStorage.getItem("authToken");
-        const decodedToken = jwtDecode(token);
-        const userID = decodedToken.userID;
-        setUserID(userID);
-        const response = await axios.get(`http://10.0.2.2:3000/user/profile/${userID}`);
-        const user = response.data;
-        console.log(user);
-        setUser(user);
-        // setUserName(user?.User?.username);
-      } catch (error) {
-        console.log("error", error);
-      }
-    };
-    fetchUserProfile();
-  }, []);
   const popIn = () => {
     Animated.timing(popAnim, {
       toValue: windowHeight * -0.35 * 0.95,
@@ -76,6 +56,7 @@ export default function EditShopProfile({ navigation, route }) {
       useNativeDriver: true,
     }).start();
   };
+
 
   const showToast = () => {
     ToastAndroid.show("Toast message displayed!", ToastAndroid.SHORT);
@@ -154,18 +135,7 @@ export default function EditShopProfile({ navigation, route }) {
       </View>
 
       <View style={{ padding: 20, alignItems: "center", backgroundColor: "#00a7e1" }}>
-        <Image source={require("./avatar.jpg")} style={{ width: 80, height: 80, borderRadius: 100 }} />
-        <View>
-          <TouchableOpacity onPress={handleImageSelection}>
-            <Text
-              style={{
-                color: "white",
-              }}
-            >
-              Change profile photo
-            </Text>
-          </TouchableOpacity>
-        </View>
+        <Image source={{uri: selectedImage}} style={{ width: 80, height: 80, borderRadius: 100 }} />
       </View>
 
       <View
@@ -187,8 +157,7 @@ export default function EditShopProfile({ navigation, route }) {
             flex: 1,
             color: COLORS_v2.darkBlue,
           }}
-          value={shop.name}
-          onChangeText={handleShopNameChange}
+          value={shopName}
           maxLength={maxCharactersName}
           editable={false}
         />
@@ -223,7 +192,7 @@ export default function EditShopProfile({ navigation, route }) {
             flex: 1,
             color: COLORS_v2.darkBlue,
           }}
-          value={shop.description}
+          value={bio}
           onChangeText={handleBioChange}
           maxLength={maxCharactersBio}
           numberOfLines={5} // Số dòng hiển thị
@@ -275,7 +244,6 @@ export default function EditShopProfile({ navigation, route }) {
             flex: 1,
             color: COLORS_v2.darkBlue,
           }}
-          value={shop.email}
           editable={false}
           value={email}
           onChangeText={(value) => setEmail(value)}

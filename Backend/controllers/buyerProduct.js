@@ -4,8 +4,8 @@ const controller = {};
 controller.showAll = async (req, res) => {
   try {
     // Fetch all products
-    const products = await Product.find().populate(["category", "shop"]);
-
+    const products = await Product.find({}).populate(["category", "shop"]);
+    console.log(products);
     res.json(products);
   } catch (error) {
     console.error("Error fetching products:", error);

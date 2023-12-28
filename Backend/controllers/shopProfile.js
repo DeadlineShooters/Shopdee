@@ -46,22 +46,22 @@ export const getprofile = async (req, res) => {
     }
 }
 export const updateShopProfile = async (req, res) => {
-    console.log(req.body);
     try {
         const shopID = req.params.shopID; // Assuming you have the shop ID in the request parameters.
+        console.log(shopID);
         const { shopName, bio, email, phone, address, profilePic } = req.body;
+        console.log(req.body);
         await Shop.findByIdAndUpdate(shopID, {
-            shopName: shopName,
+            name: shopName,
             description: bio,
             email: email,
             phone: phone,
             address: address,
-            profilePic: {
+            image: {
                 public_id: profilePic.publicId,
                 url: profilePic.secureUrl
             }
         });
-
         res.status(200).send({
             success: true,
             message: "Shop profile updated successfully",

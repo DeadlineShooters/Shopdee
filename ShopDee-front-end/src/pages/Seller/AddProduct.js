@@ -12,7 +12,6 @@ import mongoose from "mongoose";
 
 export default function AddProduct({ productId }) {
   const navigation = useNavigation();
-
   const [productNameText, setProductNameText] = useState("");
   const [productDescText, setProductDescText] = useState("");
   const [price, setPrice] = useState(""); // New state for price
