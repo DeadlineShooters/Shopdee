@@ -11,6 +11,7 @@ import SellerBottomNavigator from "./src/components/SellerBottomNavigator";
 import ProductDetails from "./src/pages/Buyer/ProductDetails";
 import Checkout from "./src/pages/Buyer/Checkout";
 import Me from "./src/pages/Seller/ShopProfile";
+import { View, Text } from "react-native";
 
 import CreateShop from "./src/pages/Buyer/CreateShop";
 import EditProfile from "./src/pages/Buyer/Me/EditProfile.js";
@@ -22,38 +23,33 @@ import AboutShopDee from "./src/pages/Buyer/Me/About.js";
 import HelpSupport from "./src/pages/Buyer/Me/Support";
 import ChangePassword from "./src/pages/Buyer/Me/ChangePassword";
 import SignIn from "./src/pages/SignIn";
-import SignUp from "./src/pages/SignIn/SignUp";
-import { UserContext } from "./UserContext.js";
+import SignUp from "./src/pages/SignIn/SignUp/index.jsx";
+import SendMailVerify from "./src/pages/Helper/SendMailVerify.js";
+import { UserProvider } from "./context/UserContext.js";
 import AddProduct from "./src/pages/Seller/AddProduct.js";
 import EditProduct from "./src/pages/Seller/EditProduct.js";
+
+import PickAddressScreen from "./src/pages/PickAddressScreen.js";
+import { COLORS } from "./assets/Themes.js";
+import GoBack from "./src/components/goBackPanel.jsx";
 
 const Stack = createNativeStackNavigator();
 
 export default function App() {
-  let buyer = true;
-  let seller = true;
-
-  // var { height, width } = Dimensions.get("window");
-  // console.log("Width is: " + width);
-  // console.log("Height is: " + height);
   return (
     <>
       <StatusBar />
-      <UserContext>
+      <UserProvider>
         <SafeAreaProvider>
           <NavigationContainer>
             <Stack.Navigator>
-              {buyer && (
+              {
+                // buyer
                 <>
                   <Stack.Screen name="SignIn" component={SignIn} options={{ headerShown: false }} />
                   <Stack.Screen name="SignUp" component={SignUp} options={{ headerShown: false }} />
-                  <Stack.Screen
-                    name="BuyerBottomNav"
-                    component={BuyerBottomNavigator}
-                    options={{
-                      headerShown: false,
-                    }}
-                  />
+                  <Stack.Screen name="SendMail" component={SendMailVerify} options={{ headerShown: false }} />
+                  <Stack.Screen name="BuyerBottomNav" component={BuyerBottomNavigator} options={{ headerShown: false }} />
                   <Stack.Screen name="CreateShop" component={CreateShop} options={{ headerShown: false }} />
                   <Stack.Screen name="EditProfile" component={EditProfile} options={{ headerShown: false }} />
                   <Stack.Screen name="Settings" component={Settings} options={{ headerShown: false }} />
@@ -65,39 +61,36 @@ export default function App() {
                   <Stack.Screen name="ProductDetails" component={ProductDetails} options={{ headerShown: false }} />
                   <Stack.Screen name="Checkout" component={Checkout} options={{ headerShown: false }} />
                 </>
-              )}
-              {seller && (
+              }
+              {
+                // seller
                 <>
                   <Stack.Screen
                     name="SellerBottomNav"
                     component={SellerBottomNavigator}
+                    // options={{ title: "Back to Me", headerTitleStyle: { fontSize: 13, color: COLORS.blue }, headerBackTitleStyle: { fontSize: 13 } }}
                     options={{
                       headerShown: false,
                     }}
                   />
-                  <Stack.Screen
-                    name="Edit product"
-                    component={EditProduct}
-                    options={{
-                      headerShown: false,
-                    }}
-                  />
-                  <Stack.Screen
-                    name="Add product"
-                    component={AddProduct}
-                    options={{
-                      headerShown: false,
-                    }}
-                  />
-                  <Stack.Screen name="Edit Profile" 
-                  component={EditShopProfile} 
-                  options={{ headerShown: false }} />
+                  <Stack.Screen name="Edit product" component={EditProduct} options={{ headerShown: false }} />
+                  <Stack.Screen name="Add product" component={AddProduct} options={{ headerShown: false }} />
+                  <Stack.Screen name="Edit Profile" component={EditShopProfile} options={{ headerShown: false }} />
                 </>
-              )}
+              }
+              <Stack.Screen name="AddressPicker" component={PickAddressScreen} options={{ headerShown: false }} />
             </Stack.Navigator>
           </NavigationContainer>
         </SafeAreaProvider>
-      </UserContext>
+      </UserProvider>
     </>
   );
 }
+
+// function CustomHeader() {
+//   return (
+//     <View style={{ height: 50, backgroundColor: COLORS.white, justifyContent: "center", alignItems: "center" }}>
+//       <Text style={{ fontSize: 13, color: COLORS.blue }}>Back to Me</Text>
+//     </View>
+//   );
+// }

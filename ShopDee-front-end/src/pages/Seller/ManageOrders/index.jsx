@@ -1,10 +1,10 @@
 import { View, Text, StyleSheet, SafeAreaView, FlatList } from "react-native";
 import Order from "../../../components/ManageOrders/Order";
-import { ORDER_LIST_TO_CONFIRM } from "../../../../data/order";
-import { ORDER_LIST_TO_DELIVER } from "../../../../data/order";
-import { ORDER_LIST_COMPLETED } from "../../../../data/order";
+import React, { useState, useEffect, useContext, useCallback } from "react";
+import { fetchOrders } from "../../../api/shopApi.js";
+import { UserContext } from "../../../../context/UserContext.js";
+import { useFocusEffect } from "@react-navigation/native";
 
-//  testing code please replace!!
 export default function ManageOrders({ orders, buttonVisible }) {
   return (
     <SafeAreaView style={[styles.mainContainer]}>
@@ -14,46 +14,125 @@ export default function ManageOrders({ orders, buttonVisible }) {
           const order = itemData.item;
           let buttonText;
 
-          if (order.status === "To Deliver") {
+          if (order.status === "toDeliver") {
             buttonText = "Complete";
-          } else if (order.status === "To Confirm") {
+          } else if (order.status === "toConfirm") {
             buttonText = "Confirm";
           }
 
           return (
-            <View key={order.id} style={styles.orderContainer}>
-              <Order buyer={order.buyer} buttonVisible={buttonVisible} buttonText={buttonText} itemList={order.items} totalPayment={order.totalPayment} />
+            <View key={order._id} style={styles.orderContainer}>
+              <Order order={order} buttonVisible={buttonVisible} buttonText={buttonText} />
             </View>
           );
         }}
       />
-      {/* {ORDER_LIST_TO_CONFIRM.map((order) => {
-        if (order.status === "To Confirm") {
-          return (
-            <View key={order.id} style={styles.orderContainer}>
-              <Order shopName={order.shopName} buttonVisible={true} buttonText="Cancel" itemList={order.items} totalPayment={order.totalPayment} />
-            </View>
-          );
-        }
-      })} */}
-      {/* <Order shopName="BITIS'S OFFICIAL STORE" buttonVisible={true} buttonText="Cancel" itemList={ORDER_ITEMS} /> */}
     </SafeAreaView>
   );
 }
 
-// Inside ConfirmOrders component
+export function useShopOrders(orderStatus, buttonVisible) {
+  // const [shopInfoData, setShopInfoData] = useState(null);
+  const [shopOrders, setShopOrders] = useState(null);
+  const { sellerData } = useContext(UserContext);
+
+  console.log("@@@ order status: " + orderStatus);
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        console.log("@@@ seller data: ", sellerData);
+        const orders = await fetchOrders(orderStatus, sellerData?._id);
+
+        console.log("@@@ Orders after fetchOrders:", orders);
+        setShopOrders(orders);
+      } catch (error) {
+        console.error("Error fetching shop info:", error);
+      }
+    };
+
+    fetchData();
+  }, [orderStatus]);
+
+  return <ManageOrders orders={shopOrders} buttonVisible={buttonVisible} />;
+}
+
 export function ConfirmOrders() {
-  return <ManageOrders orders={ORDER_LIST_TO_CONFIRM} buttonVisible={true} />;
+  const [shopOrders, setShopOrders] = useState(null);
+  const { sellerData } = useContext(UserContext);
+
+  useFocusEffect(
+    React.useCallback(() => {
+      const fetchData = async () => {
+        try {
+          console.log("@@ seller data id:  ", sellerData._id);
+          const orders = await fetchOrders("toConfirm", sellerData._id);
+
+          console.log("@@@ Orders after fetchOrders:", orders);
+          setShopOrders(orders);
+        } catch (error) {
+          console.error("Error fetching shop info:", error);
+        }
+      };
+
+      fetchData();
+    }, [])
+  );
+
+  return <ManageOrders orders={shopOrders} buttonVisible={true} />;
 }
 
-// Inside ToDeliverOrders component
+// ToDeliverOrders component
 export function ToDeliverOrders() {
-  return <ManageOrders orders={ORDER_LIST_TO_DELIVER} buttonVisible={true} />;
+  const [shopOrders, setShopOrders] = useState(null);
+  const { sellerData } = useContext(UserContext);
+
+  console.log("@@@ order status: toDeliver");
+
+  useFocusEffect(
+    React.useCallback(() => {
+      const fetchData = async () => {
+        try {
+          const orders = await fetchOrders("toDeliver", sellerData._id);
+
+          console.log("@@@ Orders after fetchOrders:", orders);
+          setShopOrders(orders);
+        } catch (error) {
+          console.error("Error fetching shop info:", error);
+        }
+      };
+
+      fetchData();
+    }, [])
+  );
+
+  return <ManageOrders orders={shopOrders} buttonVisible={true} />;
 }
 
-// Inside CompletedOrders component
+// CompletedOrders component
 export function CompletedOrders() {
-  return <ManageOrders orders={ORDER_LIST_COMPLETED} buttonVisible={false} />;
+  const [shopOrders, setShopOrders] = useState(null);
+  const { sellerData } = useContext(UserContext);
+
+  console.log("@@@ order status: completed");
+
+  useFocusEffect(
+    React.useCallback(() => {
+      const fetchData = async () => {
+        try {
+          const orders = await fetchOrders("completed", sellerData._id);
+
+          console.log("@@@ Orders after fetchOrders:", orders);
+          setShopOrders(orders);
+        } catch (error) {
+          console.error("Error fetching shop info:", error);
+        }
+      };
+
+      fetchData();
+    }, [])
+  );
+
+  return <ManageOrders orders={shopOrders} buttonVisible={false} />;
 }
 
 const styles = StyleSheet.create({

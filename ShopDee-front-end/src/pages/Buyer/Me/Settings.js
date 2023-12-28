@@ -1,6 +1,6 @@
 import React from "react";
 import { View, Text, SafeAreaView, TouchableOpacity, ScrollView, Image, Modal, Alert} from "react-native";
-import { COLORS } from "./Themes";
+import { COLORS_v2 } from "../../../../constants/theme.js";
 import {MaterialIcons, AntDesign} from '@expo/vector-icons';
 
 const Settings = ({navigation}) => {
@@ -10,10 +10,10 @@ const Settings = ({navigation}) => {
     return (
         <SafeAreaView style={{
             flex: 1,
-            backgroundColor: COLORS.gray,
+            backgroundColor: COLORS_v2.gray,
         }}>
             <View style={{
-                backgroundColor: COLORS.white,
+                backgroundColor: COLORS_v2.white,
                 alignItems: "center",
                 height: 100,
                 display: 'flex',
@@ -32,9 +32,9 @@ const Settings = ({navigation}) => {
                     <MaterialIcons
                         name="keyboard-arrow-left"
                         size={24}
-                        color={COLORS.lightBlue}
+                        color={COLORS_v2.lightBlue}
                     />
-                    <Text style={{color: COLORS.lightBlue}}>Profile</Text>
+                    <Text style={{color: COLORS_v2.lightBlue}}>Profile</Text>
                 </TouchableOpacity>
                 <Text style={{ fontSize: 20, fontWeight: 600 }}>Settings</Text>
             </View>
@@ -44,7 +44,7 @@ const Settings = ({navigation}) => {
                     <Text style={{fontSize:16, fontWeight:600, marginVertical: 10}}>Account settings</Text>
                     <View style={{
                         borderRadius: 12,
-                        backgroundColor: COLORS.white
+                        backgroundColor: COLORS_v2.white
                     }}> 
                         <TouchableOpacity
                             onPress={navigateToChangePassword}
@@ -55,7 +55,7 @@ const Settings = ({navigation}) => {
                                 paddingVertical: 8,
                                 paddingLeft: 12,
                                 borderWidth: 1,
-                                borderColor: COLORS.gray,
+                                borderColor: COLORS_v2.gray,
                             }}
                         >
                             <View style={{flexDirection: "row"}}>
@@ -72,7 +72,7 @@ const Settings = ({navigation}) => {
                     <Text style={{fontSize:16, fontWeight:600, marginVertical: 10}}>APP configuration</Text>
                     <View style={{
                         borderRadius: 12,
-                        backgroundColor: COLORS.white
+                        backgroundColor: COLORS_v2.white
                     }}> 
                         <TouchableOpacity
                             // onPress={() => function}
@@ -83,7 +83,7 @@ const Settings = ({navigation}) => {
                                 paddingVertical: 8,
                                 paddingLeft: 12,
                                 borderWidth: 1,
-                                borderColor: COLORS.gray,
+                                borderColor: COLORS_v2.gray,
                             }}
                         >
                             <View style={{flexDirection: "row"}}>
@@ -102,7 +102,7 @@ const Settings = ({navigation}) => {
                                 paddingVertical: 8,
                                 paddingLeft: 12,
                                 borderWidth: 1,
-                                borderColor: COLORS.gray,
+                                borderColor: COLORS_v2.gray,
                             }}
                         >
                             <View style={{flexDirection: "row"}}>
@@ -119,7 +119,7 @@ const Settings = ({navigation}) => {
                     <Text style={{fontSize:16, fontWeight:600, marginVertical: 10}}>Support</Text>
                     <View style={{
                         borderRadius: 12,
-                        backgroundColor: COLORS.white
+                        backgroundColor: COLORS_v2.white
                     }}> 
                         <TouchableOpacity
                             // onPress={() => function}
@@ -130,7 +130,7 @@ const Settings = ({navigation}) => {
                                 paddingVertical: 8,
                                 paddingLeft: 12,
                                 borderWidth: 1,
-                                borderColor: COLORS.gray,
+                                borderColor: COLORS_v2.gray,
                             }}
                         >
                             <View style={{flexDirection: "row"}}>
