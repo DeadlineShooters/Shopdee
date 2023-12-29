@@ -78,12 +78,13 @@ export default function CreateShop() {
         shop.image = shopDefault;
       }
       await axios.post("http://10.0.2.2:3000/shop/createShop", shop)
-      console.log(shopName);
+      // console.log(shopName);
+      setStatus("success");
+      popIn();
       setTimeout(() => {
-        setStatus("success");
-        popIn();
-      }, 3000);
-      navigation.goBack();
+        navigation.goBack(); 
+      }, 2000);
+
     } catch (error) {
       Alert.alert(
         "Create shop error", 

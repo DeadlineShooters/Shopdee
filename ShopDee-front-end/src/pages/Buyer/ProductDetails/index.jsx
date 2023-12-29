@@ -26,40 +26,40 @@ import axios from "axios";
 import React from 'react';
 import Carousel, { Pagination } from 'react-native-snap-carousel';
 
-export const product = {
-  _id: '6579401a01a6e7d1a58a8dee',
-  name: "Giày thể thao thông dụng",
-  images: [
-      {
-        url: "https://cdn.discordapp.com/attachments/987699517497438218/1176447491177193542/nike-red.png?ex=656ee71b&is=655c721b&hm=762dc70ed9d73fa64eb157260b7686e3e0c77a205e637286944f75fddc2eadf6&",
-        public_id: "alo"
-      },
-      {
-        url: "https://s3-alpha-sig.figma.com/img/5c73/7e2c/9a82f54116ae04171c97b2acdac77fd2?Expires=1701648000&Signature=oUeD46F8TkoJIdXXYdoyj9vY1ao9gyytJsls2UDO8GYZ4TJVqkSROk-DdPJAB6l0Z7HwpRKNqHcbIzWN6ojRZTlNpGKYebm9AGCxJPodxuC2d2b9E2CF2ctqT9SX9jEOp5gd8Kxg~x5R6RSQBiEcCTUsfgfAYu~QJD8d2Fov1f9XwALZ3KwGB56yo0f-bZ03pYNDCPY-EuN53g0xAqU7WOnmzINnN5cQDDcGbZ5pE5nZX64unIvxT4K0BpSoTFElkwWnDI6hBizAXE0fxpySS9fdZRjqijk4JtsxfW5OFURXk06~CGstU-9c0FvRQwYMoQqrfwdLFNZTK1OmQ7EkVQ__&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4",
-        public_id: "alo"
-      }
-  ],
-  category: "6579412001a6e7d1a58a8df1",
-  description:
-      'Giày thể thao thông dụng nam Biti\'s Basic BSM000600 được xem là mẫu giày "quốc dân" chưa bao giờ ngừng hot. Mặc dù đã ra mắt từ rất lâu nhưng đây vẫn được xem là sự lựa chọn hàng đầu cho những bạn yêu thích sự đơn giản. Thiết kế giày full đen hoặc trắng sẽ là điểm nhấn làm rung động biết bao nhiêu tín đồ mê phong cách thời trang hiện đại, trẻ trung.',
-  price: 650000,
-  size: ['35', '36', '37', '38', '39', '40'],
-  quantity: 153,
-  shop: {
-    _id: '1234',
-    image: {
-      url: "https://s3-alpha-sig.figma.com/img/5c73/7e2c/9a82f54116ae04171c97b2acdac77fd2?Expires=1701648000&Signature=oUeD46F8TkoJIdXXYdoyj9vY1ao9gyytJsls2UDO8GYZ4TJVqkSROk-DdPJAB6l0Z7HwpRKNqHcbIzWN6ojRZTlNpGKYebm9AGCxJPodxuC2d2b9E2CF2ctqT9SX9jEOp5gd8Kxg~x5R6RSQBiEcCTUsfgfAYu~QJD8d2Fov1f9XwALZ3KwGB56yo0f-bZ03pYNDCPY-EuN53g0xAqU7WOnmzINnN5cQDDcGbZ5pE5nZX64unIvxT4K0BpSoTFElkwWnDI6hBizAXE0fxpySS9fdZRjqijk4JtsxfW5OFURXk06~CGstU-9c0FvRQwYMoQqrfwdLFNZTK1OmQ7EkVQ__&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4",
-      public_id: "alo"
-    },
-    name: "BITES'S OFFICIAL STORE",
-    phone: "0902800729",
-    address: "HCM",
-  },
-};
+// export const product = {
+//   _id: '6579401a01a6e7d1a58a8dee',
+//   name: "Giày thể thao thông dụng",
+//   images: [
+//       {
+//         url: "https://cdn.discordapp.com/attachments/987699517497438218/1176447491177193542/nike-red.png?ex=656ee71b&is=655c721b&hm=762dc70ed9d73fa64eb157260b7686e3e0c77a205e637286944f75fddc2eadf6&",
+//         public_id: "alo"
+//       },
+//       {
+//         url: "https://s3-alpha-sig.figma.com/img/5c73/7e2c/9a82f54116ae04171c97b2acdac77fd2?Expires=1701648000&Signature=oUeD46F8TkoJIdXXYdoyj9vY1ao9gyytJsls2UDO8GYZ4TJVqkSROk-DdPJAB6l0Z7HwpRKNqHcbIzWN6ojRZTlNpGKYebm9AGCxJPodxuC2d2b9E2CF2ctqT9SX9jEOp5gd8Kxg~x5R6RSQBiEcCTUsfgfAYu~QJD8d2Fov1f9XwALZ3KwGB56yo0f-bZ03pYNDCPY-EuN53g0xAqU7WOnmzINnN5cQDDcGbZ5pE5nZX64unIvxT4K0BpSoTFElkwWnDI6hBizAXE0fxpySS9fdZRjqijk4JtsxfW5OFURXk06~CGstU-9c0FvRQwYMoQqrfwdLFNZTK1OmQ7EkVQ__&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4",
+//         public_id: "alo"
+//       }
+//   ],
+//   category: "6579412001a6e7d1a58a8df1",
+//   description:
+//       'Giày thể thao thông dụng nam Biti\'s Basic BSM000600 được xem là mẫu giày "quốc dân" chưa bao giờ ngừng hot. Mặc dù đã ra mắt từ rất lâu nhưng đây vẫn được xem là sự lựa chọn hàng đầu cho những bạn yêu thích sự đơn giản. Thiết kế giày full đen hoặc trắng sẽ là điểm nhấn làm rung động biết bao nhiêu tín đồ mê phong cách thời trang hiện đại, trẻ trung.',
+//   price: 650000,
+//   size: ['35', '36', '37', '38', '39', '40'],
+//   quantity: 153,
+//   shop: {
+//     _id: '1234',
+//     image: {
+//       url: "https://s3-alpha-sig.figma.com/img/5c73/7e2c/9a82f54116ae04171c97b2acdac77fd2?Expires=1701648000&Signature=oUeD46F8TkoJIdXXYdoyj9vY1ao9gyytJsls2UDO8GYZ4TJVqkSROk-DdPJAB6l0Z7HwpRKNqHcbIzWN6ojRZTlNpGKYebm9AGCxJPodxuC2d2b9E2CF2ctqT9SX9jEOp5gd8Kxg~x5R6RSQBiEcCTUsfgfAYu~QJD8d2Fov1f9XwALZ3KwGB56yo0f-bZ03pYNDCPY-EuN53g0xAqU7WOnmzINnN5cQDDcGbZ5pE5nZX64unIvxT4K0BpSoTFElkwWnDI6hBizAXE0fxpySS9fdZRjqijk4JtsxfW5OFURXk06~CGstU-9c0FvRQwYMoQqrfwdLFNZTK1OmQ7EkVQ__&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4",
+//       public_id: "alo"
+//     },
+//     name: "BITES'S OFFICIAL STORE",
+//     phone: "0902800729",
+//     address: "HCM",
+//   },
+// };
 
 export default function ProductDetails({route}) {
-  const productData = route.params.product;
-  console.log(productData);
+  const product = route.params.product;
+  // console.log("ayoo: "+JSON.stringify(product));
   const [isFavorite, setIsFavorite] = useState(false);
   // const [selectedSize, setSelectedSize] = useState(null);
   const [quantity, setQuantity] = useState(1);
@@ -192,7 +192,7 @@ export default function ProductDetails({route}) {
 
           <View>
             <Carousel
-              data={productData.image}
+              data={product.image}
               renderItem={({ item }) => (
                 <Image
                   source={{ uri: item.url }}
@@ -210,7 +210,7 @@ export default function ProductDetails({route}) {
               onSnapToItem={(index) => setActiveSlide(index)}
             />
             <Pagination
-              dotsLength={product.images.length}
+              dotsLength={product.image.length}
               activeDotIndex={activeSlide}
               containerStyle={{ position: 'absolute', bottom: 0, alignSelf: 'center' }}
               dotStyle={{
@@ -245,8 +245,8 @@ export default function ProductDetails({route}) {
               )}
             </TouchableOpacity>
             <View style={{flex: 1,}}>
-              <Text style={{ ...FONTS.h3 }}>{productData.name}</Text>
-              <Text style={{ ...FONTS.h1 }}>{productData.price.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}</Text>
+              <Text style={{ ...FONTS.h3 }}>{product.name}</Text>
+              <Text style={{ ...FONTS.h1 }}>{product.price.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}</Text>
               {/* <Text>4.5 *</Text> */}
             </View>
           </View>
@@ -263,7 +263,7 @@ export default function ProductDetails({route}) {
             ]}
           >
             <Image
-              source={{uri: productData.shop.image.url}}
+              source={{uri: product.shop.image?.url}}
               style={{
                 height: "75%",
                 width: undefined,
@@ -272,15 +272,15 @@ export default function ProductDetails({route}) {
               }}
             />
             <View>
-              <Text style={{ ...FONTS.h4 }}>{productData.shop.name}</Text>
+              <Text style={{ ...FONTS.h4 }}>{product.shop.name}</Text>
               <Text style={{ color: "gray" }}>Active 28 minutes ago</Text>
-              <Text style={{ color: "gray" }}>{productData.shop.address}</Text>
+              <Text style={{ color: "gray" }}>{product.shop.address}</Text>
             </View>
           </View>
 
           <View style={[styles.contentBox]}>
             <Text style={{ ...FONTS.h4 }}>Product description</Text>
-            <Text>{productData.description}</Text>
+            <Text>{product.description}</Text>
           </View>
         </View>
       </ScrollView>
