@@ -10,6 +10,18 @@ const UserProvider = ({ children }) => {
   const [shop, setShop] = useState(null);
   // shop
 
+  useEffect(() => {
+    const getUserID = async () => {
+    const token = await AsyncStorage.getItem("authToken");
+    const decodedToken = jwtDecode(token);
+    const userID = decodedToken.userID;
+    setUserID(userID);
+    }
+    getUserID();
+  }, []);
+
+  console.log("User ID *****: ", userID);
+
   const defaultImage =
     "https://cdn.discordapp.com/attachments/973498508793503745/1188490835541639188/default-thumbnail.png?ex=659ab758&is=65884258&hm=cdda93ced374c9a74e4c4729cd780f653ac6f8f5b04b48bde53bfc57d998a7a3&";
 

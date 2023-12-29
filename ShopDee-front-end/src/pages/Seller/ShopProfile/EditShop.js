@@ -39,6 +39,8 @@ export default function CreateShop({ navigation, route }) {
     setEmail(shopProfile.shop.email);
     setPhone(shopProfile.shop.phone);
     setSelectedImage(shopProfile.shop.image.url);
+    setPublicId(shopProfile.shop.image.public_id);
+    setSecureUrl(shopProfile.shop.image.url);
   }, []);
   // Check form changes
   const initialFormState = useRef({

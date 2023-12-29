@@ -26,7 +26,6 @@ import axios from "axios";
 import React from 'react';
 import Carousel, { Pagination } from 'react-native-snap-carousel';
 
-
 export const product = {
   _id: '6579401a01a6e7d1a58a8dee',
   name: "Giày thể thao thông dụng",
@@ -58,7 +57,9 @@ export const product = {
   },
 };
 
-export default function ProductDetails() {
+export default function ProductDetails({route}) {
+  const productData = route.params.product;
+  console.log(productData);
   const [isFavorite, setIsFavorite] = useState(false);
   // const [selectedSize, setSelectedSize] = useState(null);
   const [quantity, setQuantity] = useState(1);
@@ -191,7 +192,7 @@ export default function ProductDetails() {
 
           <View>
             <Carousel
-              data={product.images}
+              data={productData.image}
               renderItem={({ item }) => (
                 <Image
                   source={{ uri: item.url }}
@@ -244,8 +245,8 @@ export default function ProductDetails() {
               )}
             </TouchableOpacity>
             <View style={{flex: 1,}}>
-              <Text style={{ ...FONTS.h3 }}>{product.name}</Text>
-              <Text style={{ ...FONTS.h1 }}>{product.price.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}</Text>
+              <Text style={{ ...FONTS.h3 }}>{productData.name}</Text>
+              <Text style={{ ...FONTS.h1 }}>{productData.price.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}</Text>
               {/* <Text>4.5 *</Text> */}
             </View>
           </View>
@@ -262,7 +263,7 @@ export default function ProductDetails() {
             ]}
           >
             <Image
-              uri={product.shop.image.url}
+              source={{uri: productData.shop.image.url}}
               style={{
                 height: "75%",
                 width: undefined,
@@ -271,15 +272,15 @@ export default function ProductDetails() {
               }}
             />
             <View>
-              <Text style={{ ...FONTS.h4 }}>{product.shop.name}</Text>
+              <Text style={{ ...FONTS.h4 }}>{productData.shop.name}</Text>
               <Text style={{ color: "gray" }}>Active 28 minutes ago</Text>
-              <Text style={{ color: "gray" }}>{product.shop.address}</Text>
+              <Text style={{ color: "gray" }}>{productData.shop.address}</Text>
             </View>
           </View>
 
           <View style={[styles.contentBox]}>
             <Text style={{ ...FONTS.h4 }}>Product description</Text>
-            <Text>{product.description}</Text>
+            <Text>{productData.description}</Text>
           </View>
         </View>
       </ScrollView>

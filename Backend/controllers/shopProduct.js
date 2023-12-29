@@ -90,11 +90,4 @@ export const deleteProduct = async (req, res) => {
     console.log(err);
     res.status(500).send("Error deleting product");
   }
-
-  await Product.findByIdAndDelete(idProduct);
-
-  res.json({
-    message: "Product deleted successfully",
-  });
-  console.log("Product deleted");
 };

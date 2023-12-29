@@ -44,7 +44,6 @@ export default function App() {
           <NavigationContainer>
             <Stack.Navigator>
               {
-                // buyer
                 <>
                   <Stack.Screen name="SignIn" component={SignIn} options={{ headerShown: false }} />
                   <Stack.Screen name="SignUp" component={SignUp} options={{ headerShown: false }} />
@@ -63,7 +62,6 @@ export default function App() {
                 </>
               }
               {
-                // seller
                 <>
                   <Stack.Screen
                     name="SellerBottomNav"

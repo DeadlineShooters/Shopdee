@@ -1,11 +1,12 @@
 import { View, Text, SafeAreaView, TouchableOpacity, ScrollView, Image, TextInput, Modal, Alert, Dimensions, Animated, StyleSheet } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import React, { useState, useRef } from "react";
-import { COLORS } from "../../../../assets/Themes";
+import { COLORS_v2 } from "../../../../constants/theme.js";
 import { MaterialIcons, AntDesign, Entypo } from "@expo/vector-icons";
 
 const SetAddress = ({ navigation, route }) => {
   const user = route.params.props.User;
+  console.log("@@ user map: ", user);
   const { selectedAddress } = route.params;
 
   console.log("@@ user map: ", user);
@@ -85,10 +86,6 @@ const SetAddress = ({ navigation, route }) => {
     }
   };
 
-  const setNewAddress = (addr) => {
-    setNewAddress(addr);
-  };
-
   const handlePickAddress = () => {
     navigation.navigate("AddressPicker", { previousScreen: "SetAddress" });
   };
@@ -96,7 +93,7 @@ const SetAddress = ({ navigation, route }) => {
     <SafeAreaView
       style={{
         flex: 1,
-        backgroundColor: COLORS.white,
+        backgroundColor: COLORS_v2.white,
         paddingHorizontal: 22,
       }}
     >
@@ -117,8 +114,8 @@ const SetAddress = ({ navigation, route }) => {
             alignItems: "center",
           }}
         >
-          <MaterialIcons name="keyboard-arrow-left" size={24} color={COLORS.lightBlue} />
-          <Text style={{ color: COLORS.lightBlue }}>Profile</Text>
+          <MaterialIcons name="keyboard-arrow-left" size={24} color={COLORS_v2.lightBlue} />
+          <Text style={{ color: COLORS_v2.lightBlue }}>Profile</Text>
         </TouchableOpacity>
         <Text style={{ fontSize: 20, fontWeight: 600 }}>Delivery Address</Text>
       </View>
@@ -142,8 +139,8 @@ const SetAddress = ({ navigation, route }) => {
               style={{
                 height: 44,
                 width: "100%",
-                backgroundColor: COLORS.secondaryGray,
-                borderColor: COLORS.secondaryGray,
+                backgroundColor: COLORS_v2.secondaryGray,
+                borderColor: COLORS_v2.secondaryGray,
                 borderWidth: 1,
                 borderRadius: 4,
                 marginVertical: 6,
@@ -156,7 +153,7 @@ const SetAddress = ({ navigation, route }) => {
                 onChangeText={(value) => setName(value)}
                 editable={false}
                 style={{
-                  color: COLORS.black,
+                  color: COLORS_v2.black,
                 }}
               />
             </View>
@@ -181,8 +178,8 @@ const SetAddress = ({ navigation, route }) => {
               style={{
                 height: 44,
                 width: "100%",
-                backgroundColor: COLORS.secondaryGray,
-                borderColor: COLORS.secondaryGray,
+                backgroundColor: COLORS_v2.secondaryGray,
+                borderColor: COLORS_v2.secondaryGray,
                 borderWidth: 1,
                 borderRadius: 4,
                 marginVertical: 6,
@@ -195,7 +192,7 @@ const SetAddress = ({ navigation, route }) => {
                 onChangeText={(value) => setPhone(value)}
                 editable={false}
                 style={{
-                  color: COLORS.black,
+                  color: COLORS_v2.black,
                 }}
               />
             </View>
@@ -220,7 +217,7 @@ const SetAddress = ({ navigation, route }) => {
               style={{
                 height: 44,
                 width: "100%",
-                borderColor: COLORS.secondaryGray,
+                borderColor: COLORS_v2.secondaryGray,
                 borderWidth: 1,
                 borderRadius: 4,
                 marginVertical: 6,
@@ -228,11 +225,11 @@ const SetAddress = ({ navigation, route }) => {
                 paddingLeft: 8,
               }}
             >
-              {/* <TextInput
+            <TextInput
                 value={address}
                 onChangeText={value => { SetAddress(value)}}
                 editable={true}
-              /> */}
+              />
               <TouchableOpacity
                 onPress={handlePickAddress}
                 style={{
@@ -241,7 +238,7 @@ const SetAddress = ({ navigation, route }) => {
                   paddingVertical: 8,
                   paddingLeft: 5,
                   borderWidth: 1,
-                  borderColor: COLORS.gray,
+                  borderColor: COLORS_v2.gray,
                   alignItems: "center",
                 }}
               >
@@ -280,7 +277,7 @@ const SetAddress = ({ navigation, route }) => {
           </View>
         </Animated.View>
       </View>
-      {changeAddress == address ? (
+      {changeAddress == address ?
         <View
           style={{
             marginBottom: 20,
@@ -289,28 +286,27 @@ const SetAddress = ({ navigation, route }) => {
           <View
             style={{
               borderRadius: 12,
-              backgroundColor: COLORS.secondaryGray,
+              backgroundColor: COLORS_v2.secondaryGray,
               alignItems: "center",
             }}
           >
-            <Text style={{ fontSize: 16, fontWeight: 600, marginVertical: 10, color: COLORS.white }}>Save</Text>
+            <Text style={{ fontSize: 16, fontWeight: 600, marginVertical: 10, color: COLORS_v2.white }}>Save</Text>
           </View>
-        </View>
-      ) : (
+        </View> :
         <TouchableOpacity onPress={save}>
           <View style={{ marginBottom: 20 }}>
             <View
               style={{
                 borderRadius: 12,
-                backgroundColor: COLORS.blue,
+                backgroundColor: COLORS_v2.blue,
                 alignItems: "center",
               }}
             >
-              <Text style={{ fontSize: 16, fontWeight: 600, marginVertical: 10, color: COLORS.white }}>Save</Text>
+              <Text style={{ fontSize: 16, fontWeight: 600, marginVertical: 10, color: COLORS_v2.white }}>Save</Text>
             </View>
           </View>
         </TouchableOpacity>
-      )}
+      }
     </SafeAreaView>
   );
 };
