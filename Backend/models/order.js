@@ -11,7 +11,7 @@ const orderSchema = new Schema({
     status: String,
     paymentMethod: String,
     product: { type: Schema.Types.ObjectId, ref: "Product" },
-    user: { type: Schema.Types.ObjectId, ref: "User" },
+    user: { type: Schema.Types.ObjectId, ref: "user" },
 })
 
 
