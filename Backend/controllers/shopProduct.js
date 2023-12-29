@@ -8,7 +8,7 @@ export const index = async (req, res) => {
     console.log("@@ shop ID: " + shopId);
     const products = await Product.find({ shop: shopId }).populate(["category", "shop"]);
 
-    console.log("@@ products: ", products);
+    // console.log("@@ products: ", products);
     if (!products) {
       res.status(404).json({ message: "Products not found" });
     }

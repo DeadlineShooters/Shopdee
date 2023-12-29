@@ -45,3 +45,13 @@ export const update = async (req, res) => {
     res.status(500).json({ message: "Error retrieving order status" });
   }
 };
+
+export const create = async (req, res) => {
+  console.log(req.body);
+  const order = new Order(req.body);
+  await order.save();
+  res.json({
+    message: "Order created successfully.",
+    order
+  })
+}
