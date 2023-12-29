@@ -19,17 +19,15 @@ import axios from "axios";
 // };
 
 export default function Checkout({ route }) {
-
   const windowHeight = Dimensions.get("window").height;
   const [status, setStatus] = useState(null);
-  const popAnim = useRef(new Animated.Value(windowHeight *-1)).current;
+  const popAnim = useRef(new Animated.Value(windowHeight * -1)).current;
   const successColor = "#6dcf81";
   const successHeader = "Success!";
   const successMessage = "Placed order successfully";
   const failColor = "#bf6060";
   const failHeader = "Failed!";
   const failMessage = "Something went wrong. Please try again.";
-  
 
   const [selectedPayment, setSelectedPayment] = useState("Cash");
   const navigation = useNavigation();
@@ -37,28 +35,12 @@ export default function Checkout({ route }) {
   // console.log(product)
   const price = product.price.toLocaleString("vi-VN", { style: "currency", currency: "VND" });
   const deliveryFee = 15000;
-  const total = (product.price*quantity + deliveryFee).toLocaleString("vi-VN", { style: "currency", currency: "VND" });
+  const total = (product.price * quantity + deliveryFee).toLocaleString("vi-VN", { style: "currency", currency: "VND" });
 
-  const { userID, setUserID } = useContext(UserContext);
-  const [user, setUser] = useState("");
+  const { userID, setUserID, user } = useContext(UserContext);
+  console.log("@@ user", user);
+
   const isFocused = useIsFocused();
-  useEffect(() => {
-    const fetchUserProfile = async () => {
-      try {
-        const token = await AsyncStorage.getItem("authToken");
-        const decodedToken = jwtDecode(token);
-        const userID = decodedToken.userID;
-        setUserID(userID);
-        const response = await axios.get(`http://10.0.2.2:3000/user/profile/${userID}`);
-        const user = response.data.User;
-        console.log(user);
-        setUser(user);
-      } catch (error) {
-        console.log("error", error);
-      }
-    };
-    fetchUserProfile();
-  }, [navigation, isFocused]);
 
   const placeOrder = async () => {
     try {
@@ -67,7 +49,7 @@ export default function Checkout({ route }) {
 
       const order = {
         quantity,
-        totalPrice: product.price*quantity + deliveryFee,
+        totalPrice: product.price * quantity + deliveryFee,
         orderDate: new Date(),
         deliveryDate: null, // Fix the typo here
         status: "toConfirm",
@@ -82,9 +64,8 @@ export default function Checkout({ route }) {
       setStatus("success");
       popIn();
       setTimeout(() => {
-        navigation.goBack(); 
+        navigation.goBack();
       }, 2000);
-
     } catch (error) {
       console.error("Error placing order:", error);
       // Handle the error, e.g., show an error message to the user
@@ -92,33 +73,32 @@ export default function Checkout({ route }) {
   };
   const popIn = () => {
     Animated.timing(popAnim, {
-        toValue: windowHeight * -0.9*0.95,
-        duration: 300,
-        useNativeDriver: true,
+      toValue: windowHeight * -0.9 * 0.95,
+      duration: 300,
+      useNativeDriver: true,
     }).start(() => popOut());
   };
 
   const popOut = () => {
     setTimeout(() => {
-        Animated.timing(popAnim, {
-            toValue: windowHeight * -1,
-            duration: 300,
-            useNativeDriver: true,
-        }).start();
+      Animated.timing(popAnim, {
+        toValue: windowHeight * -1,
+        duration: 300,
+        useNativeDriver: true,
+      }).start();
     }, 5000);
   };
 
   const instantPopOut = () => {
     Animated.timing(popAnim, {
-        toValue: windowHeight * -1,
-        duration: 150,
-        useNativeDriver: true,
+      toValue: windowHeight * -1,
+      duration: 150,
+      useNativeDriver: true,
     }).start();
   };
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "#fff" }}>
-      
       <GoBack currentTitle="Checkout" prevTitle="Details" func={() => navigation.goBack()}></GoBack>
       <ScrollView
         style={{
@@ -131,11 +111,14 @@ export default function Checkout({ route }) {
             <Text style={{ marginLeft: 10 }}>Delivery Address</Text>
           </View>
           <Text style={{ paddingLeft: 10 }}>
-            {user?.username} | {user?.phone} 
-            {"\n"}{user.address}
+            {user?.username} | {user?.phone}
+            {"\n"}
+            {user.address}
           </Text>
           <Pressable
-            onPress={() => {navigation.navigate("SetAddress", { props: {User: user} });}}
+            onPress={() => {
+              navigation.navigate("SetAddress", { props: { user } });
+            }}
             style={{
               position: "absolute",
               top: 35,
@@ -168,7 +151,9 @@ export default function Checkout({ route }) {
           </View>
           <View style={{ flexDirection: "row", justifyContent: "space-between", marginBottom: 5 }}>
             <Text>Merchandise Subtotal</Text>
-            <Text>{price} x {quantity}</Text>
+            <Text>
+              {price} x {quantity}
+            </Text>
           </View>
           <View style={{ flexDirection: "row", justifyContent: "space-between", marginBottom: 5 }}>
             <Text>Delivery</Text>
@@ -262,20 +247,13 @@ export default function Checkout({ route }) {
               transform: [{ translateY: popAnim }],
               zIndex: 99999999,
             },
-          ]}>
+          ]}
+        >
           <View style={styles.toastRow}>
-            <AntDesign
-              name={status === "success" ? "checkcircleo" : "closecircleo"}
-              size={24}
-              color={status === "success" ? successColor : failColor}
-            />
+            <AntDesign name={status === "success" ? "checkcircleo" : "closecircleo"} size={24} color={status === "success" ? successColor : failColor} />
             <View style={styles.toastText}>
-              <Text style={{ fontWeight: "bold", fontSize: 15 }}>
-                {status === "success" ? successHeader : failHeader}
-              </Text>
-              <Text style={{ fontSize: 12 }}>
-                {status === "success" ? successMessage : failMessage}
-              </Text>
+              <Text style={{ fontWeight: "bold", fontSize: 15 }}>{status === "success" ? successHeader : failHeader}</Text>
+              <Text style={{ fontSize: 12 }}>{status === "success" ? successMessage : failMessage}</Text>
             </View>
             <TouchableOpacity onPress={instantPopOut}>
               <Entypo name="cross" size={24} color="black" />
@@ -333,8 +311,8 @@ const styles = StyleSheet.create({
 
     shadowColor: "#000",
     shadowOffset: {
-        width: 0,
-        height: 2,
+      width: 0,
+      height: 2,
     },
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
@@ -342,13 +320,13 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   toastRow: {
-      width: "100%",
-      flexDirection: "row",
-      alignItems: "center",
-      justifyContent: "space-evenly",
+    width: "100%",
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-evenly",
   },
   toastText: {
-      width: "70%",
-      padding: 2,
+    width: "70%",
+    padding: 2,
   },
 });

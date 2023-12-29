@@ -70,8 +70,9 @@ export const signIn = async (req, res) => {
 };
 
 export const getprofile = async (req, res) => {
+  const findUserID = req.params.userID;
+  console.log("@@ userID: " + findUserID);
   try {
-    const findUserID = req.params.userID;
     const User = await user.findById(findUserID);
     if (!User) {
       res.status(404).json({ message: "User not found" });
@@ -110,7 +111,7 @@ export const updateprofile = async (req, res) => {
 };
 
 export const updateaddress = async (req, res) => {
-  console.log(req.body);
+  console.log("@@ body", req.body);
   try {
     const userID = req.params.userID;
     const { address } = req.body;

@@ -1,12 +1,17 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { View, StyleSheet } from "react-native";
 import MapView, { Marker } from "react-native-maps";
 import * as Location from "expo-location";
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
-import { GOOGLE_MAPS_API_KEY } from "../../";
+import { GOOGLE_MAPS_API_KEY } from "@env";
+import { UserContext } from "../../context/UserContext.js";
 
-const PickAddressScreen = ({ navigation, route, previousScreen }) => {
+const PickAddressScreen = ({ navigation, route }) => {
+  const { user } = useContext(UserContext);
+  console.log("@@ user map", user);
   console.log("Key", GOOGLE_MAPS_API_KEY);
+  const { previousScreen } = route.params;
+
   const [region, setRegion] = useState(null);
 
   useEffect(() => {
@@ -60,7 +65,7 @@ const PickAddressScreen = ({ navigation, route, previousScreen }) => {
     });
 
     console.log(selectedAddress);
-    navigation.navigate(previousScreen, { selectedAddress });
+    navigation.navigate(previousScreen, { selectedAddress, user });
   };
 
   return (

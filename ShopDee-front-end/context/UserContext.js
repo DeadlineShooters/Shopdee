@@ -1,23 +1,35 @@
 import { createContainer, createContext, useState, useEffect } from "react";
+import { fetchUserInfo } from "../src/api/userApi";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { jwtDecode } from "jwt-decode";
 
 const UserContext = createContext();
 
 const UserProvider = ({ children }) => {
   const [userID, setUserID] = useState("");
-  const [userData, setUserData] = useState("");
+  const [user, setUser] = useState("");
   const [sellerData, setSellerData] = useState("");
 
   const [shop, setShop] = useState(null);
-  // shop
-
+  console.log("user: ", user);
   useEffect(() => {
-    const getUserID = async () => {
-    const token = await AsyncStorage.getItem("authToken");
-    const decodedToken = jwtDecode(token);
-    const userID = decodedToken.userID;
-    setUserID(userID);
-    }
-    getUserID();
+    console.log("yeey");
+    const getUser = async () => {
+      const token = await AsyncStorage.getItem("authToken");
+      const decodedToken = jwtDecode(token);
+      const userID = decodedToken.userID;
+      setUserID(userID);
+
+      try {
+        const data = await fetchUserInfo(userID);
+        setUser(data);
+
+        console.log("@@ User: ", data);
+      } catch (error) {
+        console.error("Error fetching user info:", error);
+      }
+    };
+    getUser().then("success");
   }, []);
 
   console.log("User ID *****: ", userID);
@@ -42,9 +54,7 @@ const UserProvider = ({ children }) => {
   // }, []);
 
   return (
-    <UserContext.Provider value={{ userID, setUserID, userData, setUserData, sellerData, setSellerData, shop, setShop, defaultImage }}>
-      {children}
-    </UserContext.Provider>
+    <UserContext.Provider value={{ userID, setUserID, user, setUser, sellerData, setSellerData, shop, setShop, defaultImage }}>{children}</UserContext.Provider>
   );
 };
 

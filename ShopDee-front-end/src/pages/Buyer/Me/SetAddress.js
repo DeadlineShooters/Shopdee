@@ -1,15 +1,27 @@
-import { View, Text, SafeAreaView, TouchableOpacity, ScrollView, Image, TextInput, Modal, Alert, Dimensions, Animated, StyleSheet } from "react-native";
+import {
+  View,
+  Text,
+  SafeAreaView,
+  TouchableOpacity,
+  ScrollView,
+  Image,
+  TextInput,
+  Modal,
+  Alert,
+  Dimensions,
+  Animated,
+  StyleSheet,
+  Pressable,
+} from "react-native";
 import * as ImagePicker from "expo-image-picker";
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { COLORS_v2 } from "../../../../constants/theme.js";
 import { MaterialIcons, AntDesign, Entypo } from "@expo/vector-icons";
+import { Axios } from "../../../api/axios.js";
 
 const SetAddress = ({ navigation, route }) => {
-  const user = route.params.props.User;
-  console.log("@@ user map: ", user);
-  const { selectedAddress } = route.params;
+  const { selectedAddress, user } = route.params;
 
-  console.log("@@ user map: ", user);
   const [name, setName] = useState(user.username);
   const [phone, setPhone] = useState(user.phone);
   const [address, setAddress] = useState(user.address);
@@ -26,9 +38,15 @@ const SetAddress = ({ navigation, route }) => {
   const failHeader = "Failed!";
   const failMessage = "Your information was still unsaved";
 
-  if (selectedAddress) {
-    setAddress(selectedAddress);
-  }
+  console.log("prev address: " + address);
+  console.log("cur address: " + changeAddress);
+  console.log("selected address: " + selectedAddress);
+
+  useEffect(() => {
+    if (selectedAddress) {
+      setChangeAddress(selectedAddress);
+    }
+  }, [selectedAddress]);
   const popIn = () => {
     Animated.timing(popAnim, {
       toValue: windowHeight * -0.82 * 0.95,
@@ -55,8 +73,8 @@ const SetAddress = ({ navigation, route }) => {
     }).start();
   };
 
-  const handleOnPressGoBack = ({ navigation }) => {
-    if (address != changeAddress) {
+  const handleOnPressGoBack = () => {
+    if (address !== changeAddress) {
       Alert.alert("Confirm message", "Your address is not saved. Exit now?", [
         {
           text: "Cancel",
@@ -72,13 +90,13 @@ const SetAddress = ({ navigation, route }) => {
     }
   };
   const save = async () => {
-    setChangeAddress(address);
     try {
       const userID = user._id;
       const userAddress = {
-        address: address,
+        address: changeAddress,
       };
-      await axios.put(`http://10.0.2.2:3000/user/profile/set-address/${userID}`, userAddress);
+
+      await Axios.put(`/user/profile/set-address/${userID}`, userAddress);
       setStatus("success");
       popIn();
     } catch (error) {
@@ -106,7 +124,7 @@ const SetAddress = ({ navigation, route }) => {
         }}
       >
         <TouchableOpacity
-          onPress={() => handleOnPressGoBack({ navigation })}
+          onPress={() => handleOnPressGoBack()}
           style={{
             position: "absolute",
             left: -10,
@@ -217,19 +235,13 @@ const SetAddress = ({ navigation, route }) => {
               style={{
                 height: 44,
                 width: "100%",
-                borderColor: COLORS_v2.secondaryGray,
+                borderColor: COLORS_v2.gray,
                 borderWidth: 1,
                 borderRadius: 4,
                 marginVertical: 6,
                 justifyContent: "center",
-                paddingLeft: 8,
               }}
             >
-            <TextInput
-                value={address}
-                onChangeText={value => { SetAddress(value)}}
-                editable={true}
-              />
               <TouchableOpacity
                 onPress={handlePickAddress}
                 style={{
@@ -244,7 +256,7 @@ const SetAddress = ({ navigation, route }) => {
               >
                 <View style={{ width: "90%" }}>
                   <Text style={{ fontSize: 16, fontWeight: "600" }} numberOfLines={1} ellipsizeMode="tail">
-                    {address}
+                    {changeAddress}
                   </Text>
                 </View>
 
@@ -277,36 +289,13 @@ const SetAddress = ({ navigation, route }) => {
           </View>
         </Animated.View>
       </View>
-      {changeAddress == address ?
-        <View
-          style={{
-            marginBottom: 20,
-          }}
-        >
-          <View
-            style={{
-              borderRadius: 12,
-              backgroundColor: COLORS_v2.secondaryGray,
-              alignItems: "center",
-            }}
-          >
-            <Text style={{ fontSize: 16, fontWeight: 600, marginVertical: 10, color: COLORS_v2.white }}>Save</Text>
-          </View>
-        </View> :
-        <TouchableOpacity onPress={save}>
-          <View style={{ marginBottom: 20 }}>
-            <View
-              style={{
-                borderRadius: 12,
-                backgroundColor: COLORS_v2.blue,
-                alignItems: "center",
-              }}
-            >
-              <Text style={{ fontSize: 16, fontWeight: 600, marginVertical: 10, color: COLORS_v2.white }}>Save</Text>
-            </View>
-          </View>
-        </TouchableOpacity>
-      }
+      <Pressable
+        onPress={save}
+        style={({ pressed }) => [styles.saveButton, { opacity: pressed || changeAddress == address ? 0.5 : 1 }]}
+        disabled={changeAddress == address}
+      >
+        <Text style={{ fontSize: 16, fontWeight: 600, marginVertical: 10, color: COLORS_v2.white }}>Save</Text>
+      </Pressable>
     </SafeAreaView>
   );
 };
@@ -340,5 +329,12 @@ const styles = StyleSheet.create({
   toastText: {
     width: "70%",
     padding: 2,
+  },
+  saveButton: {
+    marginBottom: 20,
+    borderRadius: 12,
+    backgroundColor: COLORS_v2.blue,
+    justifyContent: "center",
+    alignItems: "center",
   },
 });
