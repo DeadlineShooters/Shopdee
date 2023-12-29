@@ -115,7 +115,7 @@ const SetAddress = ({ navigation, route }) => {
           }}
         >
           <MaterialIcons name="keyboard-arrow-left" size={24} color={COLORS_v2.lightBlue} />
-          <Text style={{ color: COLORS_v2.lightBlue }}>Profile</Text>
+          {/* <Text style={{ color: COLORS_v2.lightBlue }}>Profile</Text> comment cái này vì trang này có thể từ trang checkout qua nữa */}
         </TouchableOpacity>
         <Text style={{ fontSize: 20, fontWeight: 600 }}>Delivery Address</Text>
       </View>

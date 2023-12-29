@@ -3,21 +3,18 @@ const Schema = mongoose.Schema;
 import user from "./Users.js";
 
 const shopSchema = new Schema({
-  image: {
-    public_id: {
-      type: String,
+    image: {
+        public_id: String,
+        url: String,
     },
-    url: {
-      type: String,
-    },
-  },
-  name: String,
-  email: String,
-  phone: String,
-  address: String,
-  description: String,
-  user: { type: Schema.Types.ObjectId, ref: "user" },
-});
+    name: String,
+    email: String,
+    phone: String,
+    address: String,
+    description: String,
+    user: { type: Schema.Types.ObjectId, ref: "user" },
+})
+
 
 const Shop = mongoose.model("Shop", shopSchema);
 export default Shop;

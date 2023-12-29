@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { View, Text, TouchableOpacity, ToastAndroid, Image, TextInput, SafeAreaView, Animated, StyleSheet, Dimensions, Alert  } from "react-native";
 import * as ImagePicker from 'expo-image-picker';
 import { AntDesign, Entypo } from '@expo/vector-icons';
@@ -67,21 +67,24 @@ export default function CreateShop() {
       phone: phone,
       userId: userID
     }
+    console.log(shop)
     try {
       if (selectedImage) {
+        console.log('ayoooooo')
+        console.log(selectedImage)
         const { url, public_id } = handleImageUpload(selectedImage);
         shop.image = { url, public_id };
       } else {
         shop.image = shopDefault;
       }
       await axios.post("http://10.0.2.2:3000/shop/createShop", shop)
-      console.log(shopName);
-      await handleImageUpload(shopDefault);
+      // console.log(shopName);
+      setStatus("success");
+      popIn();
       setTimeout(() => {
-        setStatus("success");
-        popIn();
-        navigation.navigate('SellerBottomNav', { screen: 'My Products' });
-      }, 3000);
+        navigation.goBack(); 
+      }, 2000);
+
     } catch (error) {
       Alert.alert(
         "Create shop error", 
@@ -135,7 +138,7 @@ export default function CreateShop() {
         toValue: windowHeight * -0.7*0.95,
         duration: 300,
         useNativeDriver: true,
-    }).start(popOut());
+    }).start(() => popOut());
   };
 
   const popOut = () => {
@@ -158,7 +161,7 @@ export default function CreateShop() {
   // const showToast = () => {
   //     ToastAndroid.show('Toast message displayed!', ToastAndroid.SHORT);
   // };
-
+  
   return (
     <SafeAreaView
       style={{backgroundColor: '#E3E3E3',flex: 1,}}>
