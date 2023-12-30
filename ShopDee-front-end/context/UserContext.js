@@ -11,9 +11,7 @@ const UserProvider = ({ children }) => {
   const [sellerData, setSellerData] = useState("");
 
   const [shop, setShop] = useState(null);
-  console.log("user: ", user);
   useEffect(() => {
-    console.log("yeey");
     const getUser = async () => {
       const token = await AsyncStorage.getItem("authToken");
       const decodedToken = jwtDecode(token);

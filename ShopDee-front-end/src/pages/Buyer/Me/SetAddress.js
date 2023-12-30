@@ -38,10 +38,6 @@ const SetAddress = ({ navigation, route }) => {
   const failHeader = "Failed!";
   const failMessage = "Your information was still unsaved";
 
-  console.log("prev address: " + address);
-  console.log("cur address: " + changeAddress);
-  console.log("selected address: " + selectedAddress);
-
   useEffect(() => {
     if (selectedAddress) {
       setChangeAddress(selectedAddress);
@@ -74,7 +70,9 @@ const SetAddress = ({ navigation, route }) => {
   };
 
   const handleOnPressGoBack = () => {
-    if (address !== changeAddress) {
+    console.log("prev address: " + address);
+    console.log("cur address: " + changeAddress);
+    if (address != changeAddress) {
       Alert.alert("Confirm message", "Your address is not saved. Exit now?", [
         {
           text: "Cancel",
@@ -99,6 +97,7 @@ const SetAddress = ({ navigation, route }) => {
       await Axios.put(`/user/profile/set-address/${userID}`, userAddress);
       setStatus("success");
       popIn();
+      setAddress(changeAddress);
     } catch (error) {
       console.log("error message", error);
     }

@@ -12,7 +12,7 @@ import "core-js/stable/atob";
 import { Axios } from "../../../api/axios.js";
 
 const Me = ({ navigation }) => {
-  const { userID, setUserID, setSellerData } = useContext(UserContext);
+  const { userID, setUserID, setSellerData, user } = useContext(UserContext);
   const navigateToEditProfile = () => {
     navigation.navigate("EditProfile", { props: user });
   };
@@ -106,27 +106,8 @@ const Me = ({ navigation }) => {
       },
     ]);
   };
-  const [user, setUser] = useState("");
-  const [username, setUserName] = useState("");
   const isFocused = useIsFocused();
-  useEffect(() => {
-    const fetchUserProfile = async () => {
-      try {
-        const token = await AsyncStorage.getItem("authToken");
-        const decodedToken = jwtDecode(token);
-        const userID = decodedToken.userID;
-        setUserID(userID);
-        const response = await axios.get(`http://10.0.2.2:3000/user/profile/${userID}`);
-        const user = response.data;
-        console.log(user);
-        setUser(user);
-        setUserName(user?.User?.username);
-      } catch (error) {
-        console.log("error", error);
-      }
-    };
-    fetchUserProfile();
-  }, [navigation, isFocused]);
+
   return (
     <SafeAreaView
       style={{
@@ -166,7 +147,7 @@ const Me = ({ navigation }) => {
               marginLeft: 10,
             }}
           >
-            {username}
+            {user.username}
           </Text>
         </View>
       </View>
