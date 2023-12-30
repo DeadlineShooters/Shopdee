@@ -41,7 +41,7 @@ export const register = async (req, res) => {
     console.log(req.body);
     const existingUser = await user.findOne({ email });
     if (existingUser) {
-      return res.status(400).json({ messages: "Email has been already registered!" });
+      return res.status(400).send({success: false, messages: "Email has been already registered!" });
     }
     const newUser = new user({ username, email, password, name, phone, birthDay, gender, address });
     newUser.profilePic = {
@@ -49,6 +49,7 @@ export const register = async (req, res) => {
       url: "https://res.cloudinary.com/dqxtf297o/image/upload/v1703247477/c7x3gucweyz19zpqvae8.jpg",
     };
     await newUser.save();
+    res.status(200).send({success: true, message: "Account created successfully",});
   } catch (error) {
     console.log("error registering user", error);
     res.status(500).json({ messages: "Registration failed" });
