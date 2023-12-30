@@ -14,7 +14,8 @@ import { Axios } from "../../../api/axios.js";
 const Me = ({ navigation }) => {
   const { userID, setUserID, setSellerData, user } = useContext(UserContext);
   const navigateToEditProfile = () => {
-    navigation.navigate("EditProfile", { props: user });
+    console.log("@@ user navigate", user);
+    navigation.navigate("EditProfile", { user });
   };
   const navigateToShopOwner = async () => {
     const findUser = { userID };
