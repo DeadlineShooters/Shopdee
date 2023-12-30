@@ -72,8 +72,8 @@ export default function SignUp() {
     }
 
     if (badEmail == false && badUserName == false && badPassWord == false && badConfirmPassWord == false && correctPassword == true) {
-        handleSignUp();
-      }
+      handleSignUp();
+    }
     else if (badEmail == true) {
       Alert.alert("Updating user profile failed", "Your mail is invalid. Please input again");
       setEmail("");

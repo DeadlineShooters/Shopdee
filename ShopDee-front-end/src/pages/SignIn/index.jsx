@@ -8,9 +8,45 @@ import axios from "axios";
 import { COLORS_v2 } from "../../../constants/theme";
 
 export default function SignIn() {
-  const [email, getEmail] = useState("");
-  const [password, getPassword] = useState("");
+  const [mail, setMail] = useState("");
+  const [badEmail, setBadEmail] = useState(false);
+  const [password, setPassword] = useState("");
+  const [badPassword, setBadPassword] = useState("");
   const navigation = useNavigation();
+
+  const handleCheckMail = text => {
+    let re = /\S+@\S+\.\S+/;
+    let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w\w+)+$/;
+    setMail(text);
+    if (re.test(text) || reg.test(text)) {
+      setBadEmail(false);
+    } else {
+      setBadEmail(true);
+    }
+    console.log(badEmail);
+  };
+
+  const validate = () => {
+    if (mail == '')
+    {
+      setBadEmail(true);
+    }
+    if (password == '') {
+      setBadPassword(true);
+    }
+    
+    if (badEmail == false && badPassword == false) {
+      handleSignIn();
+    }
+    else if (badEmail == true) {
+      Alert.alert("Updating user profile failed", "Your mail is invalid. Please input again");
+      setMail("");
+      setPassword("");
+    } else {
+      setMail("");
+      setPassword("");
+    }
+  }
   useEffect(() => {
     const checkSigninStatus = async () => {
       try {
@@ -34,9 +70,10 @@ export default function SignIn() {
   const handlePassword = () => {
     setHidePassword(!hidePassword);
   };
+
   const handleSignIn = () => {
     const user = {
-      email: email,
+      mail: mail,
       password: password,
     };
     axios
@@ -44,12 +81,12 @@ export default function SignIn() {
       .then((res) => {
         const token = res.data.token;
         AsyncStorage.setItem("authToken", token);
-        getEmail("");
-        getPassword("");
+        setMail("");
+        setPassword("");
         navigation.navigate("BuyerBottomNav", { screen: "Home" });
       })
       .catch((error) => {
-        Alert.alert("Failed Sign In", "Invalid email or password. Please retry !");
+        Alert.alert("Failed Sign In", "Invalid mail or password. Please retry !");
         console.log(error);
       });
   };
@@ -62,7 +99,7 @@ export default function SignIn() {
       <View style={{ flexDirection: "column", marginBottom: 6, alignSelf: "center", display: "flex" }}>
         <View style={styles.emailContainer}>
           <FontAwesome name="envelope" size={24} color="black" style={styles.Icon} />
-          <TextInput style={styles.input} onChangeText={getEmail} value={email} placeholder="Enter Email Address" />
+          <TextInput style={styles.input} onChangeText={(value) => handleCheckMail(value)} value={mail} placeholder="Enter Email Address" />
         </View>
       </View>
 
@@ -72,11 +109,11 @@ export default function SignIn() {
             <Entypo name={hidePassword ? "eye" : "eye-with-line"} size={24} color="black" style={styles.Icon} />
           </TouchableOpacity>
 
-          <TextInput style={styles.input} onChangeText={getPassword} value={password} placeholder="Password" secureTextEntry={hidePassword ? false : true} />
+          <TextInput style={styles.input} onChangeText={setPassword} value={password} placeholder="Password" secureTextEntry={hidePassword ? false : true} />
         </View>
       </View>
 
-      <TouchableOpacity style={styles.button} onPress={handleSignIn}>
+      <TouchableOpacity style={styles.button} onPress={() => validate()}>
         <Text style={styles.buttonText}>Sign In</Text>
       </TouchableOpacity>
 
