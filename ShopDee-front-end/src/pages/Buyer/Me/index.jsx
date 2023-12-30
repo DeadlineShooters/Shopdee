@@ -13,6 +13,7 @@ import { Axios } from "../../../api/axios.js";
 
 const Me = ({ navigation }) => {
   const { userID, setUserID, setSellerData, user } = useContext(UserContext);
+  console.log("@@ update: ", user);
   const navigateToEditProfile = () => {
     console.log("@@ user navigate", user);
     navigation.navigate("EditProfile", { user });
@@ -108,7 +109,15 @@ const Me = ({ navigation }) => {
     ]);
   };
   const isFocused = useIsFocused();
-
+  const [username, setUserName] = useState();
+  const [selectedImage, setSelectedImage] = useState();
+  useEffect(() => {
+    fetchUserData = () => {
+      setUserName(user.username);
+      setSelectedImage(user?.profilePic?.url);
+    }
+    fetchUserData();
+  }, [navigation, isFocused])
   return (
     <SafeAreaView
       style={{
@@ -127,7 +136,7 @@ const Me = ({ navigation }) => {
           }}
         >
           <Image
-            source={{ uri: user?.User?.profilePic.url }}
+            source={{ uri: selectedImage }}
             style={{
               height: 100,
               width: 100,
@@ -148,7 +157,7 @@ const Me = ({ navigation }) => {
               marginLeft: 10,
             }}
           >
-            {user.username}
+            {username}
           </Text>
         </View>
       </View>

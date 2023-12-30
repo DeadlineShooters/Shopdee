@@ -7,6 +7,7 @@ import DatePicker, { getFormatedDate } from "react-native-modern-datepicker";
 import { Dropdown } from "react-native-element-dropdown";
 import axios from "axios";
 import "core-js/stable/atob";
+import { UserContext } from "../../../../context/UserContext.js";
 
 const EditProfile = ({ navigation, route }) => {
   //Pop in animation
@@ -89,16 +90,18 @@ const EditProfile = ({ navigation, route }) => {
 
   //USER INFORMATION SETTING
   const user = route.params.user;
-  const [publicId, setPublicId] = useState("");
-  const [secureUrl, setSecureUrl] = useState("");
+  const [public_id, setPublicId] = useState();
+  const [url, setSecureUrl] = useState();
   const [selectedImage, setSelectedImage] = useState();
   const [username, setUserName] = useState("");
   const [mail, setMail] = useState("");
+  const [checkValidMail, setCheckValidMail] = useState(false);
   const [phone, setPhone] = useState("");
+  const [checkValidPhone, setCheckValidPhone] = useState(false);
 
   //Change information
   const [changeSelectedImage, setChangeSelectedImage] = useState();
-  const [changName, setChangeName] = useState("");
+  const [changeName, setChangeName] = useState("");
   const [changeMail, setChangeMail] = useState("");
   const [changePhone, setChangePhone] = useState("");
   const [changeGender, setChangeGender] = useState("");
@@ -110,19 +113,21 @@ const EditProfile = ({ navigation, route }) => {
     setPhone(user.phone);
     setGender(user.gender);
     setStartedDate(user.birthday);
-    setSelectedImage(user.profilePic.url);
+    setSelectedImage(user?.profilePic?.url);
+    setPublicId(user?.profilePic?.public_id)
+    setSecureUrl(user?.profilePic?.url);
 
     setChangeName(user.username);
     setChangeMail(user.email);
     setChangePhone(user.phone);
     setChangeGender(user.gender);
     setChangeStartedDate(user.birthday);
-    setChangeSelectedImage(user.profilePic.url);
+    setChangeSelectedImage(user?.profilePic?.url);
   }, []);
 
   const handleOnPressGoBack = ({ navigation }) => {
     if (
-      changName != username ||
+      changeName != username ||
       changeMail != mail ||
       changePhone != phone ||
       changeGender != gender ||
@@ -168,7 +173,30 @@ const EditProfile = ({ navigation, route }) => {
     }
   };
 
-  const save = async () => {
+  const handleCheckMail = text => {
+    let re = /\S+@\S+\.\S+/;
+    let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w\w+)+$/;
+    setMail(text);
+    if (re.test(text) || reg.test(text)) {
+      setCheckValidMail(false);
+    } else {
+      setCheckValidMail(true);
+    }
+  };
+
+  const handleCheckPhone = text => {
+    setPhone(text);
+    if (text.length === 10 && text.charAt(0) === '0')
+    {
+      setCheckValidPhone(false);
+    } else {
+      setCheckValidPhone(true);
+    }
+    console.log(checkValidPhone);
+  }
+
+  const { setUser } = useContext(UserContext);
+  const updateData = async () => {
     setChangeName(username);
     setChangeMail(mail);
     setChangePhone(phone);
@@ -177,7 +205,7 @@ const EditProfile = ({ navigation, route }) => {
     setChangeSelectedImage(selectedImage);
     try {
       const userID = user._id;
-      const profilePic = { publicId, secureUrl };
+      const profilePic = { public_id, url };
       const userInfo = {
         username: username,
         email: mail,
@@ -186,13 +214,23 @@ const EditProfile = ({ navigation, route }) => {
         birthday: startedDate,
         profilePic: profilePic,
       };
+      setUser(userInfo);
       await axios.put(`http://10.0.2.2:3000/user/profile/update/${userID}`, userInfo);
       setStatus("success");
       popIn();
     } catch (error) {
       console.log("error message", error);
     }
-  };
+  }
+  const save = async () => {
+    if (checkValidMail == false && checkValidPhone == false) {
+      updateData();
+    } else if (checkValidMail == true) {
+      Alert.alert("Updating user profile failed", "Your mail is invalid. Please input again");
+    } else if (checkValidPhone == true) {
+      Alert.alert("Updating user profile failed", "Your phone is invalid. Please input again");
+    }
+  }
 
   function renderDatePicker() {
     return (
@@ -360,15 +398,27 @@ const EditProfile = ({ navigation, route }) => {
                 borderColor: COLORS_v2.secondaryGray,
                 borderWidth: 1,
                 borderRadius: 4,
-                marginVertical: 6,
                 justifyContent: "center",
                 paddingLeft: 8,
               }}
             >
-              <TextInput value={mail} onChangeText={(value) => setMail(value)} editable={true} />
+              <TextInput 
+                value={mail}
+                onChangeText={(value) => {handleCheckMail(value);}} 
+                editable={true} 
+              />
             </View>
           </View>
         </View>
+        {checkValidMail ? 
+        (
+          <View style={{flexDirection: 'row', justifyContent: 'flex-end'}}>
+            <Text style={{color: COLORS_v2.red}}>Warn: Wrong format mail</Text>
+          </View>
+        ) : 
+        (
+          <Text style={{color: COLORS_v2.lightBlue}}></Text>
+        )}
         <View>
           <View
             style={{
@@ -395,10 +445,24 @@ const EditProfile = ({ navigation, route }) => {
                 paddingLeft: 8,
               }}
             >
-              <TextInput value={phone} onChangeText={(value) => setPhone(value)} editable={true} keyboardType="number-pad" />
+              <TextInput
+                value={phone} 
+                onChangeText={(value) => handleCheckPhone(value)} 
+                editable={true} 
+                keyboardType="number-pad"
+              />
             </View>
           </View>
         </View>
+        {checkValidPhone ? 
+        (
+          <View style={{flexDirection: 'row', justifyContent: 'flex-end'}}>
+            <Text style={{color: COLORS_v2.red}}>Warn: Wrong format phone</Text>
+          </View>
+        ) : 
+        (
+          <Text style={{color: COLORS_v2.lightBlue}}></Text>
+        )}
         <View>
           <View
             style={{
@@ -483,7 +547,7 @@ const EditProfile = ({ navigation, route }) => {
           </View>
         </Animated.View>
       </View>
-      {changName != username ||
+      {changeName != username ||
       changeMail != mail ||
       changePhone != phone ||
       changeGender != gender ||

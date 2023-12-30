@@ -49,7 +49,7 @@ export default function SignIn() {
         navigation.navigate("BuyerBottomNav", { screen: "Home" });
       })
       .catch((error) => {
-        Alert.alert("SignIn Error", "Invalid email");
+        Alert.alert("Failed Sign In", "Invalid email or password. Please retry !");
         console.log(error);
       });
   };

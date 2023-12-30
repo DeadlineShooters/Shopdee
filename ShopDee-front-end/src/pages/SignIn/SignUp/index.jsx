@@ -21,7 +21,20 @@ export default function SignUp() {
   const handlePassword = () => {
     setHidePassword(!hidePassword)
   };
+
   let isValid = true;
+  const handleCheckMail = text => {
+    let re = /\S+@\S+\.\S+/;
+    let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w\w+)+$/;
+    setEmail(text);
+    if (re.test(text) || reg.test(text)) {
+      setBadEmail(false);
+    } else {
+      setBadEmail(true);
+    }
+    console.log(badEmail);
+  };
+
   const validate = () => {
     if (email == '') {
       setBadEmail(true);
@@ -62,13 +75,20 @@ export default function SignUp() {
     {
       setCorrectPassword(true);
     }
+  
     setTimeout(() => {
       if (isValid == true) {
         handleSignUp();
         navigation.goBack();
       }
-      else
-      {
+      else if (badEmail == true) {
+        Alert.alert("Updating user profile failed", "Your mail is invalid. Please input again");
+        setEmail("");
+        setUsername("");
+        setUsername("");
+        setPassword("");
+        setConfirmPassword("");
+      } else {
         setEmail("");
         setUsername("");
         setUsername("");
@@ -135,8 +155,8 @@ export default function SignUp() {
             <FontAwesome name="envelope" size={24} color="black" style={styles.Icon}/>
             <TextInput
               style={styles.input}
-              onChangeText={(text) => setEmail(text)}
               value={email}
+              onChangeText={(text) => handleCheckMail(text)}
               placeholder="Enter Email Address"
             />
           </View>

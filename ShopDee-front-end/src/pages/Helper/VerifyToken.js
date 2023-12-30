@@ -1,49 +1,47 @@
 import React, { useState } from 'react';
 import { View, Text, Image, TextInput, TouchableOpacity, StyleSheet, Alert, KeyboardAvoidingView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { FontAwesome, Entypo, Ionicons, MaterialIcons } from '@expo/vector-icons';
+import { FontAwesome5, MaterialIcons } from '@expo/vector-icons';
 import axios from "axios"
 import {COLORS_v2} from "../../../constants/theme.js"
 
-export default function SendMailVerify() {
+export default function VerifyToken({route}) {
   const navigation = useNavigation();
-  const [email, setEmail] = useState("");
-  const [forgotEmail, setForgotEmail] = useState("");
-  const [badEmail, setBadEmail] = useState(false);
-  const port = 1; //used for entering the password reset using forget password
+  const [token, setToken] = useState("");
+  const [badToken, setBadToken] = useState(false);
 
   let isValid = true;
   const validate = () => {
-    if (email == '') {
-      setBadEmail(true);
+    if (token == '') {
+      setBadToken(true);
       isValid = false;
     }
     else {
-      setBadEmail(false);
+      setBadToken(false);
     }
-    handleResetPassword();
+    handleVerifyToken();
   }
   const [error, setError] = useState('');
-
-  const handleResetPassword = async () => {
+  const email = route.params.email;
+  const handleVerifyToken = async () => {
     try {
       const data = {
         email: email,
+        token: token,
       };
-      await axios.post('http://10.0.2.2:3000/user/reset-password', data, {
+      await axios.post('http://10.0.2.2:3000/user/reset-password/verify-token', data, {
         headers: {
           'Content-Type': 'application/json',
         },
       }).then((response) => {
         if (response.data.success) {
-          setForgotEmail(email);
-          navigation.navigate('VerifyToken', {email, port});
+          navigation.navigate('ResetPassword', {email});
         } else {
           setError('There was an issue resetting your password. Please try again.');
         }
       });
     } catch (error) {
-      console.error(error);
+      Alert.alert("Token Verification Failed", "Your token is incorrect. Please retry !");
     }
   };
   return (
@@ -56,7 +54,7 @@ export default function SendMailVerify() {
             backgroundColor: COLORS_v2.white,
         }}>
         <TouchableOpacity
-          onPress={() => navigation.navigate("SignIn")}
+          onPress={() => navigation.navigate("SendMail")}
           style={{
             position: "absolute",
             left: 10,
@@ -70,7 +68,7 @@ export default function SendMailVerify() {
           />
           <Text style={{color: COLORS_v2.lightBlue}}>Turn Back</Text>
         </TouchableOpacity>
-        <Text style={{ fontSize: 20, fontWeight: 600 }}>Reset Password</Text>
+        <Text style={{ fontSize: 20, fontWeight: 600 }}>Verify Token</Text>
       </View>
       <Image
         style={styles.logo}
@@ -79,22 +77,22 @@ export default function SendMailVerify() {
       <KeyboardAvoidingView>
         <View style={{ flexDirection: "column", marginVertical: 6, alignSelf: 'center'}}>
           <View style={styles.inputContainer}>
-            <FontAwesome name="envelope" size={24} color="black" style={styles.Icon}/>
+            <FontAwesome5 name="coins" size={24} color="black" style={styles.Icon}/>
             <TextInput
               style={styles.input}
-              onChangeText={(text) => setEmail(text)}
-              value={email}
-              placeholder="Enter Email Address"
+              onChangeText={(text) => setToken(text)}
+              value={token}
+              placeholder="Enter Token Sent To Your Mail"
             />
           </View>
         </View>
-        {badEmail === true && <>
+        {badToken === true && <>
           <Text style={{ flexDirection: "column", alignSelf: 'center', display: 'flex', color: 'red' }}>
-            Please input the email
+            Please input the token
           </Text>
         </>}
         <TouchableOpacity style={styles.button} onPress={() => {validate()}}>
-          <Text style={styles.buttonText}>Send email</Text>
+          <Text style={styles.buttonText}>Verify Token</Text>
         </TouchableOpacity>
       </KeyboardAvoidingView>
     </View>

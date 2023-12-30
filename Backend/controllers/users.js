@@ -7,6 +7,17 @@ import { getDataUri } from "../utils/feature.js";
 import cloudinary from "cloudinary";
 import Shop from "../models/shop.js";
 import mongoose from "mongoose";
+import nodemailer from "nodemailer"
+
+let transporter = nodemailer.createTransport({
+  service: 'gmail',
+  host: 'smtp.gmail.com',
+  secure: false,
+  auth: {
+    user: "nmthong226@gmail.com",
+    pass: "aszipllghvzgatsy",
+  }
+})
 
 export const checkShopOwner = async (req, res) => {
   try {
@@ -96,8 +107,8 @@ export const updateprofile = async (req, res) => {
       gender: gender,
       birthDay: birthday,
       profilePic: {
-        public_id: profilePic.publicId,
-        url: profilePic.secureUrl,
+        public_id: profilePic.public_id,
+        url: profilePic.url,
       },
     });
     res.status(200).send({
@@ -128,3 +139,84 @@ export const updateaddress = async (req, res) => {
     res.status(500).json({ message: "Error updating the user profile" });
   }
 };
+
+export const updatePassword = async (req, res) => {
+  console.log("@@ body", req.body);
+  try {
+    const password = req.body.password;
+    const email = req.body.email;
+    const existingUser = await user.findOne({ email });
+    if (!existingUser) {
+      console.error({ success: false, message: 'There was an Error' });
+      return res.send({ success: false, message: 'User not found' });
+    }
+    existingUser.password = password;
+    await existingUser.save();
+    res.status(200).send({
+      success: true,
+      message: "Password reset successfully",
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: "Error resetting password " });
+  }
+};
+
+const generateCode = async (length) => {
+  let result = '';
+  const characters = 'QWERTYUIOPASDFGHJKLZXCVBNM0123456789';
+  const charactersLength = characters.length;
+  let counter = 0;
+  while (counter < length)
+  {
+    result += characters.charAt(Math.floor(Math.random()*charactersLength));
+    counter +=1;
+  }
+  return result;
+}
+
+export const resetPassword = async (req, res) => {
+  try {
+    const email = req.body.email;
+    const existingUser = await user.findOne({ email });
+    if (!existingUser) {
+      console.error({ success: false, message: 'There was an Error' });
+      return res.send({ success: false, message: 'If user exists, an email was sent' });
+    }
+    const token = await generateCode(5);
+    existingUser.recovery.resetToken = token;
+    existingUser.recovery.resetTokenExpiration = Date.now() + 3600000;
+    await existingUser.save();
+    let info = await transporter.sendMail({
+      from: process.env.EMAIL_TEST,
+      to: email,
+      subject: "Hello " + existingUser.username,
+      text: "Reset password information",
+      html: `Hello world from ShopDee, this is your Reset Token: ${token}`,
+    });
+    console.log(info);
+    return res.send({ success: true, message: 'Email sent' });
+  } catch (error) {
+    console.error(error)
+  }
+}
+
+export const verifyToken = async (req, res) => {
+  console.log(req.body)
+  try {
+    const verificationCode = req.body.token;
+    const email = req.body.email;
+    const existingUser = await user.findOne({ email });
+    console.log(existingUser);
+    if (!existingUser || existingUser.recovery.resetToken !== verificationCode) {
+      return res.status(400).send({ success: false });
+    }
+    if (existingUser.recovery.resetTokenExpiration < new Date()) {
+      return res.status(400).send({ success: false, message: 'Token has expired.' });
+    }
+    return res.status(200).send({ success: true });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).send({ success: false, message: 'An error occurred. Please try again later.' });
+  }
+}
