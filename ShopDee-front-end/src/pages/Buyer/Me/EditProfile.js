@@ -105,14 +105,14 @@ const EditProfile = ({ navigation, route }) => {
   const [changeMail, setChangeMail] = useState("");
   const [changePhone, setChangePhone] = useState("");
   const [changeGender, setChangeGender] = useState("");
-  const [changeStartedDate, setChangeStartedDate] = useState("");
+  const [changeSelectedStartDate, setChangeSelectedStartDate] = useState("");
 
   useEffect(() => {
     setUserName(user.username);
     setMail(user.email);
     setPhone(user.phone);
     setGender(user.gender);
-    setStartedDate(user.birthday);
+    setSelectedStartDate(user.birthDay);
     setSelectedImage(user?.profilePic?.url);
     setPublicId(user?.profilePic?.public_id)
     setSecureUrl(user?.profilePic?.url);
@@ -121,7 +121,7 @@ const EditProfile = ({ navigation, route }) => {
     setChangeMail(user.email);
     setChangePhone(user.phone);
     setChangeGender(user.gender);
-    setChangeStartedDate(user.birthday);
+    setChangeSelectedStartDate(user.birthDay);
     setChangeSelectedImage(user?.profilePic?.url);
   }, []);
 
@@ -211,7 +211,7 @@ const EditProfile = ({ navigation, route }) => {
         email: mail,
         phone: phone,
         gender: gender,
-        birthday: startedDate,
+        birthday: selectedStartDate,
         profilePic: profilePic,
       };
       setUser(userInfo);
@@ -551,7 +551,7 @@ const EditProfile = ({ navigation, route }) => {
       changeMail != mail ||
       changePhone != phone ||
       changeGender != gender ||
-      changeStartedDate != startedDate ||
+      changeSelectedStartDate != selectedStartDate ||
       selectedImage != changeSelectedImage ? (
         <TouchableOpacity onPress={save}>
           <View
