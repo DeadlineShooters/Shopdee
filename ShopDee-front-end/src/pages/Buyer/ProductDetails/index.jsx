@@ -26,6 +26,7 @@ import Carousel, { Pagination } from 'react-native-snap-carousel';
 
 export default function ProductDetails({route}) {
   const product = route.params.product;
+  const { isSellerView } = route.params;
   // console.log("ayoo: "+JSON.stringify(product));
   const [isFavorite, setIsFavorite] = useState(false);
   // const [selectedSize, setSelectedSize] = useState(null);
@@ -145,16 +146,11 @@ export default function ProductDetails({route}) {
             <TouchableOpacity onPress={() => navigation.goBack()}>
               <MaterialIcons name="keyboard-arrow-left" size={24} color={COLORS.black}/>
             </TouchableOpacity>
-
-            <TouchableOpacity
-              style={{
-                backgroundColor: COLORS.white,
-                padding: 5,
-                borderRadius: 50,
-              }}
-            >
-              <MaterialCommunityIcons name="cart-outline" size={24} color="black"/>
-            </TouchableOpacity>
+            {!isSellerView ?
+              <TouchableOpacity style={{ backgroundColor: COLORS.white, padding: 5, borderRadius: 50, }}>
+                <MaterialCommunityIcons name="cart-outline" size={24} color="black" />
+              </TouchableOpacity>
+            : ''}
           </View>
 
           <View>
@@ -204,6 +200,7 @@ export default function ProductDetails({route}) {
               styles.contentBox,
             ]}
           >
+            {!isSellerView ?
             <TouchableOpacity onPress={() => setIsFavorite(!isFavorite)}>
               {isFavorite ? (
                 <Ionicons name="md-heart-sharp" size={24} color />
@@ -211,6 +208,7 @@ export default function ProductDetails({route}) {
                 <Ionicons name="md-heart-outline" size={24} color={COLORS.black}/>
               )}
             </TouchableOpacity>
+            : ''}
             <View style={{flex: 1,}}>
               <Text style={{ ...FONTS.h3 }}>{product.name}</Text>
               <Text style={{ ...FONTS.h1 }}>{product.price.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}</Text>
@@ -218,6 +216,7 @@ export default function ProductDetails({route}) {
             </View>
           </View>
 
+          {!isSellerView ?
           <View
             style={[
               {
@@ -244,6 +243,7 @@ export default function ProductDetails({route}) {
               <Text style={{ color: "gray" }}>{product.shop.address}</Text>
             </View>
           </View>
+          : ''}
 
           <View style={[styles.contentBox]}>
             <Text style={{ ...FONTS.h4 }}>Product description</Text>
@@ -252,6 +252,7 @@ export default function ProductDetails({route}) {
         </View>
       </ScrollView>
 
+      {!isSellerView ?
       <View
         style={{
           position: "absolute",
@@ -288,6 +289,7 @@ export default function ProductDetails({route}) {
         </TouchableOpacity>
       </View>
 
+      : ''}
       {renderModal()}
     </SafeAreaView>
   );

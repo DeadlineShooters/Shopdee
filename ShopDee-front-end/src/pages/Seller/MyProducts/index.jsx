@@ -78,25 +78,27 @@ const MyProducts = () => {
           console.log("@@@ Product ", product);
           return (
             <View style={styles.section} key={product._id}>
-              <Text style={{ marginBottom: 15, fontSize: 18, fontWeight: "bold" }}>{product.name}</Text>
-              <View
-                style={{
-                  flexDirection: "row",
-                  borderBottomWidth: 1,
-                  borderBottomColor: COLORS.darkGray,
-                  paddingBottom: 15,
-                }}
-              >
-                <View style={styles.imageContainer}>
-                  <Image source={{ uri: product.image[0]?.url }} style={styles.image}></Image>
+              <TouchableOpacity onPress={() => navigation.navigate("ProductDetails", { product, isSellerView: true })}>
+                <Text style={{ marginBottom: 15, fontSize: 18, fontWeight: "bold" } }>{product.name}</Text>
+                <View
+                  style={{
+                    flexDirection: "row",
+                    borderBottomWidth: 1,
+                    borderBottomColor: COLORS.darkGray,
+                    paddingBottom: 15,
+                  }}
+                >
+                  <View style={styles.imageContainer}>
+                    <Image source={{ uri: product.image[0]?.url }} style={styles.image}></Image>
+                  </View>
+                  <View>
+                    {/* <Text>{product.name}</Text> */}
+                    <Text>Category: {product.category.name}</Text>
+                    <Text style={{ marginTop: 5 }}>Price: {product.price} đ</Text>
+                    <Text style={{ marginTop: 5 }}>Stock: {product.quantity}</Text>
+                  </View>
                 </View>
-                <View>
-                  {/* <Text>{product.name}</Text> */}
-                  <Text>Category: {product.category.name}</Text>
-                  <Text style={{ marginTop: 5 }}>Price: {product.price} đ</Text>
-                  <Text style={{ marginTop: 5 }}>Stock: {product.quantity}</Text>
-                </View>
-              </View>
+              </TouchableOpacity>
               <View
                 style={{
                   flexDirection: "row",
