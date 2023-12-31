@@ -21,11 +21,22 @@ export default function SignUp() {
   const handlePassword = () => {
     setHidePassword(!hidePassword)
   };
-  let isValid = true;
+
+  const handleCheckMail = text => {
+    let re = /\S+@\S+\.\S+/;
+    let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w\w+)+$/;
+    setEmail(text);
+    if (re.test(text) || reg.test(text)) {
+      setBadEmail(false);
+    } else {
+      setBadEmail(true);
+    }
+    console.log(badEmail);
+  };
+
   const validate = () => {
     if (email == '') {
       setBadEmail(true);
-      isValid = false;
     }
     else {
       setBadEmail(false);
@@ -33,7 +44,6 @@ export default function SignUp() {
 
     if (username == '') {
       setBadUserName(true);
-      isValid = false;
     }
     else {
       setBadUserName(false);
@@ -41,7 +51,6 @@ export default function SignUp() {
 
     if (password == '') {
       setBadPassword(true);
-      isValid = false;
     }
     else {
       setBadPassword(false);
@@ -49,7 +58,6 @@ export default function SignUp() {
 
     if (confirmPassword == '') {
       setBadConfirmPassword(true);
-      isValid = false;
     }
     else {
       setBadConfirmPassword(false);
@@ -62,20 +70,25 @@ export default function SignUp() {
     {
       setCorrectPassword(true);
     }
-    setTimeout(() => {
-      if (isValid == true) {
-        handleSignUp();
-        navigation.goBack();
-      }
-      else
-      {
-        setEmail("");
-        setUsername("");
-        setUsername("");
-        setPassword("");
-        setConfirmPassword("");
-      }
-    }, 1000);
+
+    if (badEmail == false && badUserName == false && badPassWord == false && badConfirmPassWord == false && correctPassword == true) {
+      handleSignUp();
+    }
+    else if (badEmail == true) {
+      Alert.alert("Updating user profile failed", "Your mail is invalid. Please input again");
+      setEmail("");
+      setUsername("");
+      setUsername("");
+      setPassword("");
+      setConfirmPassword("");
+    }
+    else {
+      setEmail("");
+      setUsername("");
+      setUsername("");
+      setPassword("");
+      setConfirmPassword("");
+    }
   }
   const handleSignUp = async () => {
     // Xử lý logic đăng ký ở đây
@@ -90,13 +103,21 @@ export default function SignUp() {
       address:"",
     }
     try {
-      await axios.post("http://10.0.2.2:3000/user/register", user)
+      await axios.post("http://10.0.2.2:3000/user/register", user).then((response) => {
+        if (response.data.success) {
+          navigation.navigate('SignIn');
+        } else {
+          Alert.alert(
+            "Registration Failed",
+            "Your email has been registered. Please retry with another"
+          );
+        }
+      })
     } catch (error) {
       Alert.alert(
-        "Registration error",
+        "Registration Failed",
         "An error occured during registration"
       );
-      console.log("registration failed", error);
     }
   };
   return (
@@ -135,8 +156,8 @@ export default function SignUp() {
             <FontAwesome name="envelope" size={24} color="black" style={styles.Icon}/>
             <TextInput
               style={styles.input}
-              onChangeText={(text) => setEmail(text)}
               value={email}
+              onChangeText={(text) => handleCheckMail(text)}
               placeholder="Enter Email Address"
             />
           </View>

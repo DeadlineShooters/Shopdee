@@ -25,8 +25,8 @@ import React from 'react';
 import Carousel, { Pagination } from 'react-native-snap-carousel';
 
 export default function ProductDetails({route}) {
-  const productData = route.params.product;
-  console.log(productData);
+  const product = route.params.product;
+  // console.log("ayoo: "+JSON.stringify(product));
   const [isFavorite, setIsFavorite] = useState(false);
   // const [selectedSize, setSelectedSize] = useState(null);
   const [quantity, setQuantity] = useState(1);
@@ -159,7 +159,7 @@ export default function ProductDetails({route}) {
 
           <View>
             <Carousel
-              data={productData.image}
+              data={product.image}
               renderItem={({ item }) => (
                 <Image
                   source={{ uri: item.url }}
@@ -177,7 +177,7 @@ export default function ProductDetails({route}) {
               onSnapToItem={(index) => setActiveSlide(index)}
             />
             <Pagination
-              dotsLength={product.images.length}
+              dotsLength={product.image.length}
               activeDotIndex={activeSlide}
               containerStyle={{ position: 'absolute', bottom: 0, alignSelf: 'center' }}
               dotStyle={{
@@ -212,8 +212,8 @@ export default function ProductDetails({route}) {
               )}
             </TouchableOpacity>
             <View style={{flex: 1,}}>
-              <Text style={{ ...FONTS.h3 }}>{productData.name}</Text>
-              <Text style={{ ...FONTS.h1 }}>{productData.price.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}</Text>
+              <Text style={{ ...FONTS.h3 }}>{product.name}</Text>
+              <Text style={{ ...FONTS.h1 }}>{product.price.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}</Text>
               {/* <Text>4.5 *</Text> */}
             </View>
           </View>
@@ -230,7 +230,7 @@ export default function ProductDetails({route}) {
             ]}
           >
             <Image
-              source={{uri: productData.shop.image.url}}
+              source={{uri: product.shop.image?.url}}
               style={{
                 height: "75%",
                 width: undefined,
@@ -239,15 +239,15 @@ export default function ProductDetails({route}) {
               }}
             />
             <View>
-              <Text style={{ ...FONTS.h4 }}>{productData.shop.name}</Text>
+              <Text style={{ ...FONTS.h4 }}>{product.shop.name}</Text>
               <Text style={{ color: "gray" }}>Active 28 minutes ago</Text>
-              <Text style={{ color: "gray" }}>{productData.shop.address}</Text>
+              <Text style={{ color: "gray" }}>{product.shop.address}</Text>
             </View>
           </View>
 
           <View style={[styles.contentBox]}>
             <Text style={{ ...FONTS.h4 }}>Product description</Text>
-            <Text>{productData.description}</Text>
+            <Text>{product.description}</Text>
           </View>
         </View>
       </ScrollView>

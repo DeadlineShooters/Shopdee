@@ -29,7 +29,7 @@ export default function Home() {
       try {
         const response = await axios.get("http://10.0.2.2:3000/products/home");
         const productData = response.data;
-        console.log(productData);
+        // console.log(productData);
         setProductList(productData);
       } catch (error) {
         console.log("Error fetching buyer product: ", error);

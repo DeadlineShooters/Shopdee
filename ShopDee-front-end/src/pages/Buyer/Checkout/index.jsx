@@ -1,36 +1,55 @@
-import { SafeAreaView, ScrollView, Text, View, Pressable, StyleSheet, Image, TouchableOpacity } from "react-native";
+import { SafeAreaView, ScrollView, Text, View, Pressable, StyleSheet, Image, TouchableOpacity, Alert, Animated, Dimensions } from "react-native";
 import { SIZES, COLORS, FONTS } from "../../../../assets/Themes";
 import GoBack from "../../../components/goBackPanel";
 import { useNavigation } from "@react-navigation/native";
-import React, { useState } from "react";
+import React, { useState, useEffect, useContext, useRef } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { jwtDecode } from "jwt-decode";
 
-import { MaterialIcons, Ionicons, Feather, AntDesign, MaterialCommunityIcons, SimpleLineIcons } from "@expo/vector-icons";
+import { UserContext } from "../../../../context/UserContext.js";
+import { useFocusEffect, useIsFocused } from "@react-navigation/native";
+
+import { MaterialIcons, Ionicons, Feather, AntDesign, MaterialCommunityIcons, SimpleLineIcons, Entypo } from "@expo/vector-icons";
 
 import axios from "axios";
 
-const user = {
-  name: "Nguyễn Tuấn Kiệt",
-  phone: "0902800628",
-};
+// const user = {
+//   name: "Nguyễn Tuấn Kiệt",
+//   phone: "0902800628",
+// };
 
 export default function Checkout({ route }) {
+  const windowHeight = Dimensions.get("window").height;
+  const [status, setStatus] = useState(null);
+  const popAnim = useRef(new Animated.Value(windowHeight * -1)).current;
+  const successColor = "#6dcf81";
+  const successHeader = "Success!";
+  const successMessage = "Placed order successfully";
+  const failColor = "#bf6060";
+  const failHeader = "Failed!";
+  const failMessage = "Something went wrong. Please try again.";
+
   const [selectedPayment, setSelectedPayment] = useState("Cash");
   const navigation = useNavigation();
   const { product, quantity } = route.params;
+  // console.log(product)
   const price = product.price.toLocaleString("vi-VN", { style: "currency", currency: "VND" });
   const deliveryFee = 15000;
-  const total = (product.price + deliveryFee).toLocaleString("vi-VN", { style: "currency", currency: "VND" });
+  const total = (product.price * quantity + deliveryFee).toLocaleString("vi-VN", { style: "currency", currency: "VND" });
+
+  const { userID, setUserID, user } = useContext(UserContext);
+  console.log("@@ user", user);
+
+  const isFocused = useIsFocused();
 
   const placeOrder = async () => {
     try {
-      const token = await AsyncStorage.getItem("authToken");
-      const userID = jwtDecode(token).userID;
+      // const token = await AsyncStorage.getItem("authToken");
+      // const userID = jwtDecode(token).userID;
 
       const order = {
         quantity,
-        totalPrice: product.price + deliveryFee,
+        totalPrice: product.price * quantity + deliveryFee,
         orderDate: new Date(),
         deliveryDate: null, // Fix the typo here
         status: "toConfirm",
@@ -42,11 +61,40 @@ export default function Checkout({ route }) {
       const response = await axios.post(`http://10.0.2.2:3000/shop/${product.shop._id}/orders`, order);
       console.log(response.data);
 
-      navigation.goBack();
+      setStatus("success");
+      popIn();
+      setTimeout(() => {
+        navigation.goBack();
+      }, 2000);
     } catch (error) {
       console.error("Error placing order:", error);
       // Handle the error, e.g., show an error message to the user
     }
+  };
+  const popIn = () => {
+    Animated.timing(popAnim, {
+      toValue: windowHeight * -0.9 * 0.95,
+      duration: 300,
+      useNativeDriver: true,
+    }).start(() => popOut());
+  };
+
+  const popOut = () => {
+    setTimeout(() => {
+      Animated.timing(popAnim, {
+        toValue: windowHeight * -1,
+        duration: 300,
+        useNativeDriver: true,
+      }).start();
+    }, 5000);
+  };
+
+  const instantPopOut = () => {
+    Animated.timing(popAnim, {
+      toValue: windowHeight * -1,
+      duration: 150,
+      useNativeDriver: true,
+    }).start();
   };
 
   return (
@@ -63,11 +111,14 @@ export default function Checkout({ route }) {
             <Text style={{ marginLeft: 10 }}>Delivery Address</Text>
           </View>
           <Text style={{ paddingLeft: 10 }}>
-            {user.name} | {user.phone}
-            {"\n"}27 Nguyễn Văn Cừ{"\n"}P. Bình Trị Đông, Q. Bình Tân, TPHCM
+            {user?.username} | {user?.phone}
+            {"\n"}
+            {user.address}
           </Text>
           <Pressable
-            onPress={() => {}}
+            onPress={() => {
+              navigation.navigate("SetAddress", { props: { user } });
+            }}
             style={{
               position: "absolute",
               top: 35,
@@ -82,7 +133,7 @@ export default function Checkout({ route }) {
           <Text style={{ marginBottom: 15 }}>{product.shop.name}</Text>
           <View style={{ flexDirection: "row" }}>
             <View style={styles.imageContainer}>
-              <Image source={{ uri: product.images[0].url }} style={styles.image}></Image>
+              <Image source={{ uri: product.image[0].url }} style={styles.image}></Image>
             </View>
             <View>
               <Text>{product.name}</Text>
@@ -100,7 +151,9 @@ export default function Checkout({ route }) {
           </View>
           <View style={{ flexDirection: "row", justifyContent: "space-between", marginBottom: 5 }}>
             <Text>Merchandise Subtotal</Text>
-            <Text>{price}</Text>
+            <Text>
+              {price} x {quantity}
+            </Text>
           </View>
           <View style={{ flexDirection: "row", justifyContent: "space-between", marginBottom: 5 }}>
             <Text>Delivery</Text>
@@ -182,8 +235,31 @@ export default function Checkout({ route }) {
             placeOrder();
           }}
         >
-          <Text style={{ fontSize: 20, color: "white" }}>Buy now</Text>
+          <Text style={{ fontSize: 20, color: "white" }}>Checkout</Text>
         </TouchableOpacity>
+      </View>
+
+      <View>
+        <Animated.View
+          style={[
+            styles.toastContainer,
+            {
+              transform: [{ translateY: popAnim }],
+              zIndex: 99999999,
+            },
+          ]}
+        >
+          <View style={styles.toastRow}>
+            <AntDesign name={status === "success" ? "checkcircleo" : "closecircleo"} size={24} color={status === "success" ? successColor : failColor} />
+            <View style={styles.toastText}>
+              <Text style={{ fontWeight: "bold", fontSize: 15 }}>{status === "success" ? successHeader : failHeader}</Text>
+              <Text style={{ fontSize: 12 }}>{status === "success" ? successMessage : failMessage}</Text>
+            </View>
+            <TouchableOpacity onPress={instantPopOut}>
+              <Entypo name="cross" size={24} color="black" />
+            </TouchableOpacity>
+          </View>
+        </Animated.View>
       </View>
     </SafeAreaView>
   );
@@ -224,5 +300,33 @@ const styles = StyleSheet.create({
   },
   checkboxText: {
     color: COLORS.blue,
+  },
+  toastContainer: {
+    height: 60,
+    // width: 350,
+    backgroundColor: "#f5f5f5",
+    justifyContent: "center",
+    alignItems: "center",
+    borderRadius: 10,
+
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+
+    elevation: 5,
+  },
+  toastRow: {
+    width: "100%",
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-evenly",
+  },
+  toastText: {
+    width: "70%",
+    padding: 2,
   },
 });

@@ -12,9 +12,11 @@ import "core-js/stable/atob";
 import { Axios } from "../../../api/axios.js";
 
 const Me = ({ navigation }) => {
-  const { userID, setUserID, setSellerData } = useContext(UserContext);
+  const { userID, setUserID, setSellerData, user } = useContext(UserContext);
+  console.log("@@ update: ", user);
   const navigateToEditProfile = () => {
-    navigation.navigate("EditProfile", { props: user });
+    console.log("@@ user navigate", user);
+    navigation.navigate("EditProfile", { user });
   };
   const navigateToShopOwner = async () => {
     const findUser = { userID };
@@ -42,7 +44,7 @@ const Me = ({ navigation }) => {
     navigation.navigate("Settings", { props: user });
   };
   const navigateToSetAddress = () => {
-    navigation.navigate("SetAddress", { props: user });
+    navigation.navigate("SetAddress", { user });
   };
   const navigateToTermsAndPolicies = () => {
     navigation.navigate("UserPrivacy");
@@ -106,27 +108,16 @@ const Me = ({ navigation }) => {
       },
     ]);
   };
-  const [user, setUser] = useState("");
-  const [username, setUserName] = useState("");
   const isFocused = useIsFocused();
+  const [username, setUserName] = useState();
+  const [selectedImage, setSelectedImage] = useState();
   useEffect(() => {
-    const fetchUserProfile = async () => {
-      try {
-        const token = await AsyncStorage.getItem("authToken");
-        const decodedToken = jwtDecode(token);
-        const userID = decodedToken.userID;
-        setUserID(userID);
-        const response = await axios.get(`http://10.0.2.2:3000/user/profile/${userID}`);
-        const user = response.data;
-        console.log(user);
-        setUser(user);
-        setUserName(user?.User?.username);
-      } catch (error) {
-        console.log("error", error);
-      }
-    };
-    fetchUserProfile();
-  }, [navigation, isFocused]);
+    fetchUserData = () => {
+      setUserName(user.username);
+      setSelectedImage(user?.profilePic?.url);
+    }
+    fetchUserData();
+  }, [navigation, isFocused])
   return (
     <SafeAreaView
       style={{
@@ -145,7 +136,7 @@ const Me = ({ navigation }) => {
           }}
         >
           <Image
-            source={{ uri: user?.User?.profilePic.url }}
+            source={{ uri: selectedImage }}
             style={{
               height: 100,
               width: 100,

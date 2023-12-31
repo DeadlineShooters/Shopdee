@@ -1,6 +1,7 @@
 import { Axios } from "./axios";
 
 export const fetchUserInfo = async (userId) => {
+  console.log("@@@ user id: " + userId);
   try {
     const response = await Axios.get(`/user/profile/${userId}`);
     console.log("@@ User Info: ", response.data.User);

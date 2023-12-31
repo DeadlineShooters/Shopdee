@@ -4,8 +4,9 @@ import { COLORS_v2 } from "../../../../constants/theme.js";
 import {MaterialIcons, AntDesign} from '@expo/vector-icons';
 
 const Settings = ({navigation}) => {
+    const port = 2; //used for entering the password reset using reset password
     const navigateToChangePassword = () => {
-        navigation.navigate("ChangePassword");
+        navigation.navigate("SendMail");
     }
     return (
         <SafeAreaView style={{
@@ -60,81 +61,6 @@ const Settings = ({navigation}) => {
                         >
                             <View style={{flexDirection: "row"}}>
                                 <Text style={{fontSize: 16, fontWeight: 600}}>Password</Text>
-                            </View>
-                            <View>
-                                <AntDesign name="right" size={16} color="black"/>
-                            </View>
-                        </TouchableOpacity>
-                    </View>
-                </View>
-                {/*2nd tab*/}
-                <View style={{marginBottom: 12}}>
-                    <Text style={{fontSize:16, fontWeight:600, marginVertical: 10}}>APP configuration</Text>
-                    <View style={{
-                        borderRadius: 12,
-                        backgroundColor: COLORS_v2.white
-                    }}> 
-                        <TouchableOpacity
-                            // onPress={() => function}
-                            style={{
-                                flexDirection: "row",
-                                alignItems: "center",
-                                justifyContent: "space-between",
-                                paddingVertical: 8,
-                                paddingHorizontal: 12,
-                                borderWidth: 1,
-                                borderColor: COLORS_v2.gray,
-                            }}
-                        >
-                            <View style={{flexDirection: "row"}}>
-                                <Text style={{fontSize: 16, fontWeight: 600}}>Language</Text>
-                            </View>
-                            <View>
-                                <AntDesign name="right" size={16} color="black"/>
-                            </View>
-                        </TouchableOpacity>
-                        <TouchableOpacity
-                            // onPress={() => function}
-                            style={{
-                                flexDirection: "row",
-                                alignItems: "center",
-                                justifyContent: "space-between",
-                                paddingVertical: 8,
-                                paddingHorizontal: 12,
-                                borderWidth: 1,
-                                borderColor: COLORS_v2.gray,
-                            }}
-                        >
-                            <View style={{flexDirection: "row"}}>
-                                <Text style={{fontSize: 16, fontWeight: 600}}>Notifications setting</Text>
-                            </View>
-                            <View>
-                                <AntDesign name="right" size={16} color="black"/>
-                            </View>
-                        </TouchableOpacity>
-                    </View>
-                </View>
-                {/* 3rd tab */}
-                <View style={{marginBottom: 12}}>
-                    <Text style={{fontSize:16, fontWeight:600, marginVertical: 10}}>Support</Text>
-                    <View style={{
-                        borderRadius: 12,
-                        backgroundColor: COLORS_v2.white
-                    }}> 
-                        <TouchableOpacity
-                            // onPress={() => function}
-                            style={{
-                                flexDirection: "row",
-                                alignItems: "center",
-                                justifyContent: "space-between",
-                                paddingVertical: 8,
-                                paddingHorizontal: 12,
-                                borderWidth: 1,
-                                borderColor: COLORS_v2.gray,
-                            }}
-                        >
-                            <View style={{flexDirection: "row"}}>
-                                <Text style={{fontSize: 16, fontWeight: 600}}>Delete my account</Text>
                             </View>
                             <View>
                                 <AntDesign name="right" size={16} color="black"/>
