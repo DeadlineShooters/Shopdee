@@ -145,7 +145,7 @@ const ChangePassword = ({ navigation }) => {
                 borderRadius: 4,
                 marginVertical: 6,
                 justifyContent: "space-between",
-                paddingLeft: 8,
+                paddingHorizontal: 8,
                 flexDirection: "row",
                 alignItems: "center",
               }}
@@ -181,7 +181,7 @@ const ChangePassword = ({ navigation }) => {
                 borderRadius: 4,
                 marginVertical: 6,
                 justifyContent: "space-between",
-                paddingLeft: 8,
+                paddingHorizontal: 8,
                 flexDirection: "row",
                 alignItems: "center",
               }}

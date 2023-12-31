@@ -123,7 +123,7 @@ export default function Home() {
                 <View style={styles.productDetails}>
                   <Text style={styles.productName}>{product.name}</Text>
                   <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-                    <Text>{product.price}</Text>
+                    <Text>{product.price.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}</Text>
                     {<TouchableOpacity onPress={() => handleFavourite(product._id)}>
                       <AntDesign 
                         name={favoriteProducts[product._id] ? 'heart' : 'hearto'}

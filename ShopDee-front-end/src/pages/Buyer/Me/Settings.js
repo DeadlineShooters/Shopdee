@@ -51,10 +51,10 @@ const Settings = ({navigation}) => {
                             onPress={navigateToChangePassword}
                             style={{
                                 flexDirection: "row",
-                                alignItems: "flex-end",
+                                alignItems: "center",
                                 justifyContent: "space-between",
                                 paddingVertical: 8,
-                                paddingLeft: 12,
+                                paddingHorizontal: 12,
                                 borderWidth: 1,
                                 borderColor: COLORS_v2.gray,
                             }}
