@@ -18,6 +18,10 @@ const MyProducts = () => {
   const deleteThisProduct = async (productId) => {
     try {
       const response = await Axios.delete(`/shop/${shopID}/products/${productId}`);
+      if (response.data.message == "isOrdered") {
+        alert("This product has been ordered");
+        return;
+      }
       if (response.status == 200) {
         console.log("delete successfully");
       } else console.error("Error");

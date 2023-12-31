@@ -387,8 +387,7 @@ export default function CreateShop({ route }) {
         </Animated.View>
       </View>
   
-      {/* {shopName != '' && email != '' && phone != '' && bio != '' && address != '' ? */}
-      {shopName != '' && email != '' && phone != '' && bio != ''?
+      {shopName != '' && email != '' && phone != '' && bio != '' && address != '' ?
         <TouchableOpacity onPress={handleCreate}>
             <View style={{margin: 20, padding: 10,}}>                        
                 <View style={{borderRadius: 12, backgroundColor: COLORS.blue, alignItems: "center", }}>                        
