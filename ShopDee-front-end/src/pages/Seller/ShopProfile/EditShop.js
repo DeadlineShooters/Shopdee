@@ -193,7 +193,29 @@ export default function CreateShop({ navigation, route }) {
     }
   };
 
+  const isBadEmail = text => {
+    let re = /\S+@\S+\.\S+/;
+    let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w\w+)+$/;
+    if (re.test(text) || reg.test(text)) 
+      return false
+    return true;
+  };
+  const isValidPhone = text => {
+    if (text.length === 10 && text.charAt(0) === '0')
+      return true;
+    return false;
+  }
+
   const save = async () => {
+    if (isBadEmail(email)) {
+      alert("Email invalid. Please try again.");
+      return;
+    }
+    if (!isValidPhone(phone)) {
+      alert("Phone number invalid. Please try again.")
+      return;
+    }
+
     isFormEdited.current = false;
     try {
       const profilePic = { publicId, secureUrl };

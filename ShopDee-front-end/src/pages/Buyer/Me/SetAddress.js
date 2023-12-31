@@ -14,10 +14,13 @@ import {
   Pressable,
 } from "react-native";
 import * as ImagePicker from "expo-image-picker";
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useContext } from "react";
 import { COLORS_v2 } from "../../../../constants/theme.js";
 import { MaterialIcons, AntDesign, Entypo } from "@expo/vector-icons";
 import { Axios } from "../../../api/axios.js";
+import { fetchUserInfo } from "../../../api/userApi.js";
+
+import { UserContext } from "../../../../context/UserContext.js";
 
 const SetAddress = ({ navigation, route }) => {
   const { selectedAddress, user } = route.params;
@@ -26,7 +29,9 @@ const SetAddress = ({ navigation, route }) => {
   const [phone, setPhone] = useState(user.phone);
   const [address, setAddress] = useState(user.address);
   const [changeAddress, setChangeAddress] = useState(user.address);
+  const {setUser} = useContext(UserContext);
 
+  
   //Pop in animation
   const windowHeight = Dimensions.get("window").height;
   const [status, setStatus] = useState(null);
@@ -37,6 +42,12 @@ const SetAddress = ({ navigation, route }) => {
   const failColor = "#bf6060";
   const failHeader = "Failed!";
   const failMessage = "Your information was still unsaved";
+
+  const isValidPhone = text => {
+    if (text.length === 10 && text.charAt(0) === '0')
+      return true;
+    return false;
+  }
 
   useEffect(() => {
     if (selectedAddress) {
@@ -88,16 +99,29 @@ const SetAddress = ({ navigation, route }) => {
     }
   };
   const save = async () => {
+    if (!isValidPhone(phone)) {
+      alert("Your phone is invalid. Please input again");
+      return;
+    }
     try {
       const userID = user._id;
       const userAddress = {
         address: changeAddress,
+        phone,
       };
 
       await Axios.put(`/user/profile/set-address/${userID}`, userAddress);
       setStatus("success");
       popIn();
       setAddress(changeAddress);
+      try {
+        const data = await fetchUserInfo(userID);
+        setUser(data);
+        console.log("@@ User: ", data);
+      } catch (error) {
+        console.error("Error fetching user info:", error);
+      }
+      navigation.goBack();
     } catch (error) {
       console.log("error message", error);
     }
@@ -195,7 +219,6 @@ const SetAddress = ({ navigation, route }) => {
               style={{
                 height: 44,
                 width: "100%",
-                backgroundColor: COLORS_v2.secondaryGray,
                 borderColor: COLORS_v2.secondaryGray,
                 borderWidth: 1,
                 borderRadius: 4,
@@ -205,12 +228,10 @@ const SetAddress = ({ navigation, route }) => {
               }}
             >
               <TextInput
-                value={phone}
-                onChangeText={(value) => setPhone(value)}
-                editable={false}
-                style={{
-                  color: COLORS_v2.black,
-                }}
+                value={phone} 
+                onChangeText={(value) => setPhone(value)} 
+                editable={true} 
+                keyboardType="number-pad"
               />
             </View>
           </View>
@@ -290,8 +311,8 @@ const SetAddress = ({ navigation, route }) => {
       </View>
       <Pressable
         onPress={save}
-        style={({ pressed }) => [styles.saveButton, { opacity: pressed || changeAddress == address ? 0.5 : 1 }]}
-        disabled={changeAddress == address}
+        style={({ pressed }) => [styles.saveButton, { opacity: pressed || (changeAddress == address && phone == user.phone) ? 0.5 : 1 }]}
+        disabled={changeAddress == address && phone == user.phone}
       >
         <Text style={{ fontSize: 16, fontWeight: 600, marginVertical: 10, color: COLORS_v2.white }}>Save</Text>
       </Pressable>

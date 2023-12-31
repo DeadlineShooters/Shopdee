@@ -43,6 +43,15 @@ export default function Checkout({ route }) {
   const isFocused = useIsFocused();
 
   const placeOrder = async () => {
+    if (!user.phone) {
+      alert('Please provide your phone number before checking out!')
+      return;
+    }
+    if (!user.address) {
+      alert('Please provide your address before checking out!');
+      return;
+    }
+
     try {
       // const token = await AsyncStorage.getItem("authToken");
       // const userID = jwtDecode(token).userID;
@@ -117,7 +126,7 @@ export default function Checkout({ route }) {
           </Text>
           <Pressable
             onPress={() => {
-              navigation.navigate("SetAddress", { props: { user } });
+              navigation.navigate("SetAddress", { user });
             }}
             style={{
               position: "absolute",
