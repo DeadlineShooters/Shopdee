@@ -8,6 +8,7 @@ import { Dropdown } from "react-native-element-dropdown";
 import axios from "axios";
 import "core-js/stable/atob";
 import { UserContext } from "../../../../context/UserContext.js";
+import { fetchUserInfo } from "../../../api/userApi.js";
 
 const EditProfile = ({ navigation, route }) => {
   //Pop in animation
@@ -219,6 +220,14 @@ const EditProfile = ({ navigation, route }) => {
       await axios.put(`http://10.0.2.2:3000/user/profile/update/${userID}`, userInfo);
       setStatus("success");
       popIn();
+      try {
+        const data = await fetchUserInfo(userID);
+        setUser(data);
+        console.log("@@ User: ", data);
+      } catch (error) {
+        console.error("Error fetching user info:", error);
+      }
+      navigation.goBack();
     } catch (error) {
       console.log("error message", error);
     }

@@ -19,7 +19,6 @@ import { COLORS_v2 } from "../../../../constants/theme.js";
 import { MaterialIcons, AntDesign, Entypo } from "@expo/vector-icons";
 import { Axios } from "../../../api/axios.js";
 import { fetchUserInfo } from "../../../api/userApi.js";
-
 import { UserContext } from "../../../../context/UserContext.js";
 
 const SetAddress = ({ navigation, route }) => {

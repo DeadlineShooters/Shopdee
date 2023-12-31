@@ -228,9 +228,12 @@ export default function CreateShop({ navigation, route }) {
         phone,
         profilePic: profilePic,
       };
-      // await axios.put(`http://10.0.2.2:3000/shop/shopProfile/${shopID}/update`, shopProfile);
+      await axios.put(`http://10.0.2.2:3000/shop/shopProfile/${shopID}/update`, shopProfile);
       setStatus("success");
       popIn();
+      setTimeout(() => {
+        navigation.goBack(); 
+      }, 2000);
     } catch (error) {
       console.error("Error: Updating shop profile", error);
     }
