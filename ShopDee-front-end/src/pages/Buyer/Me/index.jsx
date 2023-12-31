@@ -202,7 +202,7 @@ const Me = ({ navigation }) => {
         {/*Logout button */}
         <View
           style={{
-            marginTop: 100,
+            marginTop: 60,
           }}
         >
           <View
@@ -222,6 +222,7 @@ const Me = ({ navigation }) => {
                   borderRadius: 12,
                   backgroundColor: COLORS_v2.blue,
                   alignItems: "center",
+                  margin: 20,
                 }}
               >
                 <Text style={{ fontSize: 16, fontWeight: 600, marginVertical: 10, color: COLORS_v2.white }}>Logout</Text>
