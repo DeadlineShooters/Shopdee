@@ -1,8 +1,8 @@
 import { View, Text, Image, TextInput, Button, StyleSheet, TouchableOpacity, Alert } from "react-native";
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import React from "react";
 import { useNavigation } from "@react-navigation/native";
-import { AntDesign, Entypo, FontAwesome } from "@expo/vector-icons";
+import { Entypo, FontAwesome } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 import { COLORS_v2 } from "../../../constants/theme";
@@ -43,7 +43,9 @@ export default function SignIn() {
       Alert.alert("Updating user profile failed", "Your mail is invalid. Please input again");
       setMail("");
       setPassword("");
-    } else {
+    } 
+    if (badPassword == true) {
+      Alert.alert("Updating user profile failed", "Your password is invalid. Please input again");
       setMail("");
       setPassword("");
     }

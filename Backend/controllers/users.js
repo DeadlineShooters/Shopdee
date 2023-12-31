@@ -100,14 +100,14 @@ export const updateprofile = async (req, res) => {
   console.log(req.body);
   try {
     const userID = req.params.userID;
-    const { username, email, phone, gender, birthday, profilePic } = req.body;
+    const { username, email, phone, gender, birthDay, profilePic } = req.body;
     console.log(req.body);
     await user.findByIdAndUpdate(userID, {
       username: username,
       email: email,
       phone: phone,
       gender: gender,
-      birthDay: birthday,
+      birthDay: birthDay,
       profilePic: {
         public_id: profilePic.public_id,
         url: profilePic.url,

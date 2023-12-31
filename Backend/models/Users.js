@@ -21,7 +21,7 @@ const userSchema = new mongoose.Schema({
         type: String,
     },
     birthDay: {
-        type: Date,
+        type: String,
     },
     recovery: {
         resetToken  : {

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, Image, TextInput, TouchableOpacity, StyleSheet, Alert, KeyboardAvoidingView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { FontAwesome, Entypo, Ionicons, MaterialIcons } from '@expo/vector-icons';
+import { FontAwesome, Entypo, MaterialIcons } from '@expo/vector-icons';
 import axios from "axios"
 import { COLORS_v2 } from '../../../../constants/theme';
 export default function SignUp() {
@@ -34,60 +34,65 @@ export default function SignUp() {
     console.log(badEmail);
   };
 
-  const validate = () => {
-    if (email == '') {
-      setBadEmail(true);
-    }
-    else {
-      setBadEmail(false);
-    }
-
-    if (username == '') {
+  const handleCheckUsername = text => {
+    setUsername(text);
+    if (text.length === 0)
+    {
       setBadUserName(true);
-    }
-    else {
+    } else {
       setBadUserName(false);
     }
+  }
 
-    if (password == '') {
+  const handleCheckPassword = text => {
+    setPassword(text);
+    if (text.length === 0)
+    {
       setBadPassword(true);
-    }
-    else {
+    } else {
       setBadPassword(false);
     }
+  }
 
-    if (confirmPassword == '') {
+  const handleCheckConfirmPassword = text => {
+    setConfirmPassword(text);
+    if (text.length === 0)
+    {
       setBadConfirmPassword(true);
-    }
-    else {
+    } else {
       setBadConfirmPassword(false);
+    }
+  }
+
+  let isvalid = true;
+  const validate = () => {
+    if (email.length == 0) {
+      Alert.alert("Error Sign Up", "Your email is invalid. Please retry");
+      isvalid = false;
+    }
+
+    if (username.length == 0) {
+      Alert.alert("Error Sign Up", "Your username is invalid. Please retry");
+      isvalid = false;
+    }
+
+    if (password.length == 0) {
+      Alert.alert("Error Sign Up", "Your password is invalid. Please retry");
+      isvalid = false;
+    }
+
+    if (confirmPassword.length == 0) {
+      Alert.alert("Error Sign Up", "Your confirm password is invalid. Please retry");
+      isvalid = false;
     }
 
     if (password != confirmPassword) {
-      setCorrectPassword(false);
-    }
-    else
-    {
-      setCorrectPassword(true);
+      Alert.alert("Error Sign Up", "Your password is not match. Please retry");
+      isvalid = false;
     }
 
-    if (badEmail == false && badUserName == false && badPassWord == false && badConfirmPassWord == false && correctPassword == true) {
+    if (isvalid == true) {
       handleSignUp();
-    }
-    else if (badEmail == true) {
-      Alert.alert("Updating user profile failed", "Your mail is invalid. Please input again");
-      setEmail("");
-      setUsername("");
-      setUsername("");
-      setPassword("");
-      setConfirmPassword("");
-    }
-    else {
-      setEmail("");
-      setUsername("");
-      setUsername("");
-      setPassword("");
-      setConfirmPassword("");
     }
   }
   const handleSignUp = async () => {
@@ -172,7 +177,7 @@ export default function SignUp() {
             <FontAwesome name="user" size={24} color="black" style={styles.Icon} />
             <TextInput
               style={styles.input}
-              onChangeText={(text) => setUsername(text)}
+              onChangeText={(text) => handleCheckUsername(text)}
               value={username}
               placeholder="Username"
             />
@@ -190,7 +195,7 @@ export default function SignUp() {
             </TouchableOpacity>
             <TextInput
               style={styles.input}
-              onChangeText={(text) => setPassword(text)}
+              onChangeText={(text) => handleCheckPassword(text)}
               value={password}
               placeholder="Password"
               secureTextEntry={hidePassword ? false : true}
@@ -209,7 +214,7 @@ export default function SignUp() {
             </TouchableOpacity>
             <TextInput
               style={styles.input}
-              onChangeText={(text) => setConfirmPassword(text)}
+              onChangeText={(text) => handleCheckConfirmPassword(text)}
               value={confirmPassword}
               placeholder="Confirm Password"
               secureTextEntry={hidePassword ? false : true}
