@@ -11,7 +11,7 @@ export default function SignIn() {
   const [mail, setMail] = useState("");
   const [badEmail, setBadEmail] = useState(false);
   const [password, setPassword] = useState("");
-  const [badPassword, setBadPassword] = useState("");
+  const [badPassword, setBadPassword] = useState(false);
   const navigation = useNavigation();
 
   const handleCheckMail = text => {
@@ -26,7 +26,7 @@ export default function SignIn() {
     console.log(badEmail);
   };
 
-  const validate = () => {
+  const validate = async () => {
     if (mail == '')
     {
       setBadEmail(true);
@@ -34,11 +34,12 @@ export default function SignIn() {
     if (password == '') {
       setBadPassword(true);
     }
-    
+    console.log("Bad email:", badEmail);
+    console.log("Bad password: ", badPassword);
     if (badEmail == false && badPassword == false) {
       handleSignIn();
     }
-    else if (badEmail == true) {
+    if (badEmail == true) {
       Alert.alert("Updating user profile failed", "Your mail is invalid. Please input again");
       setMail("");
       setPassword("");
@@ -60,6 +61,7 @@ export default function SignIn() {
     };
     checkSigninStatus();
   }, []);
+
   const handleSignUpPress = () => {
     navigation.navigate("SignUp");
   };
@@ -71,7 +73,7 @@ export default function SignIn() {
     setHidePassword(!hidePassword);
   };
 
-  const handleSignIn = () => {
+  const handleSignIn = async () => {
     const user = {
       mail: mail,
       password: password,

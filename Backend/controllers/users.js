@@ -65,7 +65,8 @@ const secretKey = generateSecretKey();
 
 export const signIn = async (req, res) => {
   try {
-    const { email, password } = req.body;
+    const email = req.body.mail;
+    const password = req.body.password;
     //Check if the user exists
     const loginUser = await user.findOne({ email });
     if (!loginUser) {
