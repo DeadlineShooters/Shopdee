@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect, useContext } from "react";
-import { View, Text, TouchableOpacity, ToastAndroid, Image, TextInput, SafeAreaView, Animated, StyleSheet, Dimensions } from "react-native";
+import { View, Text, TouchableOpacity, ToastAndroid, Image, TextInput, SafeAreaView, Animated, StyleSheet, Dimensions, Alert } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import { AntDesign, Entypo } from "@expo/vector-icons";
 import { UserContext } from "../../../../context/UserContext";
@@ -7,6 +7,7 @@ import { COLORS } from "../../../../assets/Themes";
 import axios from "axios";
 
 export default function CreateShop({ navigation, route }) {
+  const { selectedAddress } = route.params;
   const shopProfile = route.params.shop;
   console.log(shopProfile);
   const [shopID, setShopID] = useState("");
@@ -30,6 +31,17 @@ export default function CreateShop({ navigation, route }) {
   const failColor = "#bf6060";
   const failHeader = "Failed!";
   const failMessage = "Your information was still unsaved";
+
+  const [changeAddress, setChangeAddress] = useState("");
+  useEffect(() => {
+    if (selectedAddress) {
+      setChangeAddress(selectedAddress);
+    }
+  }, [selectedAddress]);
+
+  const handlePickAddress = () => {
+    navigation.navigate("AddressPicker", { previousScreen: "CreateShop" });
+  };
 
   useEffect(() => {
     setShopID(shopProfile.shop._id);
@@ -194,7 +206,7 @@ export default function CreateShop({ navigation, route }) {
         phone,
         profilePic: profilePic,
       };
-      await axios.put(`http://10.0.2.2:3000/shop/shopProfile/${shopID}/update`, shopProfile);
+      // await axios.put(`http://10.0.2.2:3000/shop/shopProfile/${shopID}/update`, shopProfile);
       setStatus("success");
       popIn();
     } catch (error) {
@@ -309,29 +321,38 @@ export default function CreateShop({ navigation, route }) {
           textAlignVertical="top" // Căn văn bản từ phía trên xuống
         />
       </View>
-      <View
-        style={{
-          padding: 10,
-          flexDirection: "row",
-          alignItems: "center",
-          backgroundColor: "white",
-          justifyContent: "space-between",
-          marginTop: 10,
-          marginBottom: 2,
-        }}
-      >
+      <View style={{
+        padding: 10,
+        flexDirection: 'column',
+        alignItems: 'flex-start',
+        backgroundColor: 'white',
+        justifyContent: 'space-between',
+        marginTop: 10,
+        marginBottom: 2
+      }}>
         <Text style={{ fontSize: 16 }}>Pickup address</Text>
-        <TextInput
-          placeholder="setup"
+        <TouchableOpacity
+          onPress={handlePickAddress}
           style={{
-            fontSize: 16,
-            borderColor: "#CDCDCD",
-            marginHorizontal: 10,
-            flex: 1,
+            flexDirection: "row",
+            justifyContent: "space-between",
+            paddingVertical: 8,
+            paddingHorizontal: 5,
+            // borderWidth: 1,
+            // borderColor: COLORS.gray,
+            alignItems: "center",
           }}
-          value={address}
-          onChangeText={(value) => setAddress(value)}
-        />
+        >
+          <View style={{ flex:1 }}>
+            <Text style={{ fontSize: 16, fontWeight: "600" }} numberOfLines={1} ellipsizeMode="tail">
+              {changeAddress}
+            </Text>
+          </View>
+
+          <View>
+            <AntDesign name="right" size={16} color="black" />
+          </View>
+        </TouchableOpacity>
       </View>
       <View
         style={{
