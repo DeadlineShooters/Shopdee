@@ -106,6 +106,7 @@ const EditProfile = ({ navigation, route }) => {
   const [changePhone, setChangePhone] = useState("");
   const [changeGender, setChangeGender] = useState("");
   const [changeSelectedStartDate, setChangeSelectedStartDate] = useState("");
+  const [changeStartedDate, setChangeStartedDate] = useState("");
 
   useEffect(() => {
     setUserName(user.username);
@@ -131,7 +132,7 @@ const EditProfile = ({ navigation, route }) => {
       changeMail != mail ||
       changePhone != phone ||
       changeGender != gender ||
-      changeStartedDate != startedDate ||
+      changeSelectedStartDate != selectedStartDate ||
       changeSelectedImage != selectedImage
     ) {
       Alert.alert("Confirm message", "Your profile is not saved. Exit now?", [
@@ -201,7 +202,7 @@ const EditProfile = ({ navigation, route }) => {
     setChangeMail(mail);
     setChangePhone(phone);
     setChangeGender(gender);
-    setChangeStartedDate(startedDate);
+    setChangeSelectedStartDate(startedDate);
     setChangeSelectedImage(selectedImage);
     try {
       const userID = user._id;
@@ -211,7 +212,7 @@ const EditProfile = ({ navigation, route }) => {
         email: mail,
         phone: phone,
         gender: gender,
-        birthday: selectedStartDate,
+        birthDay: selectedStartDate,
         profilePic: profilePic,
       };
       setUser(userInfo);
