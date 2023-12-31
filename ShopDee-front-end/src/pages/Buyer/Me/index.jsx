@@ -34,7 +34,7 @@ const Me = ({ navigation }) => {
         },
         {
           text: "Ok",
-          onPress: () => navigation.navigate("CreateShop"),
+          onPress: () => navigation.navigate("CreateShop", {}),
         },
       ]);
       console.log("@@@ error retrieving user data", error);
