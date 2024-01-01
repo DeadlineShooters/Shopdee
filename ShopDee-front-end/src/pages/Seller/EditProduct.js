@@ -46,9 +46,9 @@ export default function EditProduct({ route }) {
   }, []);
 
   const handleEdit = async () => {
-    if (!productNameText || !price || !stock) {
+    if (!productNameText || !price || !stock || !productDescText) {
       // Display an alert or any other feedback to inform the user about the missing fields
-      Alert.alert("Error", "Please fill in all mandatory fields (Product Name, Price, Stock).");
+      Alert.alert("Error", "Please fill in all mandatory fields (Product Name, Price, Stock, Description).");
       return;
     }
     // Upload images to Cloudinary
