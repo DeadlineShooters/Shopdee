@@ -43,7 +43,7 @@ export default function Order({ order, buttonVisible, buttonText, item }) {
         key={order.product._id}
         productName={order.product.name}
         productPrice={order.product.price}
-        productQuantity={order.product.quantity}
+        productQuantity={order.quantity}
         imagePath={order.product.image.length > 0 ? order.product.image[0].url : defaultImage}
       />
       {/* ))} */}
