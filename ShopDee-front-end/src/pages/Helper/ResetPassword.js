@@ -1,14 +1,11 @@
 import React, { useState, useRef, useContext, useEffect } from "react";
 import { View, Text, SafeAreaView, TouchableOpacity, ScrollView, TextInput, StyleSheet, Animated, Dimensions } from "react-native";
-import { COLORS_v2 } from "../../../../constants/theme.js";
+import { COLORS_v2 } from "../../../constants/theme.js";
 import { MaterialIcons, Ionicons, AntDesign, Entypo } from "@expo/vector-icons";
 import axios from "axios";
-import { UserContext } from "../../../../context/UserContext";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import jwtDecode from "jwt-decode";
 import "core-js/stable/atob";
 
-const ChangePassword = ({ navigation }) => {
+const ResetPassword = ({ navigation, route }) => {
   const windowHeight = Dimensions.get("window").height;
   const [status, setStatus] = useState(null);
   const popAnim = useRef(new Animated.Value(windowHeight * -1)).current;
@@ -20,6 +17,7 @@ const ChangePassword = ({ navigation }) => {
   const failHeader = "Failed!";
   const failMessage = "Change password failed! Please retry";
 
+  const email = route.params.email;
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [hidePassword, setHidePassword] = useState(false);
@@ -75,16 +73,20 @@ const ChangePassword = ({ navigation }) => {
   
   const handleChangePassword = async () => {
     const data = {
-      password: password
+      password: password,
+      email: email
     }
     try {
       await axios.post("http://10.0.2.2:3000/user/profile/update-password", data).then((response) => {
         if (response.data.success) {
-          navigation.navigate('Settings');
+          navigation.navigate('SignIn');
         } else {
           setError('There was an issue resetting your password. Please try again.');
         }
       });
+      const user = response.data;
+      console.log(user);
+      navigation.navigate("SignIn");
     } catch (error) {
       console.log("error", error);
     }
@@ -145,7 +147,7 @@ const ChangePassword = ({ navigation }) => {
                 borderRadius: 4,
                 marginVertical: 6,
                 justifyContent: "space-between",
-                paddingHorizontal: 8,
+                paddingLeft: 8,
                 flexDirection: "row",
                 alignItems: "center",
               }}
@@ -181,7 +183,7 @@ const ChangePassword = ({ navigation }) => {
                 borderRadius: 4,
                 marginVertical: 6,
                 justifyContent: "space-between",
-                paddingHorizontal: 8,
+                paddingLeft: 8,
                 flexDirection: "row",
                 alignItems: "center",
               }}
@@ -241,7 +243,7 @@ const ChangePassword = ({ navigation }) => {
   );
 };
 
-export default ChangePassword;
+export default ResetPassword;
 
 const styles = StyleSheet.create({
   toastContainer: {

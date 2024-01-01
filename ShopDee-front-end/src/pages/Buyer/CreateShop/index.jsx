@@ -12,7 +12,8 @@ const shopDefault = {
   public_id: 'rgbptr0a7ebx5njabzkl',
 }
 
-export default function CreateShop() {
+export default function CreateShop({ route }) {
+  const { selectedAddress } = route.params;
   const navigation = useNavigation();
   const windowHeight = Dimensions.get("window").height;
   const [status, setStatus] = useState(null);
@@ -30,11 +31,21 @@ export default function CreateShop() {
   const [address, setAddress] = useState("");
   const [phone, setPhone] = useState("");
   const [selectedImage, setSelectedImage] = useState(null);
-  const [publicId, setPublicId] = useState("");
-  const [secureUrl, setSecureUrl] = useState("");
   const maxCharactersName = 30; // Số ký tự tối đa cho phép
   const maxCharactersBio = 200;
-  // const image = null;
+
+  const [changeAddress, setChangeAddress] = useState("");
+  
+  useEffect(() => {
+    if (selectedAddress) {
+      setChangeAddress(selectedAddress);
+    }
+  }, [selectedAddress]);
+  const image = null;
+
+  const handlePickAddress = () => {
+    navigation.navigate("AddressPicker", { previousScreen: "CreateShop" });
+  };
 
   const handleOnPressGoBack = () => {
     if (shopName != '' || email != '' || phone != '' || bio != '' || address != '') {
@@ -53,8 +64,29 @@ export default function CreateShop() {
       navigation.goBack()
     }
   }
+  const isBadEmail = text => {
+    let re = /\S+@\S+\.\S+/;
+    let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w\w+)+$/;
+    if (re.test(text) || reg.test(text)) 
+      return false
+    return true;
+  };
+  const isValidPhone = text => {
+    if (text.length === 10 && text.charAt(0) === '0')
+      return true;
+    return false;
+  }
+
 
   const handleCreate = async () => {
+    if (isBadEmail(email)) {
+      alert("Email invalid. Please try again.");
+      return;
+    }
+    if (!isValidPhone(phone)) {
+      alert("Phone number invalid. Please try again.")
+      return;
+    }
     // Xử lý logic đăng ký ở đây
     const token = await AsyncStorage.getItem("authToken");
     const userID = jwtDecode(token).userID;
@@ -260,24 +292,36 @@ export default function CreateShop() {
       </View>
       <View style={{
         padding: 10,
-        flexDirection: 'row',
-        alignItems: 'center',
+        flexDirection: 'column',
+        alignItems: 'flex-start',
         backgroundColor: 'white',
         justifyContent: 'space-between',
         marginTop: 10,
         marginBottom: 2
       }}>
         <Text style={{ fontSize: 16 }}>Pickup address</Text>
-        <TextInput
-          value ={address}
-          onChangeText={value => setAddress(value)}
-          placeholder="setup"
+        <TouchableOpacity
+          onPress={handlePickAddress}
           style={{
-            fontSize: 16,
-            borderColor: '#CDCDCD',
-            marginHorizontal: 10,
-            flex: 1,
-          }} />
+            flexDirection: "row",
+            justifyContent: "space-between",
+            paddingVertical: 8,
+            paddingHorizontal: 5,
+            // borderWidth: 1,
+            // borderColor: COLORS.gray,
+            alignItems: "center",
+          }}
+        >
+          <View style={{ flex:1 }}>
+            <Text style={{ fontSize: 16, fontWeight: "600" }} numberOfLines={1} ellipsizeMode="tail">
+              {changeAddress}
+            </Text>
+          </View>
+
+          <View>
+            <AntDesign name="right" size={16} color="black" />
+          </View>
+        </TouchableOpacity>
       </View>
       <View style={{
         padding: 10,

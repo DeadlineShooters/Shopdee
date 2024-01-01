@@ -28,10 +28,12 @@ import SendMailVerify from "./src/pages/Helper/SendMailVerify.js";
 import { UserProvider } from "./context/UserContext.js";
 import AddProduct from "./src/pages/Seller/AddProduct.js";
 import EditProduct from "./src/pages/Seller/EditProduct.js";
+import ResetPassword from "./src/pages/Helper/ResetPassword.js";
 
 import PickAddressScreen from "./src/pages/PickAddressScreen.js";
 import { COLORS } from "./assets/Themes.js";
 import GoBack from "./src/components/goBackPanel.jsx";
+import VerifyToken from "./src/pages/Helper/VerifyToken.js";
 
 const Stack = createNativeStackNavigator();
 
@@ -48,6 +50,8 @@ export default function App() {
                   <Stack.Screen name="SignIn" component={SignIn} options={{ headerShown: false }} />
                   <Stack.Screen name="SignUp" component={SignUp} options={{ headerShown: false }} />
                   <Stack.Screen name="SendMail" component={SendMailVerify} options={{ headerShown: false }} />
+                  <Stack.Screen name="VerifyToken" component={VerifyToken} options={{ headerShown: false }} />
+                  <Stack.Screen name="ResetPassword" component={ResetPassword} options={{ headerShown: false }} />
                   <Stack.Screen name="BuyerBottomNav" component={BuyerBottomNavigator} options={{ headerShown: false }} />
                   <Stack.Screen name="CreateShop" component={CreateShop} options={{ headerShown: false }} />
                   <Stack.Screen name="EditProfile" component={EditProfile} options={{ headerShown: false }} />

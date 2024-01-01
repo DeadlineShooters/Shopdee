@@ -20,6 +20,7 @@ export const COLORS_v2 = {
     blue: '#007EA7',
     lightBlue: '#469AB6',
     darkBlue: '#294ba0',
+    red: "#EE4B2B",
 }
 
 export const SIZES = {

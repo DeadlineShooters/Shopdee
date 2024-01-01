@@ -17,11 +17,9 @@ const UserProvider = ({ children }) => {
       const decodedToken = jwtDecode(token);
       const userID = decodedToken.userID;
       setUserID(userID);
-
       try {
         const data = await fetchUserInfo(userID);
         setUser(data);
-
         console.log("@@ User: ", data);
       } catch (error) {
         console.error("Error fetching user info:", error);

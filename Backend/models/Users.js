@@ -21,11 +21,17 @@ const userSchema = new mongoose.Schema({
         type: String,
     },
     birthDay: {
-        type: Date,
+        type: String,
     },
-    verified: {
-        type: Boolean,
-        default: false,
+    recovery: {
+        resetToken  : {
+            type: String,
+            required: false
+        },
+        resetTokenExpiration : {
+            type: Date, 
+            required:false
+        }
     },
     verificationToken: String,
     address: {

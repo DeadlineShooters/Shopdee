@@ -13,6 +13,7 @@ import { Axios } from "../../../api/axios.js";
 
 const Me = ({ navigation }) => {
   const { userID, setUserID, setSellerData, user } = useContext(UserContext);
+  console.log("@@ update: ", user);
   const navigateToEditProfile = () => {
     console.log("@@ user navigate", user);
     navigation.navigate("EditProfile", { user });
@@ -33,7 +34,7 @@ const Me = ({ navigation }) => {
         },
         {
           text: "Ok",
-          onPress: () => navigation.navigate("CreateShop"),
+          onPress: () => navigation.navigate("CreateShop", {}),
         },
       ]);
       console.log("@@@ error retrieving user data", error);
@@ -108,7 +109,15 @@ const Me = ({ navigation }) => {
     ]);
   };
   const isFocused = useIsFocused();
-
+  const [username, setUserName] = useState();
+  const [selectedImage, setSelectedImage] = useState();
+  useEffect(() => {
+    fetchUserData = () => {
+      setUserName(user.username);
+      setSelectedImage(user?.profilePic?.url);
+    }
+    fetchUserData();
+  }, [navigation, isFocused])
   return (
     <SafeAreaView
       style={{
@@ -127,7 +136,7 @@ const Me = ({ navigation }) => {
           }}
         >
           <Image
-            source={{ uri: user?.User?.profilePic.url }}
+            source={{ uri: selectedImage }}
             style={{
               height: 100,
               width: 100,
@@ -148,7 +157,7 @@ const Me = ({ navigation }) => {
               marginLeft: 10,
             }}
           >
-            {user.username}
+            {username}
           </Text>
         </View>
       </View>
@@ -184,7 +193,7 @@ const Me = ({ navigation }) => {
         {/*Logout button */}
         <View
           style={{
-            marginTop: 100,
+            marginTop: 60,
           }}
         >
           <View
@@ -204,6 +213,7 @@ const Me = ({ navigation }) => {
                   borderRadius: 12,
                   backgroundColor: COLORS_v2.blue,
                   alignItems: "center",
+                  margin: 20,
                 }}
               >
                 <Text style={{ fontSize: 16, fontWeight: 600, marginVertical: 10, color: COLORS_v2.white }}>Logout</Text>

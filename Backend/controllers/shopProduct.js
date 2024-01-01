@@ -1,6 +1,7 @@
 import { response } from "express";
 import Product from "../models/product.js";
 import Shop from "../models/shop.js";
+import Order from "../models/order.js";
 
 export const index = async (req, res) => {
   try {
@@ -76,7 +77,12 @@ export const updateProduct = async (req, res) => {
 export const deleteProduct = async (req, res) => {
   try {
     const { idProduct } = req.params;
-    console.log(idProduct);
+
+    const isOrdered = await Order.findOne({ product: idProduct });
+    if (isOrdered) {
+      return res.json({ message: "isOrdered" });
+    }
+
     let product = await Product.findById(idProduct);
     if (!product) {
       return res.status(404).json({ message: "Product not found" });
