@@ -2,11 +2,11 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { jwtDecode } from "jwt-decode";
 import { Axios } from "./axios";
 
-// export const fetchShopInfo = async () => {
+// export const fetchShopInfo = async (shopID) => {
+//   // /shop/shopProfile/:shopID
 //   try {
-//     const token = await AsyncStorage.getItem("authToken");
-//     const userID = jwtDecode(token).userID;
-//     const shop = await Axios.get(`/user/${userID}/shop`);
+
+//     const shop = await Axios.get(`/shop/shopProfile/${shopID}`);
 
 //     console.log("@@ Shop: ", shop.data.shop);
 //     return shop.data.shop;

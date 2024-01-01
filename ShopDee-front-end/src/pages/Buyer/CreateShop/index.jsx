@@ -71,11 +71,20 @@ export default function CreateShop({ route }) {
       return false
     return true;
   };
+  const isValidPhone = text => {
+    if (text.length === 10 && text.charAt(0) === '0')
+      return true;
+    return false;
+  }
 
 
   const handleCreate = async () => {
     if (isBadEmail(email)) {
-      alert("Email invalid");
+      alert("Email invalid. Please try again.");
+      return;
+    }
+    if (!isValidPhone(phone)) {
+      alert("Phone number invalid. Please try again.")
       return;
     }
     // Xử lý logic đăng ký ở đây

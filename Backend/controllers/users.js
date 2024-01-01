@@ -127,10 +127,11 @@ export const updateaddress = async (req, res) => {
   console.log("@@ body", req.body);
   try {
     const userID = req.params.userID;
-    const { address } = req.body;
-    console.log(address);
+    const { address, phone } = req.body;
+    // console.log(address);
     await user.findByIdAndUpdate(userID, {
       address: address,
+      phone: phone
     });
     res.status(200).send({
       success: true,

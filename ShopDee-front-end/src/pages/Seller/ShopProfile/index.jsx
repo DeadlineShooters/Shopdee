@@ -116,20 +116,20 @@ export default function EditShopProfile({ navigation, route }) {
     >
       <View
         style={{
-          display: "flex",
+          // display: "flex",
           backgroundColor: "white",
-          flexDirection: "row",
+          // flexDirection: "row",
           alignItems: "center",
-          justifyContent: "space-between",
+          // justifyContent: "space-between",
           padding: 10,
           position: "relative",
         }}
       >
-        <TouchableOpacity onPress={() => navigation.goBack()}>
+        {/* <TouchableOpacity onPress={() => navigation.goBack()}>
           <AntDesign name="arrowleft" style={{ fontSize: 24 }} />
-        </TouchableOpacity>
+        </TouchableOpacity> */}
         <Text style={{ fontSize: 16, fontWeight: "bold", textAlign: "center", alignSelf: "center" }}> Shop Profile </Text>
-        <TouchableOpacity onPress={() => navigation.navigate("Edit Profile", { shop })}>
+        <TouchableOpacity onPress={() => navigation.navigate("Edit Profile", { shop })} style={{ position: "absolute", right: 15, top: 9 }}>
           <AntDesign name="edit" size={24} color="black" />
         </TouchableOpacity>
       </View>
