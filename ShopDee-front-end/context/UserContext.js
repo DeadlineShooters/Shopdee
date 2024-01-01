@@ -9,24 +9,28 @@ const UserProvider = ({ children }) => {
   const [userID, setUserID] = useState("");
   const [user, setUser] = useState("");
   const [sellerData, setSellerData] = useState("");
+  const [token, setToken] = useState(null);
 
   const [shop, setShop] = useState(null);
   useEffect(() => {
     const getUser = async () => {
       const token = await AsyncStorage.getItem("authToken");
-      const decodedToken = jwtDecode(token);
-      const userID = decodedToken.userID;
-      setUserID(userID);
-      try {
-        const data = await fetchUserInfo(userID);
-        setUser(data);
-        console.log("@@ User: ", data);
-      } catch (error) {
-        console.error("Error fetching user info:", error);
+      console.log("@@ token: " + token);
+      if (token) {
+        const decodedToken = jwtDecode(token);
+        const userID = decodedToken.userID;
+        setUserID(userID);
+        try {
+          const data = await fetchUserInfo(userID);
+          setUser(data);
+          console.log("@@ User: ", data);
+        } catch (error) {
+          console.error("Error fetching user info:", error);
+        }
       }
     };
     getUser().then("success");
-  }, []);
+  }, [token]);
 
   console.log("User ID *****: ", userID);
 
@@ -50,7 +54,9 @@ const UserProvider = ({ children }) => {
   // }, []);
 
   return (
-    <UserContext.Provider value={{ userID, setUserID, user, setUser, sellerData, setSellerData, shop, setShop, defaultImage }}>{children}</UserContext.Provider>
+    <UserContext.Provider value={{ userID, setUserID, user, setUser, sellerData, setSellerData, shop, setShop, defaultImage, setToken }}>
+      {children}
+    </UserContext.Provider>
   );
 };
 

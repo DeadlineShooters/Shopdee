@@ -7,17 +7,17 @@ import { getDataUri } from "../utils/feature.js";
 import cloudinary from "cloudinary";
 import Shop from "../models/shop.js";
 import mongoose from "mongoose";
-import nodemailer from "nodemailer"
+import nodemailer from "nodemailer";
 
 let transporter = nodemailer.createTransport({
-  service: 'gmail',
-  host: 'smtp.gmail.com',
+  service: "gmail",
+  host: "smtp.gmail.com",
   secure: false,
   auth: {
     user: "nmthong226@gmail.com",
     pass: "aszipllghvzgatsy",
-  }
-})
+  },
+});
 
 export const checkShopOwner = async (req, res) => {
   try {
@@ -41,7 +41,8 @@ export const register = async (req, res) => {
     console.log(req.body);
     const existingUser = await user.findOne({ email });
     if (existingUser) {
-      return res.status(400).send({success: false, messages: "Email has been already registered!" });
+      console.log("found existing user");
+      return res.status(400).send({ success: false, messages: "Email has been already registered!" });
     }
     const newUser = new user({ username, email, password, name, phone, birthDay, gender, address });
     newUser.profilePic = {
@@ -49,7 +50,7 @@ export const register = async (req, res) => {
       url: "https://res.cloudinary.com/dqxtf297o/image/upload/v1703247477/c7x3gucweyz19zpqvae8.jpg",
     };
     await newUser.save();
-    res.status(200).send({success: true, message: "Account created successfully",});
+    res.status(200).send({ success: true, message: "Account created successfully" });
   } catch (error) {
     console.log("error registering user", error);
     res.status(500).json({ messages: "Registration failed" });
@@ -131,7 +132,7 @@ export const updateaddress = async (req, res) => {
     // console.log(address);
     await user.findByIdAndUpdate(userID, {
       address: address,
-      phone: phone
+      phone: phone,
     });
     res.status(200).send({
       success: true,
@@ -150,8 +151,8 @@ export const updatePassword = async (req, res) => {
     const email = req.body.email;
     const existingUser = await user.findOne({ email });
     if (!existingUser) {
-      console.error({ success: false, message: 'There was an Error' });
-      return res.send({ success: false, message: 'User not found' });
+      console.error({ success: false, message: "There was an Error" });
+      return res.send({ success: false, message: "User not found" });
     }
     existingUser.password = password;
     await existingUser.save();
@@ -166,25 +167,24 @@ export const updatePassword = async (req, res) => {
 };
 
 const generateCode = async (length) => {
-  let result = '';
-  const characters = 'QWERTYUIOPASDFGHJKLZXCVBNM0123456789';
+  let result = "";
+  const characters = "QWERTYUIOPASDFGHJKLZXCVBNM0123456789";
   const charactersLength = characters.length;
   let counter = 0;
-  while (counter < length)
-  {
-    result += characters.charAt(Math.floor(Math.random()*charactersLength));
-    counter +=1;
+  while (counter < length) {
+    result += characters.charAt(Math.floor(Math.random() * charactersLength));
+    counter += 1;
   }
   return result;
-}
+};
 
 export const resetPassword = async (req, res) => {
   try {
     const email = req.body.email;
     const existingUser = await user.findOne({ email });
     if (!existingUser) {
-      console.error({ success: false, message: 'There was an Error' });
-      return res.send({ success: false, message: 'If user exists, an email was sent' });
+      console.error({ success: false, message: "There was an Error" });
+      return res.send({ success: false, message: "If user exists, an email was sent" });
     }
     const token = await generateCode(5);
     existingUser.recovery.resetToken = token;
@@ -198,14 +198,14 @@ export const resetPassword = async (req, res) => {
       html: `Hello world from ShopDee, this is your Reset Token: ${token}`,
     });
     console.log(info);
-    return res.send({ success: true, message: 'Email sent' });
+    return res.send({ success: true, message: "Email sent" });
   } catch (error) {
-    console.error(error)
+    console.error(error);
   }
-}
+};
 
 export const verifyToken = async (req, res) => {
-  console.log(req.body)
+  console.log(req.body);
   try {
     const verificationCode = req.body.token;
     const email = req.body.email;
@@ -215,11 +215,11 @@ export const verifyToken = async (req, res) => {
       return res.status(400).send({ success: false });
     }
     if (existingUser.recovery.resetTokenExpiration < new Date()) {
-      return res.status(400).send({ success: false, message: 'Token has expired.' });
+      return res.status(400).send({ success: false, message: "Token has expired." });
     }
     return res.status(200).send({ success: true });
   } catch (error) {
     console.error(error);
-    return res.status(500).send({ success: false, message: 'An error occurred. Please try again later.' });
+    return res.status(500).send({ success: false, message: "An error occurred. Please try again later." });
   }
-}
+};
