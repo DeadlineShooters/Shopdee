@@ -30,7 +30,7 @@ export default function EditProduct({ route }) {
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const response = await Axios.get("http://localhost:3000/categories", {
+        const response = await Axios.get("/categories", {
           timeout: 5000, // Set timeout to 5 seconds (adjust as needed)
         });
         const fetchedCategories = response.data;
