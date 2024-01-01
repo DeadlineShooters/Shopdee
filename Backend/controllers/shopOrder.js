@@ -1,4 +1,5 @@
 import Order from "../models/order.js";
+import Product from "../models/product.js";
 import mongoose from "mongoose";
 
 export const index = async (req, res) => {
@@ -8,12 +9,13 @@ export const index = async (req, res) => {
   try {
     const { status } = req.query || "";
     console.log("@@ status: " + status);
-    const orders = await Order.find({ status: status })
+    // find all products of the shop, and then find all orders that have these products.
+    const productIds = (await Product.find({ shop: shopId })).map((product) => product._id);
+    const orders = await Order.find({ status: status, product: { $in: productIds } })
       .populate({
         path: "product",
         populate: {
           path: "shop",
-          match: { _id: new mongoose.Types.ObjectId(shopId) },
         },
       })
       .populate("user");
@@ -52,6 +54,6 @@ export const create = async (req, res) => {
   await order.save();
   res.json({
     message: "Order created successfully.",
-    order
-  })
-}
+    order,
+  });
+};

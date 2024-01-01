@@ -1,11 +1,12 @@
 import { View, Text, Image, TextInput, Button, StyleSheet, TouchableOpacity, Alert } from "react-native";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import React from "react";
 import { useNavigation } from "@react-navigation/native";
 import { Entypo, FontAwesome } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 import { COLORS_v2 } from "../../../constants/theme";
+import { UserContext } from "../../../context/UserContext";
 
 export default function SignIn() {
   const [mail, setMail] = useState("");
@@ -13,8 +14,9 @@ export default function SignIn() {
   const [password, setPassword] = useState("");
   const [badPassword, setBadPassword] = useState(false);
   const navigation = useNavigation();
+  const { setToken } = useContext(UserContext);
 
-  const handleCheckMail = text => {
+  const handleCheckMail = (text) => {
     let re = /\S+@\S+\.\S+/;
     let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w\w+)+$/;
     setMail(text);
@@ -27,11 +29,10 @@ export default function SignIn() {
   };
 
   const validate = async () => {
-    if (mail == '')
-    {
+    if (mail == "") {
       setBadEmail(true);
     }
-    if (password == '') {
+    if (password == "") {
       setBadPassword(true);
     }
     console.log("Bad email:", badEmail);
@@ -43,13 +44,13 @@ export default function SignIn() {
       Alert.alert("Updating user profile failed", "Your mail is invalid. Please input again");
       setMail("");
       setPassword("");
-    } 
+    }
     if (badPassword == true) {
       Alert.alert("Updating user profile failed", "Your password is invalid. Please input again");
       setMail("");
       setPassword("");
     }
-  }
+  };
   useEffect(() => {
     const checkSigninStatus = async () => {
       try {
@@ -87,6 +88,7 @@ export default function SignIn() {
         AsyncStorage.setItem("authToken", token);
         setMail("");
         setPassword("");
+        setToken(token);
         navigation.navigate("BuyerBottomNav", { screen: "Home" });
       })
       .catch((error) => {
