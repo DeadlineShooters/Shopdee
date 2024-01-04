@@ -84,7 +84,7 @@ export default function CreateShop({ route }) {
       return;
     }
     if (!isValidPhone(phone)) {
-      alert("Phone number invalid. Please try again.")
+      alert("Phone number must have 10 numbers. Please try again.")
       return;
     }
     // Xử lý logic đăng ký ở đây
@@ -109,8 +109,12 @@ export default function CreateShop({ route }) {
       } else {
         shop.image = shopDefault;
       }
-      await axios.post("http://10.0.2.2:3000/shop/createShop", shop)
+      const response = await axios.post("http://10.0.2.2:3000/shop/createShop", shop)
       // console.log(shopName);
+      if (response.status == 400) {
+        alert("Email existed! Please try again");
+        return;
+      }
       setStatus("success");
       popIn();
       setTimeout(() => {
