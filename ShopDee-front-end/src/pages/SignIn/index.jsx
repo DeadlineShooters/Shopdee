@@ -41,12 +41,12 @@ export default function SignIn() {
       handleSignIn();
     }
     if (badEmail == true) {
-      Alert.alert("Updating user profile failed", "Your mail is invalid. Please input again");
+      Alert.alert("SignIn failed", "Your mail is invalid. Please input again");
       setMail("");
       setPassword("");
     }
     if (badPassword == true) {
-      Alert.alert("Updating user profile failed", "Your password is invalid. Please input again");
+      Alert.alert("SignIn failed", "Your password is invalid. Please input again");
       setMail("");
       setPassword("");
     }
