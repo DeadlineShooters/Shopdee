@@ -28,7 +28,7 @@ export default function CreateShop({ route }) {
   const [shopName, setShopName] = useState('');
   const [bio, setBio] = useState('');
   const [email, setEmail] = useState("");
-  const [address, setAddress] = useState("");
+  // const [address, setAddress] = useState("");
   const [phone, setPhone] = useState("");
   const [selectedImage, setSelectedImage] = useState(null);
   const maxCharactersName = 30; // Số ký tự tối đa cho phép
@@ -48,7 +48,7 @@ export default function CreateShop({ route }) {
   };
 
   const handleOnPressGoBack = () => {
-    if (shopName != '' || email != '' || phone != '' || bio != '' || address != '') {
+    if (shopName != '' || email != '' || phone != '' || bio != '' || changeAddress != '') {
       Alert.alert('Confirm message', 'Your shop information is not saved. Exit now?', [
         {
           text: 'Cancel',
@@ -84,7 +84,7 @@ export default function CreateShop({ route }) {
       return;
     }
     if (!isValidPhone(phone)) {
-      alert("Phone number invalid. Please try again.")
+      alert("Phone number must have 10 numbers. Please try again.")
       return;
     }
     // Xử lý logic đăng ký ở đây
@@ -94,7 +94,7 @@ export default function CreateShop({ route }) {
       image: null,
       shopName: shopName,
       bio: bio,
-      address: address,
+      address: changeAddress,
       email: email,
       phone: phone,
       userId: userID
@@ -109,8 +109,12 @@ export default function CreateShop({ route }) {
       } else {
         shop.image = shopDefault;
       }
-      await axios.post("http://10.0.2.2:3000/shop/createShop", shop)
+      const response = await axios.post("http://10.0.2.2:3000/shop/createShop", shop)
       // console.log(shopName);
+      if (response.status == 400) {
+        alert("Email existed! Please try again");
+        return;
+      }
       setStatus("success");
       popIn();
       setTimeout(() => {
@@ -396,7 +400,7 @@ export default function CreateShop({ route }) {
         </Animated.View>
       </View>
   
-      {shopName != '' && email != '' && phone != '' && bio != '' && address != '' ?
+      {shopName != '' && email != '' && phone != '' && bio != '' && changeAddress != '' ?
         <TouchableOpacity onPress={handleCreate}>
             <View style={{margin: 20, padding: 10,}}>                        
                 <View style={{borderRadius: 12, backgroundColor: COLORS.blue, alignItems: "center", }}>                        
