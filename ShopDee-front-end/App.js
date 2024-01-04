@@ -1,6 +1,7 @@
 import { StatusBar } from "react-native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { NavigationContainer } from "@react-navigation/native";
+import { LogBox } from "react-native";
 
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
@@ -38,6 +39,7 @@ import VerifyToken from "./src/pages/Helper/VerifyToken.js";
 const Stack = createNativeStackNavigator();
 
 export default function App() {
+  LogBox.ignoreAllLogs(true);
   return (
     <>
       <StatusBar />
