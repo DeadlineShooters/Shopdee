@@ -109,12 +109,8 @@ export default function CreateShop({ route }) {
       } else {
         shop.image = shopDefault;
       }
-      const response = await axios.post("http://10.0.2.2:3000/shop/createShop", shop)
+      await axios.post("http://10.0.2.2:3000/shop/createShop", shop)
       // console.log(shopName);
-      if (response.status == 400) {
-        alert("Email existed! Please try again");
-        return;
-      }
       setStatus("success");
       popIn();
       setTimeout(() => {
@@ -122,6 +118,14 @@ export default function CreateShop({ route }) {
       }, 2000);
 
     } catch (error) {
+      if (error.response.status == 400) {
+
+        Alert.alert(
+          "Create shop failed", 
+          "Email existed! Please try again."
+        );
+        return;
+      }
       Alert.alert(
         "Create shop error", 
         "An error occured during registration"
