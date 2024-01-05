@@ -128,8 +128,8 @@ export default function ProductDetails({route}) {
     );
   }
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: "#fff" }}>
-      <ScrollView style={{backgroundColor: COLORS.gray, marginBottom: 56,}}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.gray }}>
+      <ScrollView style={{ marginBottom: 56,}}>
         <View>
           <View
             style={{
@@ -212,6 +212,7 @@ export default function ProductDetails({route}) {
             <View style={{flex: 1,}}>
               <Text style={{ ...FONTS.h3 }}>{product.name}</Text>
               <Text style={{ ...FONTS.h1 }}>{product.price.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}</Text>
+              <Text style={{ ...FONTS.h3, fontWeight: "normal" }}>Stock: {product.quantity}</Text>
               {/* <Text>4.5 *</Text> */}
             </View>
           </View>
@@ -276,11 +277,12 @@ export default function ProductDetails({route}) {
         </TouchableOpacity>
         <TouchableOpacity
           style={{
-            backgroundColor: COLORS.blue,
+            backgroundColor: product.quantity === 0?COLORS.darkGray: COLORS.blue,
             flex: 0.7,
             padding: 15,
             alignItems: "center",
-          }}
+            }}
+          disabled={product.quantity === 0}
           onPress={() => {
             setOpenModel(true);
           }}
